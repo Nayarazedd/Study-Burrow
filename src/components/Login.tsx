@@ -61,15 +61,15 @@ export const Login: React.FC<LoginProps> = ({ onLogin }) => {
             </p>
           </div>
 
-          {/* Bunny Mascot Illustration */}
-          <div className="my-6 relative z-10">
-            <div className="w-44 h-44 rounded-full border-4 border-[#996a47] overflow-hidden bg-white shadow-[0_6px_0_0_rgba(125,82,49,1)] mx-auto relative group">
-              <img
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                alt="Coelho leitor no chalé aconchegante"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2vvVTLJEWtHo-ixQTsHvHoAIf4VnUgU8Ccpucdhd5i0Dy1Y_n76htpb7jzitskDwCmV-U0J63O3ZGkZoJrHgzFUN9h_nbFRR5logXC0lKwFeS5NkautJudwm-D6Xa9LqzE1SU8YfbO2cCzgh517h4PC_V4Vuzfo95BRSK53dkGVvz7wEqrQ3ur99yFHnk1E-ElQCACjwnpVfAAEMrlXlnpRRUsbOxTnz1-Th6UqYKwAeKBslEKjnH"
-              />
-            </div>
+         {/* Bunny Mascot Illustration */}
+<div className="my-6 relative z-10">
+  <div className="w-44 h-44 overflow-visible mx-auto relative flex items-center justify-center">
+    <img
+      className="w-full h-full object-contain drop-shadow-xl transition-transform duration-300 group-hover:scale-105"
+      alt="Coelho leitor no chalé aconchegante"
+      src="/coelho2.png"
+    />
+  </div>
             <div className="mt-4 bg-[#fdf9f0] border-2 border-[#7d5231] p-3.5 rounded-2xl shadow-sm text-xs text-[#7d5231] font-semibold italic max-w-xs mx-auto">
               "Um cantinho acolhedor para focar, aprender e evoluir sem cobranças excessivas." ☕📚
             </div>

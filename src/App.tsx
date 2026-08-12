@@ -109,26 +109,35 @@ export default function App() {
     };
   }, [isRunning, timeLeft, mode]);
 
-  // Audio chime synthesized
+  // Som de sino local da pasta public (zero chiado)
   const playChimeSound = () => {
     try {
-      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5
-      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.15); // A5
-      gain.gain.setValueAtTime(0.3, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.8);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start();
-      osc.stop(ctx.currentTime + 0.8);
-    } catch (e) {
-      // ignore
-    }
+      const audio = new Audio('/sino.mp3');
+      audio.volume = 0.5;
+      audio.play().catch(() => {});
+    } catch (e) {}
   };
 
+  // Função para tocar sons ambiente limpos e sem chiado
+  const playAmbientSound = (soundName: 'passarinhos' | 'chuva' | 'lareira') => {
+    try {
+      // Links diretos e limpos hospedados na nuvem para teste imediato
+      const audioLinks = {
+        passarinhos: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c287864195.mp3?filename=birds-forest-19416.mp3',
+        chuva: 'https://cdn.pixabay.com/download/audio/2021/09/06/audio_2d08aef724.mp3?filename=gentle-rain-101371.mp3',
+        lareira: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3?filename=campfire-fire-place-104938.mp3'
+      };
+      
+      const audio = new Audio(audioLinks[soundName]);
+      audio.loop = true;
+      audio.volume = 0.5;
+      audio.play().catch((err) => {
+        console.log("Audio play blocked or failed:", err);
+      });
+    } catch (e) {
+      console.log("Error playing audio", e);
+    }
+  };
   // Timer actions
   const handleStartTimer = () => {
     setIsRunning(true);
@@ -167,15 +176,15 @@ export default function App() {
   return (
     <div className="bg-[#fdf9f0] text-[#1c1c17] font-body min-h-screen flex paper-texture select-none">
       {/* Desktop Side Navigation */}
-<SidebarNav
-  activeTab={activeTab}
-  setActiveTab={setActiveTab}
-  onStartFocus={handleStartFocusFromNav}
-  onLogout={() => {
-    localStorage.removeItem('study_burrow_user');
-    setUser(null);
-  }}
-/>
+      <SidebarNav
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onStartFocus={handleStartFocusFromNav}
+        onLogout={() => {
+          localStorage.removeItem('study_burrow_user');
+          setUser(null);
+        }}
+      />
 
       {/* Mobile Bottom Navigation */}
       <BottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
@@ -236,7 +245,7 @@ export default function App() {
                       <span className="material-symbols-outlined text-3xl">auto_awesome</span>
                     </div>
                     <div>
-                      <h3 className="font-[#762c12] font-headline text-2xl font-bold mb-1">
+                      <h3 className="font-headline text-2xl font-bold text-[#390b00] mb-1">
                         Estudar com IA
                       </h3>
                       <p className="font-body text-sm text-[#390b00] leading-snug">
