@@ -1,0 +1,6 @@
+{
+  "name": "Study Burrow",
+  "description": "Toca de Estudos - Espaço aconchegante de estudos com Cronômetro Pomodoro, Estudar com IA, Correção de Redação e Conquistas",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
