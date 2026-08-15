@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Estatísticas - Study Burrow</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&amp;family=Be+Vietnam+Pro:wght@400;500;600&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined.filled {
+            font-variation-settings: 'FILL' 1;
+        }
+        
+        /* Subtle texture for the main background to evoke a ledger/cottage feel */
+        body {
+            background-color: #fafaf4; /* bg-background */
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+        }
+
+        /* Hand-drawn style dashed borders */
+        .border-dashed-custom {
+            border-style: dashed;
+            border-width: 1px;
+            border-color: rgba(139, 94, 60, 0.3); /* Warm Bark tint */
+        }
+
+        /* Ambient Shadows */
+        .shadow-ambient {
+            box-shadow: 0 4px 20px -2px rgba(139, 94, 60, 0.1);
+        }
+        
+        /* Gold foil effect for specific buttons/accents */
+        .gold-foil-bg {
+            background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #b8860b 100%);
+            color: #301400;
+        }
+        
+        /* Wiggle border radius for organic feel */
+        .rounded-organic {
+            border-radius: 12px 16px 10px 14px;
+        }
+        
+        .rounded-organic-lg {
+            border-radius: 20px 24px 18px 22px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#fdc39a",
+                      "primary-container": "#4d6a44",
+                      "on-primary": "#ffffff",
+                      "primary-fixed": "#caecbc",
+                      "on-surface-variant": "#434840",
+                      "surface-container-low": "#f4f4ee",
+                      "on-secondary-container": "#794e2e",
+                      "on-error": "#ffffff",
+                      "background": "#fafaf4",
+                      "tertiary-fixed-dim": "#c9c7b8",
+                      "tertiary": "#4c4b40",
+                      "on-tertiary-container": "#e2dfd0",
+                      "on-primary-fixed": "#072104",
+                      "primary-fixed-dim": "#afd0a2",
+                      "error-container": "#ffdad6",
+                      "surface-container": "#eeeee8",
+                      "inverse-primary": "#afd0a2",
+                      "primary": "#36522e",
+                      "outline-variant": "#c3c8bd",
+                      "surface-container-highest": "#e3e3dd",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-tint": "#496640",
+                      "on-primary-fixed-variant": "#324e2a",
+                      "outline": "#73796f",
+                      "surface-variant": "#e3e3dd",
+                      "on-tertiary-fixed-variant": "#48473c",
+                      "on-background": "#1a1c19",
+                      "inverse-on-surface": "#f1f1eb",
+                      "surface-dim": "#dadad5",
+                      "on-secondary-fixed-variant": "#653d1e",
+                      "on-surface": "#1a1c19",
+                      "on-primary-container": "#c7e9b9",
+                      "surface-bright": "#fafaf4",
+                      "secondary-fixed-dim": "#f4bb92",
+                      "on-error-container": "#93000a",
+                      "surface-container-high": "#e9e8e3",
+                      "on-secondary-fixed": "#301400",
+                      "tertiary-container": "#646357",
+                      "on-tertiary-fixed": "#1c1c13",
+                      "surface": "#fafaf4",
+                      "on-tertiary": "#ffffff",
+                      "error": "#ba1a1a",
+                      "inverse-surface": "#2f312d",
+                      "secondary-fixed": "#ffdcc5",
+                      "tertiary-fixed": "#e6e3d3",
+                      "secondary": "#805533"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-padding": "24px",
+                      "max-content-width": "1200px",
+                      "section-margin": "40px",
+                      "unit": "8px",
+                      "card-gap": "20px"
+              },
+              "fontFamily": {
+                      "headline-lg-mobile": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "headline-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-md": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "label-md": [
+                              "Quicksand"
+                      ],
+                      "label-sm": [
+                              "Quicksand"
+                      ]
+              },
+              "fontSize": {
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "40px",
+                              {
+                                      "lineHeight": "48px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased flex">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-primary-container border-r-4 border-double border-primary/20 py-6 z-50">
+<!-- Header -->
+<div class="px-6 mb-8 flex flex-col items-center">
+<div class="w-16 h-16 rounded-full bg-surface-container overflow-hidden border-2 border-primary-fixed-dim mb-3">
+<img alt="Bunny Mascot" class="w-full h-full object-cover" data-alt="A whimsical digital illustration of a cute bunny mascot wearing tiny glasses and a little sweater, drawn in a cozy, hand-sketched cottagecore style. The color palette features soft creams, sage greens, and warm browns. The lighting is soft and inviting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU8-CCQ_Q1aGJ-U419DprLmMpXTGLXtzcB3fAAHLUoiv8YyrknR0cqEM0FTS9m9DZXA-1BxbaeuiLTGJjWQbbABzFGa_JqheOCvgK0gR_LY7GWB0Wpii7eTe4jqMVgf-ko3RinR1ueugpNpfb8JW0Ta7eZZaZ01JLbbHbiAH0Eic9LethptnYw7U9RYBPqXbW2zAdX5k0audS0K2QpZIr_Ka9MdRqjG87j22faNXu3yevWaxx5T6hO"/>
+</div>
+<h1 class="text-headline-md font-headline-md text-on-primary-container text-center">Study Burrow</h1>
+<p class="text-label-md font-label-md text-on-primary-container/80 text-center mt-1">Welcome, Little Scholar</p>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 px-4 flex flex-col gap-1">
+<a class="flex items-center px-4 py-3 text-on-primary-container/80 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl m-2 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">home_app_logo</span>
+<span class="text-label-md font-label-md">Home</span>
+</a>
+<a class="flex items-center px-4 py-3 text-on-primary-container/80 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl m-2 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">calendar_today</span>
+<span class="text-label-md font-label-md">Organizer</span>
+</a>
+<a class="flex items-center px-4 py-3 bg-surface-container-highest/40 text-on-primary-container font-bold rounded-xl m-2 shadow-inner scale-95 transition-transform" href="#">
+<span class="material-symbols-outlined mr-3 filled" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center px-4 py-3 text-on-primary-container/80 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl m-2 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">psychology_alt</span>
+<span class="text-label-md font-label-md">AI Assistant</span>
+</a>
+<a class="flex items-center px-4 py-3 text-on-primary-container/80 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl m-2 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">quiz</span>
+<span class="text-label-md font-label-md">Quiz</span>
+</a>
+<a class="flex items-center px-4 py-3 text-on-primary-container/80 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl m-2 transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3">local_library</span>
+<span class="text-label-md font-label-md">Library</span>
+</a>
+</div>
+<!-- CTA & Footer -->
+<div class="px-6 mt-auto flex flex-col gap-4">
+<button class="w-full bg-primary text-on-primary py-3 px-4 rounded-organic font-label-md text-label-md shadow-ambient hover:bg-surface-tint transition-colors border border-primary-fixed/20 flex justify-center items-center">
+<span class="material-symbols-outlined mr-2 text-[18px]">play_circle</span>
+                Start Focus Session
+            </button>
+<div class="flex flex-col gap-1 border-t border-dashed-custom pt-4 mt-2">
+<a class="flex items-center px-4 py-2 text-on-primary-container/80 hover:text-on-primary-container rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[20px]">settings</span>
+<span class="text-label-sm font-label-sm">Settings</span>
+</a>
+<a class="flex items-center px-4 py-2 text-on-primary-container/80 hover:text-on-primary-container rounded-xl transition-all duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[20px]">logout</span>
+<span class="text-label-sm font-label-sm">Log Out</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 flex justify-between items-center w-full px-6 py-3 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30">
+<div class="flex items-center">
+<h2 class="text-headline-md font-headline-md font-bold text-primary italic md:hidden mr-4">Study Burrow</h2>
+<!-- Search (Left aligned as per JSON) -->
+<div class="relative hidden sm:flex items-center bg-surface-container rounded-full px-4 py-2 w-64 border border-outline-variant/50 focus-within:border-tertiary focus-within:ring-1 focus-within:ring-tertiary transition-all">
+<span class="material-symbols-outlined text-outline mr-2">search</span>
+<input class="bg-transparent border-none focus:outline-none text-body-md font-body-md text-on-surface w-full placeholder-outline-variant" placeholder="Search insights..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<!-- Navigation Links from JSON -->
+<div class="hidden lg:flex items-center gap-4">
+<span class="text-label-md font-label-md text-on-surface-variant bg-surface-container px-3 py-1.5 rounded-full border border-dashed-custom flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-1 text-secondary">local_fire_department</span>
+                        Streaks: 12 🔥
+                    </span>
+<span class="text-label-md font-label-md text-on-surface-variant hover:bg-primary-container/20 px-3 py-1.5 rounded-full transition-colors cursor-pointer flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-1 text-primary">park</span>
+                        Forest Mood
+                    </span>
+</div>
+<!-- Trailing Icons -->
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-surface-variant hover:bg-primary-container/20 rounded-full transition-colors">
+<span class="material-symbols-outlined">palette</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-primary-container/20 rounded-full transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-primary-container/20 rounded-full transition-colors">
+<span class="material-symbols-outlined">brightness_medium</span>
+</button>
+</div>
+<!-- Profile Avatar -->
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-container cursor-pointer ml-2">
+<img alt="Student avatar in forest attire" class="w-full h-full object-cover" data-alt="A portrait illustration of a student avatar dressed in cozy, forest-themed attire (like a moss-green knitted sweater and a small leaf pin). The art style is soft, hand-drawn cottagecore with warm, earthy tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAV-Gvs0-YiqiCNWfaQLT8ZWTX_nbcwox35zZVqz8hkQe0VOTASjHiJVosHhWzwZGmeSmaXmdO1zb-h0y0SqjZOUua_BEzzqeon0dNQ3Upz48bQcYHuxnJU6RZxrAq6wmUOl9PjagQ-HmWC-MZkL2Ri5DxY_F-suVrWXFOtVQ1cUJX-F2nelnJsBndqSy_r3Cd7vsNCYHXXQEXsmVKkepYCniouiOBVg4szuxCSxAHeiOMKrmDdZt0R"/>
+</div>
+</div>
+</header>
+<!-- Canvas / Dashboard Content -->
+<div class="p-6 md:p-8 max-w-[max-content-width] mx-auto w-full flex flex-col gap-8">
+<!-- Page Header & Export -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-2">
+<div>
+<h1 class="text-display-lg font-display-lg text-primary mb-2 flex items-center">
+<span class="material-symbols-outlined mr-3 text-[32px] text-tertiary">analytics</span>
+                        Estatísticas
+                    </h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant">Review your academic progress in the burrow.</p>
+</div>
+<button class="gold-foil-bg px-6 py-2.5 rounded-organic font-label-md text-label-md shadow-ambient hover:opacity-90 transition-opacity flex items-center gap-2 border border-secondary/30">
+<span class="material-symbols-outlined text-[18px]">download</span>
+                    Export PDF
+                </button>
+</div>
+<!-- Top Row: Hero Donut & Stats Cards -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-card-gap">
+<!-- Hero Donut Chart Card -->
+<div class="lg:col-span-5 bg-surface-container-low rounded-organic-lg p-container-padding shadow-ambient border border-outline-variant/40 relative overflow-hidden flex flex-col items-center justify-center min-h-[350px]">
+<!-- Decorative Background element -->
+<div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined text-[200px] text-primary">eco</span>
+</div>
+<div class="w-full flex justify-between items-start mb-6">
+<h3 class="text-headline-md font-headline-md text-on-surface flex items-center">
+<span class="material-symbols-outlined mr-2 text-secondary">pie_chart</span>
+                            Time Distribution
+                        </h3>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_horiz</span>
+</button>
+</div>
+<!-- Placeholder for Donut Chart Graphic -->
+<div class="relative w-48 h-48 rounded-full border-[16px] border-surface-variant flex items-center justify-center mb-4">
+<!-- Simulated segments using conic-gradient for the "ornate" feel in code -->
+<div class="absolute inset-0 rounded-full" style="background: conic-gradient(from 0deg, #4d6a44 0% 45%, #fdc39a 45% 70%, #c9c7b8 70% 90%, #805533 90% 100%); mask-image: radial-gradient(transparent 55%, black 56%); -webkit-mask-image: radial-gradient(transparent 55%, black 56%);"></div>
+<!-- Inner content -->
+<div class="text-center z-10 flex flex-col items-center">
+<span class="text-headline-lg font-headline-lg text-primary font-bold">42h</span>
+<span class="text-label-sm font-label-sm text-on-surface-variant mt-1">Total Focus</span>
+</div>
+</div>
+<!-- Legend -->
+<div class="flex flex-wrap justify-center gap-4 mt-4 w-full">
+<div class="flex items-center gap-1.5">
+<div class="w-3 h-3 rounded-full bg-primary-container"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Mathematics</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="w-3 h-3 rounded-full bg-secondary-container"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Literature</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="w-3 h-3 rounded-full bg-tertiary-fixed-dim"></div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Science</span>
+</div>
+</div>
+</div>
+<!-- Stats Cards Grid -->
+<div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-card-gap">
+<!-- Efficiency Score -->
+<div class="bg-surface rounded-organic p-container-padding shadow-ambient border border-dashed-custom flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-primary-container/10 rounded-lg">
+<span class="material-symbols-outlined text-primary">psychology</span>
+</div>
+<span class="text-label-sm font-label-sm text-primary bg-primary-fixed px-2 py-1 rounded-full">+5% this week</span>
+</div>
+<div class="mt-4">
+<p class="text-label-md font-label-md text-on-surface-variant mb-1">Efficiency Score</p>
+<p class="text-display-lg font-display-lg text-on-surface">87<span class="text-headline-md font-headline-md text-outline">/100</span></p>
+</div>
+<!-- Little vine progress indicator -->
+<div class="w-full bg-surface-variant h-2 rounded-full mt-4 overflow-hidden relative">
+<div class="absolute left-0 top-0 h-full bg-primary rounded-full w-[87%]"></div>
+</div>
+</div>
+<!-- Streak History -->
+<div class="bg-surface rounded-organic p-container-padding shadow-ambient border border-dashed-custom flex flex-col justify-between">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-secondary-container/20 rounded-lg">
+<span class="material-symbols-outlined text-secondary">local_fire_department</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant">Current</span>
+</div>
+<div class="mt-4">
+<p class="text-label-md font-label-md text-on-surface-variant mb-1">Streak History</p>
+<p class="text-display-lg font-display-lg text-on-surface">12 <span class="text-headline-md font-headline-md text-outline font-normal">Days</span></p>
+</div>
+<div class="flex justify-between mt-4">
+<!-- Small day indicators -->
+<div class="w-6 h-6 rounded-full bg-primary-container flex items-center justify-center text-[10px] text-on-primary">M</div>
+<div class="w-6 h-6 rounded-full bg-primary-container flex items-center justify-center text-[10px] text-on-primary">T</div>
+<div class="w-6 h-6 rounded-full bg-primary-container flex items-center justify-center text-[10px] text-on-primary">W</div>
+<div class="w-6 h-6 rounded-full bg-primary-container flex items-center justify-center text-[10px] text-on-primary">T</div>
+<div class="w-6 h-6 rounded-full bg-primary-container flex items-center justify-center text-[10px] text-on-primary">F</div>
+<div class="w-6 h-6 rounded-full border border-dashed-custom flex items-center justify-center text-[10px] text-on-surface-variant">S</div>
+<div class="w-6 h-6 rounded-full border border-dashed-custom flex items-center justify-center text-[10px] text-on-surface-variant">S</div>
+</div>
+</div>
+<!-- Additional Stat 1 -->
+<div class="bg-surface rounded-organic p-container-padding shadow-ambient border border-dashed-custom flex flex-col justify-between sm:col-span-2 md:col-span-1">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-tertiary-fixed-dim/30 rounded-lg">
+<span class="material-symbols-outlined text-tertiary">menu_book</span>
+</div>
+</div>
+<div class="mt-2">
+<p class="text-label-md font-label-md text-on-surface-variant mb-1">Pages Read</p>
+<p class="text-headline-lg font-headline-lg text-on-surface">342</p>
+</div>
+</div>
+<!-- Additional Stat 2 -->
+<div class="bg-surface rounded-organic p-container-padding shadow-ambient border border-dashed-custom flex flex-col justify-between sm:col-span-2 md:col-span-1">
+<div class="flex justify-between items-start">
+<div class="p-2 bg-inverse-primary/30 rounded-lg">
+<span class="material-symbols-outlined text-primary">emoji_events</span>
+</div>
+</div>
+<div class="mt-2">
+<p class="text-label-md font-label-md text-on-surface-variant mb-1">Quizzes Mastered</p>
+<p class="text-headline-lg font-headline-lg text-on-surface">14</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Row: Weekly Focus Bar Chart -->
+<div class="bg-surface-container-low rounded-organic-lg p-container-padding shadow-ambient border border-outline-variant/40 relative">
+<div class="flex justify-between items-center mb-8 border-b border-dashed-custom pb-4">
+<div>
+<h3 class="text-headline-md font-headline-md text-on-surface flex items-center">
+<span class="material-symbols-outlined mr-2 text-primary">bar_chart</span>
+                            Weekly Focus
+                        </h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant mt-1">Hours spent per day across subjects</p>
+</div>
+<select class="bg-surface border border-outline-variant rounded-md px-3 py-1.5 text-label-md font-label-md text-on-surface focus:ring-primary focus:border-primary">
+<option>This Week</option>
+<option>Last Week</option>
+<option>This Month</option>
+</select>
+</div>
+<!-- Styled Bar Chart Area -->
+<div class="h-64 flex items-end justify-between gap-2 sm:gap-4 pt-4">
+<!-- Y-Axis labels -->
+<div class="flex flex-col justify-between h-full text-label-sm font-label-sm text-outline pb-6 pr-2 border-r border-dashed-custom">
+<span>8h</span>
+<span>6h</span>
+<span>4h</span>
+<span>2h</span>
+<span>0h</span>
+</div>
+<!-- Bars -->
+<!-- Monday -->
+<div class="flex-1 flex flex-col items-center justify-end h-full group">
+<div class="w-full max-w-[40px] bg-primary-container/20 rounded-t-md relative flex items-end justify-center h-full">
+<div class="w-full bg-primary-container rounded-t-md transition-all group-hover:bg-primary" style="height: 60%;"></div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface mt-2">Mon</span>
+</div>
+<!-- Tuesday -->
+<div class="flex-1 flex flex-col items-center justify-end h-full group">
+<div class="w-full max-w-[40px] bg-primary-container/20 rounded-t-md relative flex items-end justify-center h-full">
+<div class="w-full bg-primary-container rounded-t-md transition-all group-hover:bg-primary" style="height: 80%;"></div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface mt-2">Tue</span>
+</div>
+<!-- Wednesday -->
+<div class="flex-1 flex flex-col items-center justify-end h-full group">
+<div class="w-full max-w-[40px] bg-primary-container/20 rounded-t-md relative flex items-end justify-center h-full">
+<div class="w-full bg-primary-container rounded-t-md transition-all group-hover:bg-primary" style="height: 45%;"></div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface mt-2">Wed</span>
+</div>
+<!-- Thursday -->
+<div class="flex-1 flex flex-col items-center justify-end h-full group">
+<div class="w-full max-w-[40px] bg-primary-container/20 rounded-t-md relative flex items-end justify-center h-full">
+<div class="w-full bg-secondary-container rounded-t-md transition-all group-hover:bg-secondary" style="height: 70%;"></div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface mt-2">Thu</span>
+</div>
+<!-- Friday -->
+<div class="flex-1 flex flex-col items-center justify-end h-full group">
+<div class="w-full max-w-[40px] bg-primary-container/20 rounded-t-md relative flex items-end justify-center h-full">
+<div class="w-full bg-primary-container rounded-t-md transition-all group-hover:bg-primary" style="height: 90%;"></div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface mt-2">Fri</span>
+</div>
+<!-- Saturday -->
+<div class="flex-1 flex flex-col items-center justify-end h-full group">
+<div class="w-full max-w-[40px] bg-primary-container/20 rounded-t-md relative flex items-end justify-center h-full">
+<div class="w-full bg-tertiary-fixed-dim rounded-t-md transition-all group-hover:bg-tertiary" style="height: 30%;"></div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface mt-2 text-outline">Sat</span>
+</div>
+<!-- Sunday -->
+<div class="flex-1 flex flex-col items-center justify-end h-full group">
+<div class="w-full max-w-[40px] bg-primary-container/20 rounded-t-md relative flex items-end justify-center h-full">
+<div class="w-full bg-tertiary-fixed-dim rounded-t-md transition-all group-hover:bg-tertiary" style="height: 20%;"></div>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface mt-2 text-outline">Sun</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

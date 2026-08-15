@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Home - Study Burrow</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700&amp;family=Quicksand:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#fdc39a",
+                        "primary-container": "#4d6a44",
+                        "on-primary": "#ffffff",
+                        "primary-fixed": "#caecbc",
+                        "on-surface-variant": "#434840",
+                        "surface-container-low": "#f4f4ee",
+                        "on-secondary-container": "#794e2e",
+                        "on-error": "#ffffff",
+                        "background": "#fafaf4",
+                        "tertiary-fixed-dim": "#c9c7b8",
+                        "tertiary": "#4c4b40",
+                        "on-tertiary-container": "#e2dfd0",
+                        "on-primary-fixed": "#072104",
+                        "primary-fixed-dim": "#afd0a2",
+                        "error-container": "#ffdad6",
+                        "surface-container": "#eeeee8",
+                        "inverse-primary": "#afd0a2",
+                        "primary": "#36522e",
+                        "outline-variant": "#c3c8bd",
+                        "surface-container-highest": "#e3e3dd",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-tint": "#496640",
+                        "on-primary-fixed-variant": "#324e2a",
+                        "outline": "#73796f",
+                        "surface-variant": "#e3e3dd",
+                        "on-tertiary-fixed-variant": "#48473c",
+                        "on-background": "#1a1c19",
+                        "inverse-on-surface": "#f1f1eb",
+                        "surface-dim": "#dadad5",
+                        "on-secondary-fixed-variant": "#653d1e",
+                        "on-surface": "#1a1c19",
+                        "on-primary-container": "#c7e9b9",
+                        "surface-bright": "#fafaf4",
+                        "secondary-fixed-dim": "#f4bb92",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e9e8e3",
+                        "on-secondary-fixed": "#301400",
+                        "tertiary-container": "#646357",
+                        "on-tertiary-fixed": "#1c1c13",
+                        "surface": "#fafaf4",
+                        "on-tertiary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "inverse-surface": "#2f312d",
+                        "secondary-fixed": "#ffdcc5",
+                        "tertiary-fixed": "#e6e3d3",
+                        "secondary": "#805533"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-padding": "24px",
+                        "max-content-width": "1200px",
+                        "section-margin": "40px",
+                        "unit": "8px",
+                        "card-gap": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "label-md": ["Quicksand"],
+                        "label-sm": ["Quicksand"]
+                    },
+                    "fontSize": {
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }]
+                    },
+                    "boxShadow": {
+                        "ambient": "0 4px 20px -2px rgba(139, 94, 60, 0.15)",
+                        "ambient-lg": "0 8px 32px -4px rgba(139, 94, 60, 0.12)",
+                    }
+                }
+            }
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .bg-pattern-botanical {
+                background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%234d6a44" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+            }
+            .border-journal {
+                border: 1px dashed #8B5E3C;
+            }
+            .scrollbar-hide::-webkit-scrollbar {
+                display: none;
+            }
+            .scrollbar-hide {
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex font-body-md bg-pattern-botanical selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-primary-container dark:bg-primary-container border-r-4 border-double border-primary/20 shadow-xl py-6 z-40">
+<div class="px-6 mb-8 flex flex-col items-center text-center">
+<div class="w-20 h-20 rounded-full bg-surface-container flex items-center justify-center mb-3 shadow-ambient border-2 border-primary-fixed overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A cute vector illustration of a fluffy bunny mascot wearing tiny reading glasses, set against a soft cream background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_f8jtXmFNWPqH7hsXleJ65p6wuERNPBgO21y9msLA0w0ZZ9MbAVbvWJdnxIPx5H7bkoWxZyw6Nai84l20_hyvaKF_gxCEfiPnGmeMHinYfOsUjPNFWr8CXehOgkaXUCsoDGacIv_s9kvqo7i7-GrTyvkvfjcJMytsYnrCeAht-ks1lN09kNOFuALwLJinK1UBhYPpKDER637UuVgTiTUtDrzrM2sUQ2XLuTQTpUy4H7QXflfeLuR7"/>
+</div>
+<h1 class="text-headline-md font-headline-md text-on-primary-container font-bold">Study Burrow</h1>
+<p class="text-label-md font-label-md text-on-primary-container/80 mt-1">Welcome, Little Scholar</p>
+</div>
+<div class="flex-1 px-4 space-y-2 overflow-y-auto scrollbar-hide">
+<a class="flex items-center gap-3 px-4 py-3 bg-surface-container-highest/40 text-on-primary-container font-bold rounded-xl shadow-inner transition-all duration-200 scale-95 cursor-pointer" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home_app_logo</span>
+<span class="text-label-md font-label-md">Home</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-primary-container/80 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-label-md font-label-md">Organizer</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-primary-container/80 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-label-md font-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-primary-container/80 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer" href="#">
+<span class="material-symbols-outlined">psychology_alt</span>
+<span class="text-label-md font-label-md">AI Assistant</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-primary-container/80 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer" href="#">
+<span class="material-symbols-outlined">quiz</span>
+<span class="text-label-md font-label-md">Quiz</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-primary-container/80 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer" href="#">
+<span class="material-symbols-outlined">local_library</span>
+<span class="text-label-md font-label-md">Library</span>
+</a>
+</div>
+<div class="px-6 mt-6">
+<button class="w-full py-3 bg-primary text-on-primary rounded-xl font-label-md text-label-md shadow-ambient hover:translate-y-px transition-transform flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg">play_arrow</span>
+                Start Focus Session
+            </button>
+</div>
+<div class="mt-6 px-4 space-y-2 border-t border-primary/20 pt-4">
+<a class="flex items-center gap-3 px-4 py-2 text-on-primary-container/80 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-on-primary-container/80 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-label-md font-label-md">Log Out</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 w-full flex flex-col relative min-h-screen">
+<!-- TopAppBar (Mobile & Global Actions) -->
+<header class="sticky top-0 z-50 flex justify-between items-center w-full px-6 py-3 bg-surface/80 dark:bg-surface-dim/80 backdrop-blur-md border-b border-outline-variant/30 dark:border-outline/20">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="hidden md:flex gap-6">
+<a class="text-primary dark:text-primary-fixed font-bold border-b-2 border-primary pb-1 text-label-md font-label-md translate-y-0.5 transition-all duration-150" href="#">Streaks: 12 🔥</a>
+<a class="text-on-surface-variant dark:text-on-tertiary-fixed-variant pb-1 text-label-md font-label-md hover:text-primary transition-colors" href="#">Forest Mood</a>
+</div>
+<h1 class="md:hidden text-headline-md font-headline-md font-bold text-primary dark:text-primary-fixed italic">Study Burrow</h1>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-on-surface-variant hover:bg-primary-container/20 rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">palette</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-primary-container/20 rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<button class="p-2 text-on-surface-variant hover:bg-primary-container/20 rounded-full transition-colors flex items-center justify-center">
+<span class="material-symbols-outlined">brightness_medium</span>
+</button>
+<div class="w-8 h-8 rounded-full overflow-hidden border border-outline-variant ml-2">
+<img class="w-full h-full object-cover" data-alt="Student avatar in forest attire, small icon size, watercolor style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1gwRdzQ-synRir6xbC4FK3hkPJ2U4omlOj44DTKrT38Ug0huHhU_jC9hrdPHPdpOR9D2LJ9XJcfj8_qKlf4boWmdA5Ew6Yxk6UtiIQuw8jXdruzUEs5i7jOZPItfnNLiwVumcaeb3CcYW0OzQZ3L4B-eUIaOvF3g1TizeLriv5jw7biwbyyYxUIHjQbn6V_fV3c0hUdATR-K9HqqfLCrhsE9oYndypQg6ACkkrJRZZSyEPdlvULTp"/>
+</div>
+</div>
+</header>
+<div class="p-6 md:p-10 max-w-max-content-width mx-auto w-full flex-1 flex flex-col gap-6">
+<!-- Welcome Header -->
+<section class="bg-surface-container-low rounded-2xl p-8 shadow-ambient border-journal relative overflow-hidden flex flex-col md:flex-row items-center gap-8">
+<div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
+<span class="material-symbols-outlined" style="font-size: 200px;">eco</span>
+</div>
+<div class="w-32 h-32 rounded-full border-4 border-surface shadow-md overflow-hidden z-10 shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A beautifully rendered portrait of Anna, a young student surrounded by soft glowing fireflies in a cozy evening forest setting. Soft pastel colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQLoxwlm4SVnC4EZ_qLLx_hKXQU5xNJWmMZneLwuxVdD5w1wPs_xx0sW0IP_JIwkS2V5Aa7UKyH5Y-DBBvXQGoWth5GhyhYzRvHUN7yXSoY-vIc0C1_NC_oADUvub2VuEE8w7RPwv2gC8YrCpPLhCNGmTHRi2YzL6S9_ysO3g9QGPWKjIsLISbH1uuxiPea_GTYRj4xg3hJ7xZNMoZKISOPvyGXvndCwJPDdoDr9MPg4GwjYtQJed6"/>
+</div>
+<div class="z-10 text-center md:text-left">
+<h2 class="text-display-lg font-display-lg text-on-surface mb-2 font-serif">Welcome back, Anna</h2>
+<p class="text-body-lg font-body-lg text-on-surface-variant flex items-center justify-center md:justify-start gap-2">
+                        Here's what's happening in your burrow today. <span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">potted_plant</span>
+</p>
+</div>
+</section>
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Main Stats Column -->
+<div class="md:col-span-8 flex flex-col gap-6">
+<!-- KPI Cards -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-surface rounded-xl p-5 shadow-ambient border-journal flex flex-col relative overflow-hidden hover:-translate-y-1 transition-transform">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-2">Total Hours</span>
+<div class="flex items-end justify-between mt-auto">
+<span class="text-headline-lg font-headline-lg text-primary font-bold">42</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1; font-size: 32px;">hourglass_top</span>
+</div>
+<span class="text-label-sm text-outline mt-2">+5 this week</span>
+</div>
+<div class="bg-surface rounded-xl p-5 shadow-ambient border-journal flex flex-col relative overflow-hidden hover:-translate-y-1 transition-transform">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-2">Topics</span>
+<div class="flex items-end justify-between mt-auto">
+<span class="text-headline-lg font-headline-lg text-primary font-bold">14</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1; font-size: 32px;">menu_book</span>
+</div>
+<span class="text-label-sm text-outline mt-2">2 completed</span>
+</div>
+<div class="bg-surface rounded-xl p-5 shadow-ambient border-journal flex flex-col relative overflow-hidden hover:-translate-y-1 transition-transform">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-2">Quizzes</span>
+<div class="flex items-end justify-between mt-auto">
+<span class="text-headline-lg font-headline-lg text-primary font-bold">8</span>
+<span class="material-symbols-outlined text-secondary-container" style="font-variation-settings: 'FILL' 1; font-size: 32px;">task_alt</span>
+</div>
+<span class="text-label-sm text-outline mt-2">Avg 85%</span>
+</div>
+<div class="bg-surface-container rounded-xl p-5 shadow-ambient flex flex-col relative overflow-hidden hover:-translate-y-1 transition-transform border border-primary/10">
+<span class="text-label-sm font-label-sm text-on-surface-variant uppercase tracking-wider mb-2">Energy</span>
+<div class="flex items-end justify-between mt-auto">
+<span class="text-headline-lg font-headline-lg text-on-surface font-bold">High</span>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1; font-size: 32px;">battery_charging_full</span>
+</div>
+<div class="w-full bg-surface h-2 rounded-full mt-3 overflow-hidden">
+<div class="bg-primary h-full w-3/4 rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Current Focus Area -->
+<div class="bg-surface rounded-2xl shadow-ambient-lg border border-surface-dim overflow-hidden">
+<div class="bg-primary-container px-6 py-4 flex justify-between items-center text-on-primary-container">
+<h3 class="text-headline-md font-headline-md font-bold flex items-center gap-2">
+<span class="material-symbols-outlined">auto_stories</span> Current Focus
+                            </h3>
+<button class="text-label-sm font-label-sm bg-surface/20 hover:bg-surface/30 px-3 py-1 rounded-full transition-colors">View Curriculum &gt;</button>
+</div>
+<div class="p-6">
+<div class="flex flex-col gap-4">
+<!-- Focus Item -->
+<div class="flex items-center gap-4 p-4 rounded-xl hover:bg-surface-container-lowest transition-colors group border-b border-journal pb-4">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-secondary-container">functions</span>
+</div>
+<div class="flex-1">
+<h4 class="text-label-md font-label-md text-on-surface font-bold">Advanced Calculus: Integrals</h4>
+<p class="text-body-md font-body-md text-on-surface-variant text-sm line-clamp-1">Chapter 4 review and practice problems.</p>
+</div>
+<div class="w-32 flex flex-col gap-1 items-end hidden sm:flex">
+<span class="text-label-sm text-on-surface-variant">65% Complete</span>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[65%] rounded-full"></div>
+</div>
+</div>
+<button class="p-2 text-outline hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+<!-- Focus Item -->
+<div class="flex items-center gap-4 p-4 rounded-xl hover:bg-surface-container-lowest transition-colors group">
+<div class="w-12 h-12 rounded-full bg-tertiary-fixed-dim flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-on-tertiary-fixed-variant">history_edu</span>
+</div>
+<div class="flex-1">
+<h4 class="text-label-md font-label-md text-on-surface font-bold">European History: Renaissance</h4>
+<p class="text-body-md font-body-md text-on-surface-variant text-sm line-clamp-1">Essay drafting and source gathering.</p>
+</div>
+<div class="w-32 flex flex-col gap-1 items-end hidden sm:flex">
+<span class="text-label-sm text-on-surface-variant">30% Complete</span>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[30%] rounded-full"></div>
+</div>
+</div>
+<button class="p-2 text-outline hover:text-primary transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Sidebar (Tasks & Mood) -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<!-- Today's Tasks -->
+<div class="bg-surface-container-lowest rounded-2xl shadow-ambient border-journal p-6 flex flex-col h-full max-h-[500px]">
+<div class="flex justify-between items-center mb-6 border-b border-outline-variant pb-2">
+<h3 class="text-headline-sm font-headline-md font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">checklist</span> Tasks
+                            </h3>
+<button class="text-label-sm font-label-sm text-primary hover:underline">Add New</button>
+</div>
+<div class="flex-1 overflow-y-auto pr-2 space-y-4 scrollbar-hide">
+<label class="flex items-start gap-3 cursor-pointer group">
+<input checked="" class="mt-1 rounded text-primary focus:ring-primary border-outline bg-surface w-4 h-4" type="checkbox"/>
+<div class="flex-1">
+<p class="text-label-md font-label-md text-on-surface line-through opacity-70">Review biology notes</p>
+<span class="text-label-sm text-error bg-error-container px-2 py-0.5 rounded-full mt-1 inline-block">High</span>
+</div>
+</label>
+<label class="flex items-start gap-3 cursor-pointer group">
+<input class="mt-1 rounded text-primary focus:ring-primary border-outline bg-surface w-4 h-4" type="checkbox"/>
+<div class="flex-1">
+<p class="text-label-md font-label-md text-on-surface group-hover:text-primary transition-colors">Draft lit essay intro</p>
+<span class="text-label-sm text-on-secondary-container bg-secondary-container px-2 py-0.5 rounded-full mt-1 inline-block">Medium</span>
+</div>
+</label>
+<label class="flex items-start gap-3 cursor-pointer group">
+<input class="mt-1 rounded text-primary focus:ring-primary border-outline bg-surface w-4 h-4" type="checkbox"/>
+<div class="flex-1">
+<p class="text-label-md font-label-md text-on-surface group-hover:text-primary transition-colors">Organize desk</p>
+<span class="text-label-sm text-on-primary-container bg-primary-container/30 px-2 py-0.5 rounded-full mt-1 inline-block">Low</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Forest Mood Selector -->
+<div class="bg-surface rounded-2xl shadow-ambient border border-surface-dim p-6">
+<h3 class="text-headline-sm font-headline-md font-bold text-on-surface mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary">landscape</span> Forest Mood
+                        </h3>
+<div class="grid grid-cols-2 gap-3">
+<button class="relative rounded-xl overflow-hidden aspect-video border-2 border-primary focus:outline-none shadow-sm group">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A lush green forest clearing bathed in warm morning sunlight, highly detailed, cottagecore aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPhyAE6DY6WlADp1wbjgEtCG94wepZtbHz8qfcHh35vuW8XeQqjpdqIKpFY3C5uFuBdo3wGJM5jlhA-gKsMkKb7JTNh0Vx6JfOX4G5lKjWoIb7aytNoQM5zRMuJZ5HSAdT8ohTfhtibEPpzypKPP15him15WKSo_3_vBLwJlWd_9QPLkjNDGzUxrpOIluV_LBYqjJBwCrTwIH9uBcgse2BprV2B7SMvuLAE6zlPohTvhMkJC3hHZER"/>
+<div class="absolute inset-0 bg-black/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-white shadow-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</button>
+<button class="relative rounded-xl overflow-hidden aspect-video border-2 border-transparent hover:border-primary/50 focus:outline-none shadow-sm group">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A cozy study room at night illuminated by warm lamplight, raining softly outside the window, lo-fi aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWUtjDM4sdCijHDOkPa6QVtnCdrlNjXxvRge07F2cumAuw9uz7xv4nxh_dK1gUpZMS9yXf0WnzBaFfi3GVF7zz_Nymr47lu3MJUtOndH9uGEVbB0rYzbYZzPQlhamEqX87aIr0D6XPPAEiJ5qirrSg1wWaUMsmvcMPERSZVzLUk5qzeUJFoqFxvZtW0-nd7qzyE0_Ghq5kBdllRWyJP0NLyl1kkLQE2bCXL8Mh5YLxzraQBr5EsgZl"/>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

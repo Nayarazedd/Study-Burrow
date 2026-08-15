@@ -1,17 +1,1832 @@
-<!doctype html>
-<html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Study Burrow | Toca de Estudos</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Literata:ital,opsz,wght@0,7..72,200..900;1,7..72,200..900&family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  </head>
-  <body class="bg-[#fdf9f0] text-[#1c1c17] font-['Quicksand',sans-serif]">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Study Burrow | Toca de Estudos Integrada</title>
+  
+  <!-- Tailwind CSS & Plugins -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 
+  <!-- Firebase SDK (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <!-- Tailwind Configuration -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#36522e",
+            "primary-container": "#4d6a44",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#c7e9b9",
+            "primary-fixed": "#caecbc",
+            "primary-fixed-dim": "#afd0a2",
+            "secondary": "#805533",
+            "secondary-container": "#fdc39a",
+            "on-secondary": "#ffffff",
+            "on-secondary-container": "#794e2e",
+            "secondary-fixed": "#ffdcc5",
+            "secondary-fixed-dim": "#f4bb92",
+            "tertiary": "#4c4b40",
+            "tertiary-container": "#646357",
+            "on-tertiary-container": "#e2dfd0",
+            "tertiary-fixed": "#e6e3d3",
+            "tertiary-fixed-dim": "#c9c7b8",
+            "background": "#fafaf4",
+            "surface": "#fafaf4",
+            "surface-dim": "#dadad5",
+            "surface-bright": "#fafaf4",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f4f4ee",
+            "surface-container": "#eeeee8",
+            "surface-container-high": "#e9e8e3",
+            "surface-container-highest": "#e3e3dd",
+            "on-surface": "#1a1c19",
+            "on-surface-variant": "#434840",
+            "outline": "#73796f",
+            "outline-variant": "#c3c8bd",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "on-error-container": "#93000a"
+          },
+          fontFamily: {
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Be Vietnam Pro", "sans-serif"],
+            "label": ["Quicksand", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+  
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="bg-background text-on-surface font-body min-h-screen flex selection:bg-secondary-container selection:text-on-secondary-container">
+
+  <!-- Desktop Side Navigation Bar -->
+  <nav class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-primary-container border-r-4 border-double border-primary/20 shadow-xl py-5 z-40">
+    <div class="px-6 mb-4 flex flex-col items-center text-center">
+      <div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-2 shadow-ambient border-2 border-primary-fixed overflow-hidden relative">
+        <img class="w-full h-full object-cover" alt="Mascote Coelho" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_f8jtXmFNWPqH7hsXleJ65p6wuERNPBgO21y9msLA0w0ZZ9MbAVbvWJdnxIPx5H7bkoWxZyw6Nai84l20_hyvaKF_gxCEfiPnGmeMHinYfOsUjPNFWr8CXehOgkaXUCsoDGacIv_s9kvqo7i7-GrTyvkvfjcJMytsYnrCeAht-ks1lN09kNOFuALwLJinK1UBhYPpKDER637UuVgTiTUtDrzrM2sUQ2XLuTQTpUy4H7QXflfeLuR7"/>
+      </div>
+      <h1 class="text-lg font-headline font-bold text-on-primary-container italic tracking-tight">Study Burrow</h1>
+      <p id="user-display-subtitle" class="text-xs font-label text-on-primary-container/80">Estudante da Toca</p>
+    </div>
+
+    <!-- Navigation Menu Items -->
+    <div class="flex-1 px-3 space-y-1 overflow-y-auto scrollbar-hide">
+      <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-link w-full flex items-center gap-3 px-3.5 py-2.5 text-on-primary-container/90 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer active-nav">
+        <span class="material-symbols-outlined text-xl">dashboard</span>
+        <span class="text-xs font-label font-bold">Dashboard</span>
+      </button>
+
+      <button onclick="switchTab('pomodoro')" id="nav-pomodoro" class="nav-link w-full flex items-center gap-3 px-3.5 py-2.5 text-on-primary-container/90 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer">
+        <span class="material-symbols-outlined text-xl">timer</span>
+        <span class="text-xs font-label font-bold">Estação Pomodoro</span>
+      </button>
+
+      <button onclick="switchTab('organizer')" id="nav-organizer" class="nav-link w-full flex items-center gap-3 px-3.5 py-2.5 text-on-primary-container/90 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer">
+        <span class="material-symbols-outlined text-xl">calendar_today</span>
+        <span class="text-xs font-label font-bold">Organizador</span>
+      </button>
+
+      <button onclick="switchTab('ai-assistant')" id="nav-ai-assistant" class="nav-link w-full flex items-center gap-3 px-3.5 py-2.5 text-on-primary-container/90 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer">
+        <span class="material-symbols-outlined text-xl">psychology_alt</span>
+        <span class="text-xs font-label font-bold">Assistente de IA</span>
+      </button>
+
+      <button onclick="switchTab('essay-lab')" id="nav-essay-lab" class="nav-link w-full flex items-center gap-3 px-3.5 py-2.5 text-on-primary-container/90 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer">
+        <span class="material-symbols-outlined text-xl">edit_note</span>
+        <span class="text-xs font-label font-bold">Corrigir Redação</span>
+      </button>
+
+      <button onclick="switchTab('stats')" id="nav-stats" class="nav-link w-full flex items-center gap-3 px-3.5 py-2.5 text-on-primary-container/90 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer">
+        <span class="material-symbols-outlined text-xl">analytics</span>
+        <span class="text-xs font-label font-bold">Estatísticas</span>
+      </button>
+
+      <button onclick="switchTab('garden')" id="nav-garden" class="nav-link w-full flex items-center gap-3 px-3.5 py-2.5 text-on-primary-container/90 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer">
+        <span class="material-symbols-outlined text-xl">potted_plant</span>
+        <span class="text-xs font-label font-bold">Jardim & Conquistas</span>
+      </button>
+
+      <button onclick="switchTab('support')" id="nav-support" class="nav-link w-full flex items-center gap-3 px-3.5 py-2.5 text-on-primary-container/90 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer">
+        <span class="material-symbols-outlined text-xl">help_outline</span>
+        <span class="text-xs font-label font-bold">Suporte</span>
+      </button>
+
+      <a href="perfil.html" id="nav-profile" class="nav-link w-full flex items-center gap-3 px-3.5 py-2.5 text-on-primary-container/90 hover:text-on-primary-container hover:bg-surface-container-highest/20 rounded-xl transition-all duration-200 cursor-pointer">
+        <span class="material-symbols-outlined text-xl">person</span>
+        <span class="text-xs font-label font-bold">Meu Perfil</span>
+      </a>
+    </div>
+
+    <!-- Action Button & Footer -->
+    <div class="px-5 mt-3 space-y-2.5">
+      <button onclick="switchTab('pomodoro')" class="w-full py-2.5 bg-surface-container-lowest text-primary rounded-xl font-label font-bold text-xs shadow-ambient hover:bg-surface-bright active:translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer border border-primary/20">
+        <span class="material-symbols-outlined text-base">local_cafe</span>
+        Iniciar Foco (25m)
+      </button>
+
+      <div class="pt-2 border-t border-primary/20 space-y-0.5">
+        <button onclick="handleLogout()" class="w-full flex items-center gap-2 px-3 py-1.5 text-on-primary-container/80 hover:text-on-primary-container rounded-lg text-xs font-label transition-colors cursor-pointer text-left">
+          <span class="material-symbols-outlined text-base">logout</span>
+          Sair da Conta
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile Bottom Navigation Bar -->
+  <nav class="md:hidden fixed bottom-0 left-0 w-full bg-surface-container-lowest shadow-[0_-4px_20px_-2px_rgba(139,94,60,0.15)] z-50 rounded-t-2xl px-2 py-1.5 flex justify-around items-center border-t border-outline-variant/30 text-[10px]">
+    <button onclick="switchTab('dashboard')" id="bnav-dashboard" class="bottom-nav-link flex flex-col items-center p-1 text-on-surface-variant cursor-pointer active-nav">
+      <span class="material-symbols-outlined text-xl">dashboard</span>
+      <span class="font-label font-bold">Início</span>
+    </button>
+    <button onclick="switchTab('pomodoro')" id="bnav-pomodoro" class="bottom-nav-link flex flex-col items-center p-1 text-on-surface-variant cursor-pointer">
+      <span class="material-symbols-outlined text-xl">timer</span>
+      <span class="font-label font-bold">Foco</span>
+    </button>
+    <button onclick="switchTab('organizer')" id="bnav-organizer" class="bottom-nav-link flex flex-col items-center p-1 text-on-surface-variant cursor-pointer">
+      <span class="material-symbols-outlined text-xl">calendar_today</span>
+      <span class="font-label font-bold">Agenda</span>
+    </button>
+    <button onclick="switchTab('ai-assistant')" id="bnav-ai-assistant" class="bottom-nav-link flex flex-col items-center p-1 text-on-surface-variant cursor-pointer">
+      <span class="material-symbols-outlined text-xl">psychology_alt</span>
+      <span class="font-label font-bold">IA</span>
+    </button>
+    <button onclick="switchTab('stats')" id="bnav-stats" class="bottom-nav-link flex flex-col items-center p-1 text-on-surface-variant cursor-pointer">
+      <span class="material-symbols-outlined text-xl">analytics</span>
+      <span class="font-label font-bold">Stats</span>
+    </button>
+  </nav>
+
+  <!-- Main Content Wrapper -->
+  <main class="flex-1 md:ml-64 w-full flex flex-col min-h-screen relative pb-20 md:pb-8">
+    
+    <!-- Top Bar (Global Actions & Storage Mode Badge) -->
+    <header class="sticky top-0 z-30 flex justify-between items-center w-full px-6 py-3 bg-surface/90 backdrop-blur-md border-b border-outline-variant/30">
+      <div class="flex items-center gap-3">
+        <h1 class="md:hidden text-base font-headline font-bold text-primary italic">Study Burrow</h1>
+        
+        <!-- User Level & XP Badge -->
+        <div class="flex items-center gap-2 bg-surface-container-low px-3 py-1 rounded-full border border-dashed-custom">
+          <span class="material-symbols-outlined text-base text-secondary filled">grade</span>
+          <span id="header-xp-display" class="text-xs font-label font-bold text-on-surface-variant">Nível 1 • 65 XP</span>
+        </div>
+
+        <!-- Mode Badge (Visitante vs Logado/Nuvem) -->
+        <div id="storage-mode-badge" class="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-label font-bold bg-[#f1eee5] text-[#7d5231] border border-[#c2c8be]">
+          <span id="storage-mode-icon" class="material-symbols-outlined text-base">phonelink_off</span>
+          <span id="storage-mode-text">Modo Visitante (Local)</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button onclick="toggleForestMood()" class="flex items-center gap-1.5 bg-surface-container px-3 py-1 rounded-full text-xs font-label font-bold text-on-surface-variant hover:bg-primary-container/20 hover:text-primary transition-colors cursor-pointer">
+          <span class="material-symbols-outlined text-base text-primary">park</span>
+          <span class="hidden sm:inline">Modo Floresta</span>
+        </button>
+
+        <div class="flex items-center gap-1">
+          <a title="Meu Perfil" href="perfil.html" class="p-1.5 text-on-surface-variant hover:bg-primary-container/20 rounded-full transition-colors cursor-pointer">
+            <span class="material-symbols-outlined text-xl">account_circle</span>
+          </a>
+          <button title="Notificações" onclick="showNotificationToast()" class="p-1.5 text-on-surface-variant hover:bg-primary-container/20 rounded-full transition-colors cursor-pointer relative">
+            <span class="material-symbols-outlined text-xl">notifications</span>
+            <span class="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full"></span>
+          </button>
+        </div>
+
+        <a href="perfil.html" class="w-8 h-8 rounded-full overflow-hidden border-2 border-primary-container cursor-pointer ml-1 shadow-sm" title="Clique para ver seu perfil">
+          <img class="w-full h-full object-cover" alt="Avatar Estudante" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1gwRdzQ-synRir6xbC4FK3hkPJ2U4omlOj44DTKrT38Ug0huHhU_jC9hrdPHPdpOR9D2LJ9XJcfj8_qKlf4boWmdA5Ew6Yxk6UtiIQuw8jXdruzUEs5i7jOZPItfnNLiwVumcaeb3CcYW0OzQZ3L4B-eUIaOvF3g1TizeLriv5jw7biwbyyYxUIHjQbn6V_fV3c0hUdATR-K9HqqfLCrhsE9oYndypQg6ACkkrJRZZSyEPdlvULTp"/>
+        </a>
+      </div>
+    </header>
+
+    <!-- Content Sections Container -->
+    <div class="p-6 md:p-8 max-w-[1400px] mx-auto w-full flex-1">
+
+      <!-- ===================================================================
+           VIEW 1: DASHBOARD INICIAL
+           =================================================================== -->
+      <section id="view-dashboard" class="view-section active-view">
+        <div class="bg-surface-container-low rounded-3xl p-6 md:p-8 shadow-ambient border-journal relative overflow-hidden flex flex-col md:flex-row items-center gap-6 mb-8">
+          <div class="absolute -right-8 -bottom-8 opacity-10 pointer-events-none">
+            <span class="material-symbols-outlined" style="font-size: 180px;">eco</span>
+          </div>
+          <div class="w-24 h-24 rounded-full border-4 border-surface shadow-md overflow-hidden z-10 shrink-0 bg-surface-container">
+            <img class="w-full h-full object-cover" alt="Anna portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQLoxwlm4SVnC4EZ_qLLx_hKXQU5xNJWmMZneLwuxVdD5w1wPs_xx0sW0IP_JIwkS2V5Aa7UKyH5Y-DBBvXQGoWth5GhyhYzRvHUN7yXSoY-vIc0C1_NC_oADUvub2VuEE8w7RPwv2gC8YrCpPLhCNGmTHRi2YzL6S9_ysO3g9QGPWKjIsLISbH1uuxiPea_GTYRj4xg3hJ7xZNMoZKISOPvyGXvndCwJPDdoDr9MPg4GwjYtQJed6"/>
+          </div>
+          <div class="z-10 text-center md:text-left">
+            <h2 id="dashboard-welcome-name" class="text-2xl md:text-3xl font-headline font-bold text-on-surface mb-1">Bem-vindo à Toca de Estudos! 🌸</h2>
+            <p class="text-sm text-on-surface-variant flex items-center justify-center md:justify-start gap-2">
+              Um espaço tranquilo para focar e crescer no seu próprio ritmo.
+              <span class="material-symbols-outlined text-primary text-base filled">potted_plant</span>
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div class="lg:col-span-8 space-y-6">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="bg-surface rounded-2xl p-4 shadow-ambient border-journal flex flex-col justify-between hover:-translate-y-1 transition-transform">
+                <span class="text-[11px] font-label font-bold text-on-surface-variant uppercase tracking-wider mb-1">Horas Focadas</span>
+                <div class="flex items-end justify-between mt-1">
+                  <span id="dash-focus-min" class="text-2xl font-headline font-bold text-primary">50 min</span>
+                  <span class="material-symbols-outlined text-secondary-container filled text-2xl">hourglass_top</span>
+                </div>
+                <span class="text-[10px] font-label text-outline mt-1.5">+2 sessões concluídas</span>
+              </div>
+
+              <div class="bg-surface rounded-2xl p-4 shadow-ambient border-journal flex flex-col justify-between hover:-translate-y-1 transition-transform">
+                <span class="text-[11px] font-label font-bold text-on-surface-variant uppercase tracking-wider mb-1">Redações</span>
+                <div class="flex items-end justify-between mt-1">
+                  <span class="text-2xl font-headline font-bold text-primary">1</span>
+                  <span class="material-symbols-outlined text-secondary-container filled text-2xl">edit_note</span>
+                </div>
+                <span class="text-[10px] font-label text-outline mt-1.5">Nota 920/1000</span>
+              </div>
+
+              <div class="bg-surface rounded-2xl p-4 shadow-ambient border-journal flex flex-col justify-between hover:-translate-y-1 transition-transform">
+                <span class="text-[11px] font-label font-bold text-on-surface-variant uppercase tracking-wider mb-1">Quizzes IA</span>
+                <div class="flex items-end justify-between mt-1">
+                  <span class="text-2xl font-headline font-bold text-primary">3</span>
+                  <span class="material-symbols-outlined text-secondary-container filled text-2xl">task_alt</span>
+                </div>
+                <span class="text-[10px] font-label text-outline mt-1.5">Média de 88%</span>
+              </div>
+
+              <div class="bg-surface-container rounded-2xl p-4 shadow-ambient flex flex-col justify-between hover:-translate-y-1 transition-transform border border-primary/10">
+                <span class="text-[11px] font-label font-bold text-on-surface-variant uppercase tracking-wider mb-1">Energia</span>
+                <div class="flex items-end justify-between mt-1">
+                  <span class="text-2xl font-headline font-bold text-on-surface">Alta</span>
+                  <span class="material-symbols-outlined text-primary filled text-2xl">battery_charging_full</span>
+                </div>
+                <div class="w-full bg-surface h-2 rounded-full mt-2 overflow-hidden">
+                  <div class="bg-primary h-full w-3/4 rounded-full"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <button onclick="switchTab('ai-assistant')" class="chunky-btn w-full text-left cursor-pointer group">
+                <div class="bg-[#fe9572]/20 border-2 border-[#fe9572] rounded-3xl p-6 h-full flex flex-col justify-between hover:bg-[#fe9572]/30 transition-colors shadow-sm">
+                  <div class="w-12 h-12 bg-[#99462a] rounded-2xl flex items-center justify-center text-white mb-4">
+                    <span class="material-symbols-outlined text-2xl">auto_awesome</span>
+                  </div>
+                  <div>
+                    <h3 class="font-headline text-xl font-bold text-[#762c12] mb-1">Estudar com IA</h3>
+                    <p class="text-xs text-[#390b00]">Sessões guiadas e amigáveis para revisar matérias difíceis.</p>
+                  </div>
+                </div>
+              </button>
+
+              <button onclick="switchTab('essay-lab')" class="chunky-btn w-full text-left cursor-pointer group">
+                <div class="bg-[#c6edc4]/40 border-2 border-[#436444] rounded-3xl p-6 h-full flex flex-col justify-between hover:bg-[#c6edc4]/60 transition-colors shadow-sm">
+                  <div class="w-12 h-12 bg-[#436444] rounded-2xl flex items-center justify-center text-white mb-4">
+                    <span class="material-symbols-outlined text-2xl">edit_note</span>
+                  </div>
+                  <div>
+                    <h3 class="font-headline text-xl font-bold text-[#012108] mb-1">Corrigir Redação</h3>
+                    <p class="text-xs text-[#2e4e30]">Feedback construtivo e gentil para melhorar sua escrita.</p>
+                  </div>
+                </div>
+              </button>
+            </div>
+
+            <div class="bg-surface rounded-3xl shadow-ambient-lg border border-surface-dim overflow-hidden">
+              <div class="bg-primary-container px-6 py-4 flex justify-between items-center text-on-primary-container">
+                <h3 class="text-lg font-headline font-bold flex items-center gap-2">
+                  <span class="material-symbols-outlined">auto_stories</span> Foco Atual
+                </h3>
+                <button onclick="switchTab('organizer')" class="text-xs font-label bg-surface/20 hover:bg-surface/30 px-3 py-1 rounded-full transition-colors cursor-pointer">
+                  Ver Grade Completa &gt;
+                </button>
+              </div>
+
+              <div class="p-6 space-y-4">
+                <div class="flex items-center gap-4 p-3.5 rounded-2xl hover:bg-surface-container-lowest transition-colors border-b border-journal pb-3.5">
+                  <div class="w-11 h-11 rounded-2xl bg-secondary-container flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-on-secondary-container text-xl">functions</span>
+                  </div>
+                  <div class="flex-1">
+                    <h4 class="font-headline font-bold text-on-surface text-sm">Cálculo Avançado: Integrais</h4>
+                    <p class="text-xs text-on-surface-variant">Revisão do Capítulo 4 e lista de exercícios práticos.</p>
+                  </div>
+                  <div class="w-28 flex flex-col gap-1 items-end hidden sm:flex">
+                    <span class="text-[10px] font-label text-on-surface-variant">65% Concluído</span>
+                    <div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+                      <div class="bg-primary h-full w-[65%] rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-4 p-3.5 rounded-2xl hover:bg-surface-container-lowest transition-colors">
+                  <div class="w-11 h-11 rounded-2xl bg-tertiary-fixed-dim flex items-center justify-center shrink-0">
+                    <span class="material-symbols-outlined text-on-tertiary-fixed-variant text-xl">history_edu</span>
+                  </div>
+                  <div class="flex-1">
+                    <h4 class="font-headline font-bold text-on-surface text-sm">História Geral: Renascimento</h4>
+                    <p class="text-xs text-on-surface-variant">Elaboração de rascunho de redação e fichamento de fontes.</p>
+                  </div>
+                  <div class="w-28 flex flex-col gap-1 items-end hidden sm:flex">
+                    <span class="text-[10px] font-label text-on-surface-variant">30% Concluído</span>
+                    <div class="w-full bg-surface-container-high h-1.5 rounded-full overflow-hidden">
+                      <div class="bg-secondary h-full w-[30%] rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="lg:col-span-4 space-y-6">
+            <div class="bg-[#fdf9f0] border-4 border-[#7d5231] rounded-3xl p-6 shadow-[0_8px_0_0_rgba(125,82,49,1)] space-y-4">
+              <div class="flex items-center justify-between border-b-2 border-[#ffdcc5] pb-3">
+                <h3 class="font-headline text-lg font-bold text-[#7d5231] flex items-center gap-2">
+                  <span class="material-symbols-outlined text-2xl text-[#99462a]">timer</span> Timer Pomodoro
+                </h3>
+                <span id="widget-mode-badge" class="text-xs font-body font-bold text-white bg-[#436444] px-2.5 py-1 rounded-full">Foco</span>
+              </div>
+
+              <div id="widget-timer-display" class="font-headline text-5xl font-bold text-[#7d5231] text-center tracking-wider py-2 font-mono">
+                25:00
+              </div>
+
+              <div class="flex gap-2">
+                <button id="widget-btn-start" onclick="togglePomodoroTimer()" class="chunky-btn flex-1 rounded-xl cursor-pointer">
+                  <span id="widget-btn-text" class="chunky-btn-inner bg-[#436444] text-white font-body font-bold text-xs py-3 rounded-xl flex justify-center items-center gap-1">
+                    <span class="material-symbols-outlined text-base">play_arrow</span> Iniciar
+                  </span>
+                </button>
+                <button onclick="resetPomodoroTimer()" class="chunky-btn rounded-xl px-3 cursor-pointer">
+                  <span class="chunky-btn-inner bg-[#e6e2d9] text-[#7d5231] border-2 border-[#7d5231] font-body font-bold text-xs py-3 rounded-xl flex justify-center items-center">
+                    <span class="material-symbols-outlined text-base">restart_alt</span>
+                  </span>
+                </button>
+              </div>
+
+              <button onclick="switchTab('pomodoro')" class="w-full text-center text-xs font-bold text-[#7d5231] hover:underline pt-1">
+                Abrir Estação Pomodoro Completa com Sons &gt;
+              </button>
+            </div>
+
+            <div class="bg-surface-container-lowest rounded-3xl shadow-ambient border-journal p-5 flex flex-col">
+              <div class="flex justify-between items-center mb-4 border-b border-outline-variant pb-2.5">
+                <h3 class="font-headline font-bold text-base text-on-surface flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary">checklist</span> Tarefas do Dia
+                </h3>
+                <span id="task-count" class="text-[10px] font-label font-bold text-primary bg-primary-fixed px-2 py-0.5 rounded-full">1/3 Concluídas</span>
+              </div>
+              <div class="space-y-3">
+                <label class="flex items-start gap-2.5 cursor-pointer group p-1.5 rounded-xl hover:bg-surface-container-low transition-colors">
+                  <input type="checkbox" checked onchange="updateTaskCount()" class="mt-1 rounded text-primary focus:ring-primary border-outline bg-surface w-4 h-4 cursor-pointer"/>
+                  <div class="flex-1">
+                    <p class="text-xs font-label text-on-surface line-through opacity-70">Revisar anotações de Biologia</p>
+                    <span class="text-[9px] font-bold text-error bg-error-container px-1.5 py-0.5 rounded-full mt-0.5 inline-block">Alta</span>
+                  </div>
+                </label>
+
+                <label class="flex items-start gap-2.5 cursor-pointer group p-1.5 rounded-xl hover:bg-surface-container-low transition-colors">
+                  <input type="checkbox" onchange="updateTaskCount()" class="mt-1 rounded text-primary focus:ring-primary border-outline bg-surface w-4 h-4 cursor-pointer"/>
+                  <div class="flex-1">
+                    <p class="text-xs font-label text-on-surface group-hover:text-primary transition-colors">Elaborar introdução da redação</p>
+                    <span class="text-[9px] font-bold text-on-secondary-container bg-secondary-container px-1.5 py-0.5 rounded-full mt-0.5 inline-block">Média</span>
+                  </div>
+                </label>
+
+                <label class="flex items-start gap-2.5 cursor-pointer group p-1.5 rounded-xl hover:bg-surface-container-low transition-colors">
+                  <input type="checkbox" onchange="updateTaskCount()" class="mt-1 rounded text-primary focus:ring-primary border-outline bg-surface w-4 h-4 cursor-pointer"/>
+                  <div class="flex-1">
+                    <p class="text-xs font-label text-on-surface group-hover:text-primary transition-colors">Organizar mesa de estudos</p>
+                    <span class="text-[9px] font-bold text-on-primary-container bg-primary-container/30 px-1.5 py-0.5 rounded-full mt-0.5 inline-block">Baixa</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 2: ESTAÇÃO POMODORO COMPLETA
+           =================================================================== -->
+      <section id="view-pomodoro" class="view-section">
+        <div class="max-w-5xl mx-auto space-y-6">
+          <div>
+            <h2 class="font-headline text-3xl font-bold text-[#436444] mb-1">Estação Pomodoro</h2>
+            <p class="font-body text-sm text-[#424841]">Mantenha o foco suave e faça pausas revigorantes com o ritmo do coelhinho.</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div class="lg:col-span-7 bg-[#fdf9f0] border-4 border-[#7d5231] rounded-[2rem] p-6 sm:p-8 shadow-[0_8px_0_0_rgba(125,82,49,1)] flex flex-col items-center">
+              <div class="flex gap-2 p-1.5 bg-[#e6e2d9] rounded-2xl border-2 border-[#c2c8be] mb-6 w-full font-body font-bold text-xs sm:text-sm">
+                <button onclick="setTimerMode('work')" id="timer-mode-work" class="flex-1 py-2 rounded-xl transition-all cursor-pointer bg-[#436444] text-white shadow-md">Foco (25 min)</button>
+                <button onclick="setTimerMode('shortBreak')" id="timer-mode-short" class="flex-1 py-2 rounded-xl transition-all cursor-pointer text-[#424841] hover:bg-[#dddad1]">Pausa Curta (5 min)</button>
+                <button onclick="setTimerMode('longBreak')" id="timer-mode-long" class="flex-1 py-2 rounded-xl transition-all cursor-pointer text-[#424841] hover:bg-[#dddad1]">Pausa Longa (15 min)</button>
+              </div>
+
+              <div id="full-timer-display" class="font-headline text-7xl sm:text-8xl leading-none font-bold text-[#7d5231] tracking-widest my-4 font-mono select-none">
+                25:00
+              </div>
+
+              <div class="w-full my-4 p-4 bg-[#f1eee5] rounded-2xl border-2 border-[#e6e2d9]">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="font-body font-bold text-xs text-[#7d5231] flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-base">graphic_eq</span>
+                    Sons de Fundo Acolhedores:
+                  </span>
+                  <span id="ambient-status-badge" class="hidden text-[10px] text-[#436444] font-bold bg-[#c6edc4] px-2 py-0.5 rounded-full border border-[#436444]">
+                    Tocando
+                  </span>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-body font-bold">
+                  <button onclick="setAmbientSound('none')" id="ambient-btn-none" class="py-2 px-2 rounded-xl border border-[#7d5231] bg-[#7d5231] text-white cursor-pointer">Silêncio</button>
+                  <button onclick="setAmbientSound('rain')" id="ambient-btn-rain" class="py-2 px-2 rounded-xl border border-[#c2c8be] bg-white text-[#424841] hover:bg-[#ece8df] cursor-pointer flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">rainy</span> Chuva</button>
+                  <button onclick="setAmbientSound('fireplace')" id="ambient-btn-fireplace" class="py-2 px-2 rounded-xl border border-[#c2c8be] bg-white text-[#424841] hover:bg-[#ece8df] cursor-pointer flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">local_fire_department</span> Lareira</button>
+                  <button onclick="setAmbientSound('birds')" id="ambient-btn-birds" class="py-2 px-2 rounded-xl border border-[#c2c8be] bg-white text-[#424841] hover:bg-[#ece8df] cursor-pointer flex items-center justify-center gap-1"><span class="material-symbols-outlined text-sm">nature</span> Passarinhos</button>
+                </div>
+              </div>
+
+              <div class="flex gap-4 w-full mt-2">
+                <button id="full-btn-start" onclick="togglePomodoroTimer()" class="chunky-btn flex-1 rounded-2xl cursor-pointer">
+                  <span id="full-btn-text" class="chunky-btn-inner bg-[#436444] hover:bg-[#385439] text-white font-body font-bold text-sm sm:text-base py-3.5 rounded-2xl flex justify-center items-center gap-2">
+                    <span class="material-symbols-outlined text-xl">play_arrow</span> INICIAR SESSÃO
+                  </span>
+                </button>
+
+                <button onclick="resetPomodoroTimer()" class="chunky-btn rounded-2xl cursor-pointer px-4">
+                  <span class="chunky-btn-inner bg-[#e6e2d9] text-[#7d5231] border-2 border-[#7d5231] font-body font-bold text-base py-3.5 rounded-2xl flex justify-center items-center">
+                    <span class="material-symbols-outlined text-xl">restart_alt</span>
+                  </span>
+                </button>
+              </div>
+            </div>
+
+            <div class="lg:col-span-5 bg-[#fdf9f0] border-2 border-[#7d5231] rounded-3xl p-6 shadow-[0_8px_0_0_rgba(125,82,49,1)]">
+              <div class="flex items-center justify-between mb-4 border-b-2 border-[#ffdcc5] pb-3">
+                <h3 class="font-headline text-lg font-bold text-[#7d5231] flex items-center gap-2">
+                  <span class="material-symbols-outlined text-2xl text-[#99462a]">task_alt</span> Metas da Sessão
+                </h3>
+                <span id="pomo-xp-badge" class="text-xs font-body font-bold text-[#436444] bg-[#c6edc4] px-2.5 py-1 rounded-full">+15 XP por Meta</span>
+              </div>
+
+              <form onsubmit="handleAddPomoTask(event)" class="flex gap-2 mb-4">
+                <input id="pomo-task-input" type="text" placeholder="O que vamos estudar agora?" class="flex-1 bg-white border-2 border-[#c2c8be] rounded-xl px-3.5 py-2 text-xs md:text-sm font-body focus:outline-none focus:border-[#436444]"/>
+                <button type="submit" class="bg-[#436444] text-white px-3.5 py-2 rounded-xl font-bold text-sm hover:bg-[#36522e] transition-colors cursor-pointer">+</button>
+              </form>
+
+              <div id="pomo-tasks-list" class="space-y-2 max-h-72 overflow-y-auto pr-1">
+                <div class="p-3 rounded-2xl border-2 border-[#7d5231] bg-white flex items-center justify-between gap-2 shadow-sm group">
+                  <div onclick="togglePomoTaskItem(this)" class="flex items-center gap-2.5 cursor-pointer flex-1">
+                    <div class="w-5 h-5 rounded-md border-2 border-[#7d5231] bg-white flex items-center justify-center"></div>
+                    <span class="font-body text-xs font-semibold text-[#1c1c17]">Revisar anotações de Biologia Celular</span>
+                  </div>
+                  <button onclick="this.closest('.group').remove()" class="text-[#737970] hover:text-[#ba1a1a] p-1"><span class="material-symbols-outlined text-base">delete</span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 3: ORGANIZADOR COMPLETO & CALENDÁRIO INTERATIVO
+           =================================================================== -->
+      <section id="view-organizer" class="view-section">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+          <div>
+            <h2 class="text-3xl md:text-4xl font-headline font-bold text-primary">Organizador & Agenda de Estudos</h2>
+            <p class="text-sm text-on-surface-variant flex items-center gap-2 mt-1">
+              <span class="material-symbols-outlined text-base text-secondary">calendar_month</span>
+              Selecione qualquer dia no calendário para visualizar e gerenciar suas rotinas de estudo.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          
+          <!-- Coluna 1: Calendário Interativo Estilo Google Agenda (4 colunas) -->
+          <div class="lg:col-span-5 space-y-6">
+            <div class="bg-surface-container-lowest rounded-3xl p-6 shadow-burrow border-2 border-[#7d5231] relative overflow-hidden">
+              <div class="flex justify-between items-center mb-4">
+                <h3 id="calendar-month-year-title" class="text-xl font-headline font-bold text-[#7d5231] flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-2xl">calendar_today</span> Maio 2024
+                </h3>
+                <div class="flex gap-1.5">
+                  <button onclick="navigateMonth(-1)" class="w-8 h-8 rounded-full flex items-center justify-center bg-surface-container hover:bg-primary-container hover:text-on-primary-container transition-colors text-on-surface-variant cursor-pointer">
+                    <span class="material-symbols-outlined text-lg">chevron_left</span>
+                  </button>
+                  <button onclick="navigateMonth(1)" class="w-8 h-8 rounded-full flex items-center justify-center bg-surface-container hover:bg-primary-container hover:text-on-primary-container transition-colors text-on-surface-variant cursor-pointer">
+                    <span class="material-symbols-outlined text-lg">chevron_right</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Dias da Semana -->
+              <div class="grid grid-cols-7 gap-1 text-center mb-2">
+                <span class="text-xs font-label text-[#7d5231] font-bold">Dom</span>
+                <span class="text-xs font-label text-[#7d5231] font-bold">Seg</span>
+                <span class="text-xs font-label text-[#7d5231] font-bold">Ter</span>
+                <span class="text-xs font-label text-[#7d5231] font-bold">Qua</span>
+                <span class="text-xs font-label text-[#7d5231] font-bold">Qui</span>
+                <span class="text-xs font-label text-[#7d5231] font-bold">Sex</span>
+                <span class="text-xs font-label text-[#7d5231] font-bold">Sáb</span>
+              </div>
+
+              <!-- Grid de Dias Clicáveis -->
+              <div id="interactive-calendar-grid" class="grid grid-cols-7 gap-1 text-center text-sm font-body">
+                <!-- Renderizado Dinamicamente no JS -->
+              </div>
+            </div>
+
+            <!-- Semente do Dia -->
+            <div class="bg-[#Fdfbf2] p-6 rounded-organic shadow-sm border border-outline-variant/30 relative">
+              <h4 class="text-xs font-label text-secondary font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <span class="material-symbols-outlined text-base">psychiatry</span> Semente do Dia
+              </h4>
+              <p class="text-sm font-body italic text-on-surface-variant leading-relaxed">
+                "Pequenas melhorias diárias ao longo do tempo levam a resultados incríveis. Continue regando a sua mente."
+              </p>
+            </div>
+          </div>
+
+          <!-- Coluna 2: Agenda do Dia Selecionado & Formulário "Plantar Tópico" (7 colunas) -->
+          <div class="lg:col-span-7 space-y-6">
+            
+            <!-- Painel de Rotinas do Dia Selecionado -->
+            <div class="bg-[#fdf9f0] rounded-3xl p-6 border-4 border-[#7d5231] shadow-[0_8px_0_0_rgba(125,82,49,1)] space-y-4">
+              <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b-2 border-[#ffdcc5] pb-3">
+                <div>
+                  <span class="text-[11px] font-bold text-[#99462a] uppercase tracking-wider">Agenda Diária</span>
+                  <h3 id="selected-day-title" class="text-xl font-headline font-bold text-[#7d5231]">Rotina do Dia 8 de Maio</h3>
+                </div>
+                
+                <button onclick="openAddRoutineModal()" class="chunky-btn btn-primary rounded-2xl cursor-pointer">
+                  <span class="chunky-btn-inner bg-[#436444] hover:bg-[#36522e] text-white font-body font-bold text-xs px-4 py-2 rounded-2xl flex items-center gap-1.5">
+                    <span class="material-symbols-outlined text-base">add</span> + Nova Rotina
+                  </span>
+                </button>
+              </div>
+
+              <!-- Lista Interativa de Rotinas do Dia -->
+              <div id="daily-routines-container" class="space-y-3 max-h-80 overflow-y-auto pr-1">
+                <!-- Preenchido via JavaScript ao Clicar no Dia -->
+              </div>
+            </div>
+
+            <!-- Formulário Plantar Tópico (com campo <input type="date">) -->
+            <div class="bg-surface-container-lowest p-6 rounded-3xl shadow-ambient border border-outline-variant/30 space-y-4">
+              <div class="flex items-center gap-3 pb-3 border-b border-outline-variant/30">
+                <div class="w-9 h-9 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center">
+                  <span class="material-symbols-outlined text-lg">add_task</span>
+                </div>
+                <div>
+                  <h3 class="text-base font-headline font-bold text-on-surface">Plantar Novo Tópico de Estudo</h3>
+                  <p class="text-xs text-on-surface-variant">Agende com data específica no seu calendário</p>
+                </div>
+              </div>
+
+              <form onsubmit="handlePlantTopic(event)" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-label font-bold text-[#7d5231] mb-1">Nome do Tópico</label>
+                    <input id="topic-name-input" required type="text" placeholder="Ex: Fotosíntese, Matrizes..." class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl px-3.5 py-2.5 text-sm text-on-surface focus:outline-none focus:border-primary"/>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-label font-bold text-[#7d5231] mb-1">📅 Data de Estudo:</label>
+                    <input id="topic-date-input" required type="date" class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl px-3.5 py-2.5 text-sm text-on-surface focus:outline-none focus:border-primary"/>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div>
+                    <label class="block text-xs font-label text-on-surface-variant mb-1">Matéria</label>
+                    <select id="topic-subject-input" class="w-full bg-surface-bright border-2 border-[#c2c8be] rounded-xl px-3 py-2 text-xs text-on-surface focus:border-primary">
+                      <option value="Biologia 🌿">Biologia 🌿</option>
+                      <option value="Matemática 📐">Matemática 📐</option>
+                      <option value="História 📜">História 📜</option>
+                      <option value="Português ✍️">Português ✍️</option>
+                      <option value="Física ⚡">Física ⚡</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-label text-on-surface-variant mb-1">Horário Previsto</label>
+                    <input id="topic-time-input" type="time" value="14:00" class="w-full bg-surface-bright border-2 border-[#c2c8be] rounded-xl px-3 py-2 text-xs text-on-surface focus:border-primary"/>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-label text-on-surface-variant mb-1">Prioridade</label>
+                    <select id="topic-priority-input" class="w-full bg-surface-bright border-2 border-[#c2c8be] rounded-xl px-3 py-2 text-xs text-on-surface focus:border-secondary">
+                      <option value="Alta">Alta</option>
+                      <option value="Média">Média</option>
+                      <option value="Baixa">Baixa</option>
+                    </select>
+                  </div>
+                </div>
+
+                <button type="submit" class="w-full bg-primary text-on-primary py-3 rounded-xl text-xs font-label font-bold shadow hover:bg-primary-container transition-all flex justify-center items-center gap-1.5 cursor-pointer">
+                  <span class="material-symbols-outlined text-base">psychiatry</span> Plantar no Calendário (+15 XP)
+                </button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 4: ASSISTENTE DE IA
+           =================================================================== -->
+      <section id="view-ai-assistant" class="view-section">
+        <div class="max-w-5xl mx-auto space-y-6">
+          <div class="bg-[#fe9572]/20 border-2 border-[#fe9572] rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 shadow-[0_6px_0_0_#fe9572]">
+            <div class="w-16 h-16 bg-[#99462a] rounded-2xl flex items-center justify-center text-white shrink-0 shadow-sm">
+              <span class="material-symbols-outlined text-3xl">auto_awesome</span>
+            </div>
+            <div>
+              <h2 class="font-headline text-2xl md:text-3xl font-bold text-[#762c12] mb-1">Estudar com IA na Toca</h2>
+              <p class="font-body text-[#390b00] text-sm md:text-base">Sessões guiadas e amigáveis para revisar matérias difíceis, entender conceitos passo a passo e testar seus conhecimentos sem estresse.</p>
+            </div>
+          </div>
+
+          <div class="flex gap-2 p-2 bg-[#f1eee5] rounded-2xl border-2 border-[#e6e2d9] font-body font-bold text-sm max-w-md mx-auto">
+            <button onclick="switchAiSubTab('explain')" id="aisubtab-explain" class="flex-1 py-2.5 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 bg-[#99462a] text-white shadow-md">
+              <span class="material-symbols-outlined text-base">menu_book</span> Explicação
+            </button>
+            <button onclick="switchAiSubTab('quiz')" id="aisubtab-quiz" class="flex-1 py-2.5 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 text-[#424841] hover:bg-[#ece8df]">
+              <span class="material-symbols-outlined text-base">quiz</span> Quiz Rápido
+            </button>
+            <button onclick="switchAiSubTab('chat')" id="aisubtab-chat" class="flex-1 py-2.5 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 text-[#424841] hover:bg-[#ece8df]">
+              <span class="material-symbols-outlined text-base">forum</span> Tira-Dúvidas
+            </button>
+          </div>
+
+          <div id="ai-quick-suggestions" class="bg-[#fdf9f0] border-2 border-[#7d5231] rounded-2xl p-4 shadow-sm">
+            <p class="font-body font-bold text-xs text-[#7d5231] uppercase tracking-wider mb-2">Sugestões Rápidas de Estudo:</p>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="useQuickTopic('Biologia: Fotossíntese')" class="bg-[#f1eee5] hover:bg-[#c6edc4] hover:text-[#012108] text-[#424841] text-xs font-body font-bold px-3 py-1.5 rounded-xl border border-[#c2c8be] cursor-pointer">+ Biologia: Fotossíntese</button>
+              <button onclick="useQuickTopic('História: Era Vargas')" class="bg-[#f1eee5] hover:bg-[#c6edc4] hover:text-[#012108] text-[#424841] text-xs font-body font-bold px-3 py-1.5 rounded-xl border border-[#c2c8be] cursor-pointer">+ História: Era Vargas</button>
+              <button onclick="useQuickTopic('Matemática: Funções do 2º Grau')" class="bg-[#f1eee5] hover:bg-[#c6edc4] hover:text-[#012108] text-[#424841] text-xs font-body font-bold px-3 py-1.5 rounded-xl border border-[#c2c8be] cursor-pointer">+ Matemática: Funções do 2º Grau</button>
+            </div>
+          </div>
+
+          <div id="aiview-explain" class="bg-[#fdf9f0] border-2 border-[#7d5231] rounded-3xl p-6 md:p-8 shadow-[0_6px_0_0_rgba(125,82,49,1)] space-y-6">
+            <div class="space-y-2">
+              <label class="font-headline text-base font-bold text-[#7d5231]">Qual matéria ou assunto você quer que o Coelho Sábio explique?</label>
+              <div class="flex gap-2">
+                <input id="ai-explain-input" type="text" placeholder="Ex: Leis de Newton, Fotossíntese..." class="flex-1 bg-white border-2 border-[#c2c8be] rounded-xl px-4 py-3 font-body text-sm focus:outline-none focus:border-[#436444]"/>
+                <button onclick="generateAiExplanation()" class="bg-[#fe9572] text-[#762c12] border-2 border-[#99462a] font-body font-bold px-6 py-3 rounded-xl flex items-center gap-2 cursor-pointer hover:bg-[#fd835c]">Explicar</button>
+              </div>
+            </div>
+            <div id="ai-explain-result" class="hidden p-6 bg-[#f7f3ea] border-2 border-[#7d5231] rounded-2xl space-y-4">
+              <div class="flex items-center gap-3 border-b-2 border-[#e6e2d9] pb-3">
+                <span class="material-symbols-outlined text-2xl text-[#436444]">auto_awesome</span>
+                <h4 class="font-headline text-lg font-bold text-[#436444]">Explicação do Coelho Sábio</h4>
+              </div>
+              <div id="ai-explain-text" class="font-body text-[#1c1c17] text-sm leading-relaxed whitespace-pre-wrap"></div>
+              <div class="p-3 bg-[#c6edc4] border border-[#436444] rounded-xl text-xs font-body font-bold text-[#012108] flex items-center gap-2">
+                <span class="material-symbols-outlined text-base">grade</span> Você ganhou +10 XP por revisar este conteúdo!
+              </div>
+            </div>
+          </div>
+
+          <div id="aiview-quiz" class="hidden bg-[#fdf9f0] border-2 border-[#7d5231] rounded-3xl p-6 md:p-8 shadow-[0_6px_0_0_rgba(125,82,49,1)] space-y-6">
+            <div class="space-y-2">
+              <label class="font-headline text-base font-bold text-[#7d5231]">Gere um Quiz Personalizado para testar seus conhecimentos:</label>
+              <div class="flex gap-2">
+                <input id="ai-quiz-input" type="text" placeholder="Ex: Fotossíntese, Era Vargas..." class="flex-1 bg-white border-2 border-[#c2c8be] rounded-xl px-4 py-3 font-body text-sm focus:outline-none focus:border-[#436444]"/>
+                <button onclick="generateAiQuiz()" class="bg-[#436444] text-white border-2 border-[#2e4e30] font-body font-bold px-6 py-3 rounded-xl flex items-center gap-2 cursor-pointer hover:bg-[#36522e]">Gerar Quiz</button>
+              </div>
+            </div>
+            <div id="ai-quiz-container" class="hidden space-y-6">
+              <div class="border-b-2 border-[#ffdcc5] pb-3 flex justify-between items-center">
+                <h4 id="quiz-title" class="font-headline text-lg font-bold text-[#99462a]">Quiz de Estudos</h4>
+              </div>
+              <div id="quiz-questions-list" class="space-y-6"></div>
+            </div>
+          </div>
+
+          <div id="aiview-chat" class="hidden bg-[#fdf9f0] border-2 border-[#7d5231] rounded-3xl p-6 shadow-[0_6px_0_0_rgba(125,82,49,1)] flex flex-col h-[500px]">
+            <div class="flex items-center gap-3 border-b-2 border-[#ffdcc5] pb-3 mb-4">
+              <span class="material-symbols-outlined text-2xl text-[#99462a]">forum</span>
+              <h4 class="font-headline text-lg font-bold text-[#7d5231]">Conversa com o Coelho Sábio 🐰</h4>
+            </div>
+            <div id="chat-messages" class="flex-1 overflow-y-auto space-y-3 pr-2 mb-4">
+              <div class="flex gap-3 justify-start">
+                <div class="w-8 h-8 rounded-full bg-[#7d5231] text-white flex items-center justify-center shrink-0 font-bold text-xs border border-white shadow-sm">🐰</div>
+                <div class="max-w-[80%] p-3.5 bg-[#f1eee5] text-[#1c1c17] border border-[#c2c8be] rounded-2xl rounded-bl-none font-body text-xs md:text-sm leading-relaxed">
+                  Olá! Sou o Coelho Sábio da Toca de Estudos. Qual matéria ou dúvida você gostaria de revisar juntos hoje? 🌿
+                </div>
+              </div>
+            </div>
+            <form onsubmit="handleSendChatMessage(event)" class="flex gap-2 pt-2 border-t border-[#e6e2d9]">
+              <input id="chat-input-field" type="text" placeholder="Pergunte qualquer dúvida..." class="flex-1 bg-white border-2 border-[#c2c8be] rounded-xl px-4 py-2.5 font-body text-sm focus:outline-none focus:border-[#436444]"/>
+              <button type="submit" class="bg-[#436444] text-white px-4 py-2.5 rounded-xl font-bold flex items-center justify-center cursor-pointer hover:bg-[#36522e]"><span class="material-symbols-outlined text-lg">send</span></button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 5: CORRIGIR REDAÇÃO (ESSAY LAB)
+           =================================================================== -->
+      <section id="view-essay-lab" class="view-section">
+        <div class="max-w-5xl mx-auto space-y-6">
+          <div>
+            <h2 class="font-headline text-3xl font-bold text-[#436444] mb-1">Laboratório de Redação</h2>
+            <p class="font-body text-sm text-[#424841]">Receba análise estrutural, notas por competência e sugestões gentis de melhoria.</p>
+          </div>
+
+          <div class="bg-[#fdf9f0] border-2 border-[#7d5231] rounded-3xl p-6 md:p-8 shadow-[0_8px_0_0_rgba(125,82,49,1)] space-y-5">
+            <div>
+              <label class="block font-headline text-base font-bold text-[#7d5231] mb-1">Tema da Redação:</label>
+              <input id="essay-title-input" type="text" placeholder="Ex: Os desafios da inteligência artificial no mercado de trabalho brasileiro" class="w-full bg-white border-2 border-[#c2c8be] rounded-xl px-4 py-3 font-body text-sm focus:outline-none focus:border-[#436444]"/>
+            </div>
+
+            <div>
+              <label class="block font-headline text-base font-bold text-[#7d5231] mb-1">Texto da Redação:</label>
+              <textarea id="essay-content-input" rows="8" placeholder="Cole ou digite aqui seu texto completo..." class="w-full bg-white border-2 border-[#c2c8be] rounded-xl p-4 font-body text-sm focus:outline-none focus:border-[#436444]"></textarea>
+            </div>
+
+            <button onclick="analyzeEssay()" class="chunky-btn btn-primary rounded-xl cursor-pointer">
+              <span class="chunky-btn-inner bg-[#436444] text-white font-body font-bold px-6 py-3.5 rounded-xl flex items-center gap-2">
+                <span class="material-symbols-outlined text-lg">auto_awesome</span> Corrigir Redação (+20 XP)
+              </span>
+            </button>
+
+            <div id="essay-result-box" class="hidden p-6 bg-[#c6edc4]/40 border-2 border-[#436444] rounded-2xl space-y-4 mt-6">
+              <div class="flex justify-between items-center border-b-2 border-[#436444]/30 pb-3">
+                <h4 class="font-headline text-xl font-bold text-[#012108]">Resultado da Avaliação</h4>
+                <span class="text-2xl font-headline font-bold text-[#436444]">920 / 1000</span>
+              </div>
+              <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs font-body font-bold">
+                <div class="p-2 bg-white rounded-xl border border-[#436444]/30">C1: 180<br/><span class="font-normal text-[10px]">Norma Culta</span></div>
+                <div class="p-2 bg-white rounded-xl border border-[#436444]/30">C2: 180<br/><span class="font-normal text-[10px]">Repertório</span></div>
+                <div class="p-2 bg-white rounded-xl border border-[#436444]/30">C3: 180<br/><span class="font-normal text-[10px]">Argumentação</span></div>
+                <div class="p-2 bg-white rounded-xl border border-[#436444]/30">C4: 200<br/><span class="font-normal text-[10px]">Coesão</span></div>
+                <div class="p-2 bg-white rounded-xl border border-[#436444]/30">C5: 180<br/><span class="font-normal text-[10px]">Proposta</span></div>
+              </div>
+              <p class="text-xs text-[#2e4e30] leading-relaxed">
+                <strong>Comentário do Corretor:</strong> Excelente estrutura argumentativa! Seus conectivos fluem muito bem entre os parágrafos. Para alcançar os 1000 pontos, tente aprofundar um pouco mais a proposta de intervenção citando o agente e o meio de ação com mais especificidade. ✨
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 6: ESTATÍSTICAS DETALHADAS
+           =================================================================== -->
+      <section id="view-stats" class="view-section">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
+          <div>
+            <h2 class="text-3xl md:text-4xl font-headline font-bold text-primary flex items-center gap-3">
+              <span class="material-symbols-outlined text-3xl text-tertiary">analytics</span> Estatísticas Detalhadas
+            </h2>
+            <p class="text-sm text-on-surface-variant mt-1">Revise seu desempenho acadêmico na Toca.</p>
+          </div>
+          <button onclick="window.print()" class="gold-foil-bg px-5 py-2.5 rounded-organic text-xs font-label shadow-ambient hover:opacity-90 transition-opacity flex items-center gap-2 border border-secondary/30 cursor-pointer">
+            <span class="material-symbols-outlined text-base">download</span> Exportar PDF
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+          <div class="lg:col-span-5 bg-surface-container-low rounded-organic-lg p-6 shadow-ambient border border-outline-variant/40 relative overflow-hidden flex flex-col items-center justify-center">
+            <div class="w-full flex justify-between items-start mb-4">
+              <h3 class="text-lg font-headline font-bold text-on-surface flex items-center gap-2">
+                <span class="material-symbols-outlined text-secondary">pie_chart</span> Distribuição do Tempo
+              </h3>
+            </div>
+            <div class="relative w-44 h-44 rounded-full border-[14px] border-surface-variant flex items-center justify-center mb-4">
+              <div class="absolute inset-0 rounded-full" style="background: conic-gradient(from 0deg, #4d6a44 0% 45%, #fdc39a 45% 70%, #c9c7b8 70% 90%, #805533 90% 100%); mask-image: radial-gradient(transparent 55%, black 56%); -webkit-mask-image: radial-gradient(transparent 55%, black 56%);"></div>
+              <div class="text-center z-10 flex flex-col items-center">
+                <span id="stats-total-hours" class="text-3xl font-headline font-bold text-primary">42h</span>
+                <span class="text-xs font-label text-on-surface-variant mt-0.5">Foco Total</span>
+              </div>
+            </div>
+            <div class="flex flex-wrap justify-center gap-3 w-full text-xs font-label">
+              <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-primary-container"></div><span class="text-on-surface-variant">Matemática (45%)</span></div>
+              <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-secondary-container"></div><span class="text-on-surface-variant">Literatura (25%)</span></div>
+              <div class="flex items-center gap-1.5"><div class="w-3 h-3 rounded-full bg-tertiary-fixed-dim"></div><span class="text-on-surface-variant">Ciências (20%)</span></div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="bg-surface rounded-organic p-6 shadow-ambient border border-dashed-custom flex flex-col justify-between">
+              <div class="flex justify-between items-start">
+                <div class="p-2 bg-primary-container/10 rounded-lg"><span class="material-symbols-outlined text-primary">psychology</span></div>
+                <span class="text-xs font-label text-primary bg-primary-fixed px-2 py-0.5 rounded-full font-bold">+5% esta semana</span>
+              </div>
+              <div class="mt-4">
+                <p class="text-xs font-label text-on-surface-variant mb-1">Pontuação de Eficiência</p>
+                <p class="text-3xl font-headline font-bold text-on-surface">87<span class="text-lg text-outline">/100</span></p>
+              </div>
+              <div class="w-full bg-surface-variant h-2 rounded-full mt-4 overflow-hidden relative">
+                <div class="absolute left-0 top-0 h-full bg-primary rounded-full w-[87%]"></div>
+              </div>
+            </div>
+
+            <div class="bg-surface rounded-organic p-6 shadow-ambient border border-dashed-custom flex flex-col justify-between">
+              <div class="flex justify-between items-start">
+                <div class="p-2 bg-secondary-container/20 rounded-lg"><span class="material-symbols-outlined text-secondary">local_fire_department</span></div>
+                <span class="text-xs font-label text-on-surface-variant font-bold">Atual</span>
+              </div>
+              <div class="mt-4">
+                <p class="text-xs font-label text-on-surface-variant mb-1">Histórico de Sequência</p>
+                <p class="text-3xl font-headline font-bold text-on-surface">3 <span class="text-base text-outline font-normal">Dias</span></p>
+              </div>
+              <div class="flex justify-between mt-4 text-[10px] font-label font-bold text-on-primary">
+                <div class="w-6 h-6 rounded-full bg-primary-container flex items-center justify-center">S</div>
+                <div class="w-6 h-6 rounded-full bg-primary-container flex items-center justify-center">T</div>
+                <div class="w-6 h-6 rounded-full bg-primary-container flex items-center justify-center">Q</div>
+                <div class="w-6 h-6 rounded-full border border-dashed-custom text-on-surface-variant flex items-center justify-center">Q</div>
+                <div class="w-6 h-6 rounded-full border border-dashed-custom text-on-surface-variant flex items-center justify-center">S</div>
+                <div class="w-6 h-6 rounded-full border border-dashed-custom text-on-surface-variant flex items-center justify-center">S</div>
+                <div class="w-6 h-6 rounded-full border border-dashed-custom text-on-surface-variant flex items-center justify-center">D</div>
+              </div>
+            </div>
+
+            <div class="bg-surface rounded-organic p-5 shadow-ambient border border-dashed-custom flex flex-col justify-between">
+              <div class="p-2 bg-tertiary-fixed-dim/30 rounded-lg w-fit"><span class="material-symbols-outlined text-tertiary">menu_book</span></div>
+              <div class="mt-2">
+                <p class="text-xs font-label text-on-surface-variant mb-0.5">Páginas Lidas</p>
+                <p class="text-2xl font-headline font-bold text-on-surface">342</p>
+              </div>
+            </div>
+
+            <div class="bg-surface rounded-organic p-5 shadow-ambient border border-dashed-custom flex flex-col justify-between">
+              <div class="p-2 bg-primary-fixed-dim/30 rounded-lg w-fit"><span class="material-symbols-outlined text-primary">emoji_events</span></div>
+              <div class="mt-2">
+                <p class="text-xs font-label text-on-surface-variant mb-0.5">Quizzes Dominados</p>
+                <p class="text-2xl font-headline font-bold text-on-surface">14</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-surface-container-low rounded-organic-lg p-6 shadow-ambient border border-outline-variant/40">
+          <div class="flex justify-between items-center mb-6 border-b border-dashed-custom pb-4">
+            <div>
+              <h3 class="text-lg font-headline font-bold text-on-surface flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">bar_chart</span> Foco Semanal
+              </h3>
+              <p class="text-xs font-label text-on-surface-variant mt-0.5">Horas de estudo dedicadas por dia</p>
+            </div>
+            <select onchange="updateWeeklyChart(this.value)" class="bg-surface border border-outline-variant rounded-lg px-3 py-1.5 text-xs font-label text-on-surface focus:ring-primary">
+              <option value="this-week">Esta Semana</option>
+              <option value="last-week">Semana Passada</option>
+              <option value="this-month">Este Mês</option>
+            </select>
+          </div>
+
+          <div class="h-60 flex items-end justify-between gap-2 sm:gap-4 pt-4">
+            <div class="flex flex-col justify-between h-full text-xs font-label text-outline pb-6 pr-2 border-r border-dashed-custom">
+              <span>8h</span><span>6h</span><span>4h</span><span>2h</span><span>0h</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center justify-end h-full"><div class="w-full max-w-[36px] bg-primary-container/20 rounded-t-md relative flex items-end justify-center h-full"><div id="bar-mon" class="w-full bg-primary-container rounded-t-md transition-all duration-500" style="height: 60%;"></div></div><span class="text-xs font-label text-on-surface mt-2">Seg</span></div>
+            <div class="flex-1 flex flex-col items-center justify-end h-full"><div class="w-full max-w-[36px] bg-primary-container/20 rounded-t-md relative flex items-end justify-center h-full"><div id="bar-tue" class="w-full bg-primary-container rounded-t-md transition-all duration-500" style="height: 80%;"></div></div><span class="text-xs font-label text-on-surface mt-2">Ter</span></div>
+            <div class="flex-1 flex flex-col items-center justify-end h-full"><div class="w-full max-w-[36px] bg-primary-container/20 rounded-t-md relative flex items-end justify-center h-full"><div id="bar-wed" class="w-full bg-primary-container rounded-t-md transition-all duration-500" style="height: 45%;"></div></div><span class="text-xs font-label text-on-surface mt-2">Qua</span></div>
+            <div class="flex-1 flex flex-col items-center justify-end h-full"><div class="w-full max-w-[36px] bg-primary-container/20 rounded-t-md relative flex items-end justify-center h-full"><div id="bar-thu" class="w-full bg-secondary-container rounded-t-md transition-all duration-500" style="height: 70%;"></div></div><span class="text-xs font-label text-on-surface mt-2">Qui</span></div>
+            <div class="flex-1 flex flex-col items-center justify-end h-full"><div class="w-full max-w-[36px] bg-primary-container/20 rounded-t-md relative flex items-end justify-center h-full"><div id="bar-fri" class="w-full bg-primary-container rounded-t-md transition-all duration-500" style="height: 90%;"></div></div><span class="text-xs font-label text-on-surface mt-2">Sex</span></div>
+            <div class="flex-1 flex flex-col items-center justify-end h-full"><div class="w-full max-w-[36px] bg-primary-container/20 rounded-t-md relative flex items-end justify-center h-full"><div id="bar-sat" class="w-full bg-tertiary-fixed-dim rounded-t-md transition-all duration-500" style="height: 30%;"></div></div><span class="text-xs font-label text-outline mt-2">Sáb</span></div>
+            <div class="flex-1 flex flex-col items-center justify-end h-full"><div class="w-full max-w-[36px] bg-primary-container/20 rounded-t-md relative flex items-end justify-center h-full"><div id="bar-sun" class="w-full bg-tertiary-fixed-dim rounded-t-md transition-all duration-500" style="height: 20%;"></div></div><span class="text-xs font-label text-outline mt-2">Dom</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 7: JARDIM & CONQUISTAS (GARDEN)
+           =================================================================== -->
+      <section id="view-garden" class="view-section">
+        <div class="max-w-5xl mx-auto space-y-6">
+          <div>
+            <h2 class="font-headline text-3xl font-bold text-[#436444] mb-1">Jardim de Conquistas 🌸</h2>
+            <p class="font-body text-sm text-[#424841]">Cada minuto focado faz suas plantinhas e conquistas crescerem.</p>
+          </div>
+
+          <div class="bg-[#c6edc4]/40 border-2 border-[#436444] rounded-3xl p-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-4">
+              <div class="w-16 h-16 rounded-2xl bg-[#436444] text-white flex items-center justify-center font-bold text-2xl shadow-sm">
+                <span id="garden-level-badge">1</span>
+              </div>
+              <div>
+                <h3 id="garden-level-title" class="font-headline text-xl font-bold text-[#012108]">Jardineiro Aprendiz (Nível 1)</h3>
+                <p id="garden-xp-sub" class="text-xs text-[#2e4e30]">65 / 100 XP para o Nível 2</p>
+              </div>
+            </div>
+            <div class="w-full sm:w-64 bg-white border border-[#436444] h-4 rounded-full overflow-hidden p-0.5">
+              <div id="garden-xp-bar" class="bg-[#436444] h-full rounded-full transition-all duration-500" style="width: 65%;"></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            <div class="bg-surface rounded-2xl p-5 shadow-ambient border-journal text-center space-y-3">
+              <div class="w-16 h-16 mx-auto bg-primary-fixed rounded-full flex items-center justify-center text-primary text-3xl">🌱</div>
+              <h4 class="font-headline font-bold text-on-surface text-base">Brotinho de Foco</h4>
+              <p class="text-xs text-on-surface-variant">Desbloqueado com 30min de estudo contínuo.</p>
+              <span class="text-[10px] font-bold text-primary bg-primary-fixed px-2 py-0.5 rounded-full inline-block">Ativo</span>
+            </div>
+
+            <div class="bg-surface rounded-2xl p-5 shadow-ambient border-journal text-center space-y-3">
+              <div class="w-16 h-16 mx-auto bg-secondary-fixed rounded-full flex items-center justify-center text-secondary text-3xl">🌸</div>
+              <h4 class="font-headline font-bold text-on-surface text-base">Flor da Persistência</h4>
+              <p class="text-xs text-on-surface-variant">Desbloqueado com 3 dias de sequência.</p>
+              <span class="text-[10px] font-bold text-secondary bg-secondary-fixed px-2 py-0.5 rounded-full inline-block">Ativo</span>
+            </div>
+
+            <div class="bg-surface rounded-2xl p-5 shadow-ambient border-journal text-center space-y-3 opacity-60">
+              <div class="w-16 h-16 mx-auto bg-surface-container rounded-full flex items-center justify-center text-outline text-3xl">🌳</div>
+              <h4 class="font-headline font-bold text-on-surface text-base">Árvore do Conhecimento</h4>
+              <p class="text-xs text-on-surface-variant">Alcance o Nível 5 para germinar.</p>
+              <span class="text-[10px] font-bold text-outline bg-surface-container px-2 py-0.5 rounded-full inline-block">Bloqueado</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================================================================
+           VIEW 8: SUPORTE
+           =================================================================== -->
+      <section id="view-support" class="view-section">
+        <div class="max-w-4xl mx-auto space-y-6">
+          <div>
+            <h2 class="font-headline text-3xl font-bold text-[#436444] mb-1">Suporte da Toca</h2>
+            <p class="font-body text-sm text-[#424841]">Estamos aqui para ajudar com qualquer dúvida sobre sua experiência.</p>
+          </div>
+
+          <div class="bg-surface rounded-3xl p-6 shadow-ambient border border-surface-dim space-y-4">
+            <h3 class="font-headline text-lg font-bold text-on-surface">Perguntas Frequentes ☕</h3>
+            
+            <details class="p-3 bg-surface-container-low rounded-xl cursor-pointer">
+              <summary class="font-headline font-bold text-sm text-primary">Diferença entre Modo Visitante e Modo Logado?</summary>
+              <p class="text-xs text-on-surface-variant mt-2">O <strong>Modo Visitante</strong> salva seus dados somente no LocalStorage do seu navegador local. O <strong>Modo Logado</strong> conecta-se com o Firebase para sincronizar seu progresso, XP e tarefas com segurança no banco de dados.</p>
+            </details>
+
+            <details class="p-3 bg-surface-container-low rounded-xl cursor-pointer">
+              <summary class="font-headline font-bold text-sm text-primary">Como funciona o ganho de XP?</summary>
+              <p class="text-xs text-on-surface-variant mt-2">Você ganha +25 XP ao concluir cada sessão Pomodoro de 25 min, +10 XP por explorar explicações com IA, +15 XP por tarefa concluída e +20 XP por redação corrigida.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ===================================================================
+       APPLICATION JAVASCRIPT ENGINE
+       =================================================================== -->
+  <script>
+    let currentUser = null;
+    let userStats = {
+      xp: 65,
+      maxXp: 100,
+      level: 1,
+      totalFocusMinutes: 50,
+      completedPomodoros: 2,
+      streakDays: 3
+    };
+
+    // Firebase Auth & Firestore instances
+    let firebaseApp = null;
+    let auth = null;
+    let db = null;
+
+    // Calendar & Routines State Engine
+    let currentCalendarYear = 2024;
+    let currentCalendarMonth = 4; // 0-indexed (4 = Maio)
+    let selectedCalendarDay = 8; // Dia 8 selecionado por padrão
+    let studyRoutines = {
+      "2024-05-08": [
+        { id: "r1", time: "08:30 - 10:00", title: "Biologia: Respiração Celular", subject: "Biologia 🌿", priority: "Alta", done: true },
+        { id: "r2", time: "14:00 - 15:30", title: "Cálculo: Exercícios de Integrais", subject: "Matemática 📐", priority: "Alta", done: false },
+        { id: "r3", time: "16:30 - 17:30", title: "História: Fichamento Renascimento", subject: "História 📜", priority: "Média", done: false }
+              ],
+      "2024-05-03": [
+        { id: "r4", time: "10:00 - 11:30", title: "Literatura: Romantismo 1ª Fase", subject: "Português ✍️", priority: "Média", done: true }
+      ],
+      "2024-05-14": [
+        { id: "r5", time: "09:00 - 11:00", title: "Simulado Geral de Exatas", subject: "Matemática 📐", priority: "Alta", done: false }
+      ]
+    };
+
+    // Pomodoro Timer State
+    let pomoTimeLeft = 25 * 60;
+    let pomoIsRunning = false;
+    let pomoMode = 'work';
+    let pomoInterval = null;
+    let ambientSoundType = 'none';
+
+    // Audio Context
+    let audioCtx = null;
+    let activeAudioNodes = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initFirebase();
+      checkAuthentication();
+      loadForestModePreference();
+      loadRoutinesData();
+      setDefaultDateInput();
+      renderCalendarGrid();
+      renderSelectedDayRoutines();
+      updateStatsUI();
+      updatePomodoroDisplay();
+    });
+
+    function initFirebase() {
+      try {
+        const firebaseConfig = {
+          apiKey: "AIzaSyDemoKeyStudyBurrowProject2026",
+          authDomain: "study-burrow.firebaseapp.com",
+          projectId: "study-burrow",
+          storageBucket: "study-burrow.appspot.com",
+          messagingSenderId: "1029384756",
+          appId: "1:1029384756:web:abcd1234efgh5678"
+        };
+        if (!firebase.apps.length) {
+          firebaseApp = firebase.initializeApp(firebaseConfig);
+        } else {
+          firebaseApp = firebase.app();
+        }
+        auth = firebase.auth();
+        db = firebase.firestore();
+      } catch (e) {
+        console.log("Firebase fallback active:", e);
+      }
+    }
+
+    function checkAuthentication() {
+      const savedUser = localStorage.getItem('study_burrow_user');
+      if (!savedUser) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      try {
+        currentUser = JSON.parse(savedUser);
+      } catch (e) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const badge = document.getElementById('storage-mode-badge');
+      const icon = document.getElementById('storage-mode-icon');
+      const text = document.getElementById('storage-mode-text');
+
+      if (badge && icon && text) {
+        badge.classList.remove('hidden');
+        if (currentUser.isGuest) {
+          icon.textContent = 'phonelink_off';
+          text.textContent = 'Modo Visitante (Local)';
+          badge.className = 'hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-label font-bold bg-[#f1eee5] text-[#7d5231] border border-[#c2c8be]';
+        } else {
+          icon.textContent = 'cloud_done';
+          text.textContent = 'Modo Logado (Nuvem ☁️)';
+          badge.className = 'hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-label font-bold bg-[#c6edc4] text-[#012108] border border-[#436444]';
+        }
+      }
+
+      const savedStats = localStorage.getItem('study_burrow_stats');
+      if (savedStats) {
+        try { userStats = JSON.parse(savedStats); } catch(e){}
+      }
+    }
+
+    function loadRoutinesData() {
+      const savedRoutines = localStorage.getItem('study_burrow_routines');
+      if (savedRoutines) {
+        try { studyRoutines = JSON.parse(savedRoutines); } catch(e){}
+      }
+    }
+
+    function saveRoutinesData() {
+      localStorage.setItem('study_burrow_routines', JSON.stringify(studyRoutines));
+      renderCalendarGrid();
+      renderSelectedDayRoutines();
+    }
+
+    function setDefaultDateInput() {
+      const dateInput = document.getElementById('topic-date-input');
+      if (dateInput) {
+        const mStr = (currentCalendarMonth + 1 < 10 ? '0' : '') + (currentCalendarMonth + 1);
+        const dStr = (selectedCalendarDay < 10 ? '0' : '') + selectedCalendarDay;
+        dateInput.value = `${currentCalendarYear}-${mStr}-${dStr}`;
+      }
+    }
+
+    // CALENDÁRIO INTERATIVO ENGINE (GOOGLE AGENDA STYLE)
+    const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+
+    function navigateMonth(delta) {
+      currentCalendarMonth += delta;
+      if (currentCalendarMonth < 0) { currentCalendarMonth = 11; currentCalendarYear--; }
+      else if (currentCalendarMonth > 11) { currentCalendarMonth = 0; currentCalendarYear++; }
+      renderCalendarGrid();
+      renderSelectedDayRoutines();
+    }
+
+    function renderCalendarGrid() {
+      const monthTitle = document.getElementById('calendar-month-year-title');
+      if (monthTitle) monthTitle.innerHTML = `<span class="material-symbols-outlined text-primary text-2xl">calendar_today</span> ${monthNames[currentCalendarMonth]} ${currentCalendarYear}`;
+
+      const grid = document.getElementById('interactive-calendar-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const firstDay = new Date(currentCalendarYear, currentCalendarMonth, 1).getDay();
+      const totalDays = new Date(currentCalendarYear, currentCalendarMonth + 1, 0).getDate();
+
+      // Dias vazios do mês anterior
+      for (let i = 0; i < firstDay; i++) {
+        const emptyCell = document.createElement('div');
+        emptyCell.className = "py-2.5 text-on-surface-variant/30 text-xs";
+        grid.appendChild(emptyCell);
+      }
+
+      // Dias do Mês Selecionado (Clicáveis)
+      for (let d = 1; d <= totalDays; d++) {
+        const mStr = (currentCalendarMonth + 1 < 10 ? '0' : '') + (currentCalendarMonth + 1);
+        const dStr = (d < 10 ? '0' : '') + d;
+        const dateKey = `${currentCalendarYear}-${mStr}-${dStr}`;
+        const hasRoutines = studyRoutines[dateKey] && studyRoutines[dateKey].length > 0;
+        const isSelected = (d === selectedCalendarDay);
+
+        const dayBtn = document.createElement('button');
+        dayBtn.type = 'button';
+        dayBtn.onclick = () => selectCalendarDay(d);
+
+        let btnClasses = "py-2.5 rounded-2xl relative transition-all duration-200 cursor-pointer flex flex-col items-center justify-center font-bold font-body text-xs sm:text-sm ";
+        
+        if (isSelected) {
+          btnClasses += "bg-[#436444] text-white shadow-md scale-105 border-2 border-[#2e4e30]";
+        } else if (hasRoutines) {
+          btnClasses += "bg-[#ffdcc5] text-[#805533] hover:bg-[#fdc39a] border border-[#805533]/40";
+        } else {
+          btnClasses += "hover:bg-[#eeeee8] text-[#1a1c19]";
+        }
+
+        dayBtn.className = btnClasses;
+        dayBtn.innerHTML = `
+          <span>${d}</span>
+          ${hasRoutines ? `<span class="w-1.5 h-1.5 ${isSelected ? 'bg-white' : 'bg-[#805533]'} rounded-full mt-0.5"></span>` : ''}
+        `;
+        grid.appendChild(dayBtn);
+      }
+    }
+
+    function selectCalendarDay(day) {
+      selectedCalendarDay = day;
+      setDefaultDateInput();
+      renderCalendarGrid();
+      renderSelectedDayRoutines();
+    }
+
+    function renderSelectedDayRoutines() {
+      const title = document.getElementById('selected-day-title');
+      if (title) title.textContent = `Rotinas do Dia ${selectedCalendarDay} de ${monthNames[currentCalendarMonth]}`;
+
+      const container = document.getElementById('daily-routines-container');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const mStr = (currentCalendarMonth + 1 < 10 ? '0' : '') + (currentCalendarMonth + 1);
+      const dStr = (selectedCalendarDay < 10 ? '0' : '') + selectedCalendarDay;
+      const dateKey = `${currentCalendarYear}-${mStr}-${dStr}`;
+      const routines = studyRoutines[dateKey] || [];
+
+      if (routines.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 text-center bg-white rounded-2xl border-2 border-dashed border-[#c2c8be] space-y-2">
+            <span class="material-symbols-outlined text-3xl text-[#7d5231]">edit_calendar</span>
+            <p class="font-body text-xs text-[#737970] font-semibold">Nenhuma semente de estudo agendada para o dia ${selectedCalendarDay}.</p>
+            <button onclick="openAddRoutineModal()" class="text-xs font-bold text-[#436444] hover:underline cursor-pointer">+ Clique aqui para adicionar uma rotina!</button>
+          </div>
+        `;
+        return;
+      }
+
+      routines.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = `p-4 rounded-2xl border-2 ${item.done ? 'border-[#436444] bg-[#c6edc4]/30' : 'border-[#7d5231] bg-white'} shadow-sm flex items-center justify-between gap-3 group transition-all`;
+        
+        itemDiv.innerHTML = `
+          <div onclick="toggleRoutineDone('${dateKey}', '${item.id}')" class="flex items-center gap-3 cursor-pointer flex-1">
+            <div class="w-6 h-6 rounded-lg border-2 ${item.done ? 'border-[#436444] bg-[#436444] text-white' : 'border-[#7d5231] bg-white'} flex items-center justify-center font-bold text-xs shrink-0">
+              ${item.done ? '<span class="material-symbols-outlined text-sm">check</span>' : ''}
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold ${item.done ? 'line-through text-[#737970]' : 'text-[#1c1c17]'}">${item.title}</span>
+                <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-[#f1eee5] text-[#7d5231] border border-[#c2c8be]">${item.subject}</span>
+              </div>
+              <p class="text-[11px] text-[#737970] font-medium mt-0.5">⏰ ${item.time} • Prioridade ${item.priority}</p>
+            </div>
+          </div>
+          
+          <button onclick="deleteRoutineItem('${dateKey}', '${item.id}')" class="text-[#737970] hover:text-[#ba1a1a] p-1.5 transition-colors cursor-pointer" title="Excluir rotina">
+            <span class="material-symbols-outlined text-lg">delete</span>
+          </button>
+        `;
+        container.appendChild(itemDiv);
+      });
+    }
+
+    function toggleRoutineDone(dateKey, routineId) {
+      if (studyRoutines[dateKey]) {
+        const item = studyRoutines[dateKey].find(r => r.id === routineId);
+        if (item) {
+          item.done = !item.done;
+          if (item.done) addXp(15);
+          saveRoutinesData();
+        }
+      }
+    }
+
+    function deleteRoutineItem(dateKey, routineId) {
+      if (studyRoutines[dateKey]) {
+        studyRoutines[dateKey] = studyRoutines[dateKey].filter(r => r.id !== routineId);
+        if (studyRoutines[dateKey].length === 0) delete studyRoutines[dateKey];
+        saveRoutinesData();
+        showToast('🗑️ Rotina removida!');
+      }
+    }
+
+    function openAddRoutineModal() {
+      const name = prompt(`Digite a rotina ou matéria para o Dia ${selectedCalendarDay}:`, "Revisão Geral");
+      if (!name || !name.trim()) return;
+      
+      const time = prompt("Horário previsto (ex: 14:00 - 15:30):", "14:00 - 15:00");
+      const mStr = (currentCalendarMonth + 1 < 10 ? '0' : '') + (currentCalendarMonth + 1);
+      const dStr = (selectedCalendarDay < 10 ? '0' : '') + selectedCalendarDay;
+      const dateKey = `${currentCalendarYear}-${mStr}-${dStr}`;
+
+      if (!studyRoutines[dateKey]) studyRoutines[dateKey] = [];
+
+      studyRoutines[dateKey].push({
+        id: 'r_' + Date.now(),
+        title: name.trim(),
+        time: time || '14:00',
+        subject: 'Geral 🌿',
+        priority: 'Média',
+        done: false
+      });
+
+      addXp(15);
+      saveRoutinesData();
+      showToast(`✨ Nova rotina adicionada ao Dia ${selectedCalendarDay} (+15 XP)!`);
+    }
+
+    function handlePlantTopic(e) {
+      e.preventDefault();
+      const nameInput = document.getElementById('topic-name-input');
+      const dateInput = document.getElementById('topic-date-input');
+      const subjectInput = document.getElementById('topic-subject-input');
+      const timeInput = document.getElementById('topic-time-input');
+      const priorityInput = document.getElementById('topic-priority-input');
+
+      if (!nameInput || !dateInput) return;
+
+      const topicName = nameInput.value.trim();
+      const topicDate = dateInput.value; // YYYY-MM-DD
+      const subject = subjectInput ? subjectInput.value : 'Geral';
+      const time = timeInput ? timeInput.value : '14:00';
+      const priority = priorityInput ? priorityInput.value : 'Média';
+
+      if (!topicName || !topicDate) return;
+
+      if (!studyRoutines[topicDate]) studyRoutines[topicDate] = [];
+
+      studyRoutines[topicDate].push({
+        id: 'r_' + Date.now(),
+        title: topicName,
+        time: time,
+        subject: subject,
+        priority: priority,
+        done: false
+      });
+
+      // Se o tópico for para o mês atual, atualiza o dia selecionado
+      const parts = topicDate.split('-');
+      if (parts.length === 3) {
+        selectedCalendarDay = parseInt(parts[2], 10);
+        currentCalendarMonth = parseInt(parts[1], 10) - 1;
+        currentCalendarYear = parseInt(parts[0], 10);
+      }
+
+      nameInput.value = '';
+      addXp(15);
+      saveRoutinesData();
+      showToast(`🌿 Tópico "${topicName}" plantado no calendário (+15 XP)!`);
+    }
+
+    function saveStats() {
+      localStorage.setItem('study_burrow_stats', JSON.stringify(userStats));
+      
+      if (currentUser && !currentUser.isGuest && db && auth && auth.currentUser) {
+        try {
+          db.collection('users').doc(auth.currentUser.uid).set({
+            xp: userStats.xp,
+            level: userStats.level,
+            totalFocusMinutes: userStats.totalFocusMinutes,
+            completedPomodoros: userStats.completedPomodoros,
+            updatedAt: new Date().toISOString()
+          }, { merge: true });
+        } catch (e) {
+          console.warn("Firestore sync fallback:", e);
+        }
+      }
+
+      updateStatsUI();
+    }
+
+    function addXp(amount) {
+      userStats.xp += amount;
+      while (userStats.xp >= userStats.maxXp) {
+        userStats.xp -= userStats.maxXp;
+        userStats.level += 1;
+        userStats.maxXp = Math.round(userStats.maxXp * 1.3);
+        showToast('🎉 PARABÉNS! Você subiu para o Nível ' + userStats.level + '!');
+      }
+      saveStats();
+    }
+
+    function updateStatsUI() {
+      const headerXp = document.getElementById('header-xp-display');
+      if (headerXp) headerXp.textContent = 'Nível ' + userStats.level + ' • ' + userStats.xp + ' XP';
+
+      const userSub = document.getElementById('user-display-subtitle');
+      if (userSub && currentUser) userSub.textContent = currentUser.name + (currentUser.isGuest ? ' (Visitante)' : ' ☁️');
+
+      const welcomeName = document.getElementById('dashboard-welcome-name');
+      if (welcomeName && currentUser) welcomeName.textContent = 'Bem-vindo de volta, ' + currentUser.name + '! 🌸';
+
+      const lvlTitle = document.getElementById('garden-level-title');
+      if (lvlTitle) lvlTitle.textContent = 'Jardineiro da Toca (Nível ' + userStats.level + ')';
+      
+      const lvlBadge = document.getElementById('garden-level-badge');
+      if (lvlBadge) lvlBadge.textContent = userStats.level;
+
+      const xpSub = document.getElementById('garden-xp-sub');
+      if (xpSub) xpSub.textContent = userStats.xp + ' / ' + userStats.maxXp + ' XP para o próximo Nível';
+
+      const xpBar = document.getElementById('garden-xp-bar');
+      if (xpBar) {
+        const pct = Math.min(100, Math.round((userStats.xp / userStats.maxXp) * 100));
+        xpBar.style.width = pct + '%';
+      }
+
+      const dashMin = document.getElementById('dash-focus-min');
+      if (dashMin) dashMin.textContent = userStats.totalFocusMinutes + ' min';
+
+      const statsHours = document.getElementById('stats-total-hours');
+      if (statsHours) statsHours.textContent = Math.round(userStats.totalFocusMinutes / 60) + 'h';
+    }
+
+    function handleLogout() {
+      if (auth && auth.currentUser) {
+        auth.signOut().catch(() => {});
+      }
+      localStorage.removeItem('study_burrow_user');
+      window.location.href = 'login.html';
+    }
+
+    function goToLogin() {
+      window.location.href = 'login.html';
+    }
+
+    function switchTab(viewId) {
+      const sections = document.querySelectorAll('.view-section');
+      sections.forEach(sec => sec.classList.remove('active-view'));
+
+      const targetSection = document.getElementById('view-' + viewId);
+      if (targetSection) targetSection.classList.add('active-view');
+
+      const sidebarLinks = document.querySelectorAll('.nav-link');
+      sidebarLinks.forEach(link => link.classList.remove('active-nav'));
+      const activeSidebarLink = document.getElementById('nav-' + viewId);
+      if (activeSidebarLink) activeSidebarLink.classList.add('active-nav');
+
+      const bottomNavLinks = document.querySelectorAll('.bottom-nav-link');
+      bottomNavLinks.forEach(link => link.classList.remove('active-nav'));
+      const activeBottomLink = document.getElementById('bnav-' + viewId);
+      if (activeBottomLink) activeBottomLink.classList.add('active-nav');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // POMODORO TIMER ENGINE
+    function setTimerMode(mode) {
+      pomoMode = mode;
+      pomoIsRunning = false;
+      clearInterval(pomoInterval);
+
+      if (mode === 'work') pomoTimeLeft = 25 * 60;
+      else if (mode === 'shortBreak') pomoTimeLeft = 5 * 60;
+      else if (mode === 'longBreak') pomoTimeLeft = 15 * 60;
+
+      updatePomodoroDisplay();
+
+      const btnWork = document.getElementById('timer-mode-work');
+      const btnShort = document.getElementById('timer-mode-short');
+      const btnLong = document.getElementById('timer-mode-long');
+      
+      if (btnWork) btnWork.className = (mode === 'work') ? "flex-1 py-2 rounded-xl transition-all cursor-pointer bg-[#436444] text-white shadow-md" : "flex-1 py-2 rounded-xl transition-all cursor-pointer text-[#424841] hover:bg-[#dddad1]";
+      if (btnShort) btnShort.className = (mode === 'shortBreak') ? "flex-1 py-2 rounded-xl transition-all cursor-pointer bg-[#7d5231] text-white shadow-md" : "flex-1 py-2 rounded-xl transition-all cursor-pointer text-[#424841] hover:bg-[#dddad1]";
+      if (btnLong) btnLong.className = (mode === 'longBreak') ? "flex-1 py-2 rounded-xl transition-all cursor-pointer bg-[#99462a] text-white shadow-md" : "flex-1 py-2 rounded-xl transition-all cursor-pointer text-[#424841] hover:bg-[#dddad1]";
+
+      const badge = document.getElementById('widget-mode-badge');
+      if (badge) {
+        if (mode === 'work') { badge.textContent = 'Foco'; badge.className = 'text-xs font-body font-bold text-white bg-[#436444] px-2.5 py-1 rounded-full'; }
+        else if (mode === 'shortBreak') { badge.textContent = 'Pausa Curta'; badge.className = 'text-xs font-body font-bold text-white bg-[#7d5231] px-2.5 py-1 rounded-full'; }
+        else { badge.textContent = 'Pausa Longa'; badge.className = 'text-xs font-body font-bold text-white bg-[#99462a] px-2.5 py-1 rounded-full'; }
+      }
+    }
+
+    function togglePomodoroTimer() {
+      if (pomoIsRunning) {
+        pomoIsRunning = false;
+        clearInterval(pomoInterval);
+      } else {
+        pomoIsRunning = true;
+        pomoInterval = setInterval(() => {
+          if (pomoTimeLeft > 0) {
+            pomoTimeLeft--;
+            updatePomodoroDisplay();
+          } else {
+            pomoIsRunning = false;
+            clearInterval(pomoInterval);
+            playChimeSound();
+
+            if (pomoMode === 'work') {
+              addXp(25);
+              userStats.totalFocusMinutes += 25;
+              userStats.completedPomodoros += 1;
+              saveStats();
+              showToast('🎉 Parabéns! Sessão de Foco concluída (+25 XP)!');
+            } else {
+              showToast('☕ Pausa concluída! Hora de renovar o foco na Toca.');
+            }
+          }
+        }, 1000);
+      }
+      updatePomodoroDisplay();
+    }
+
+    function resetPomodoroTimer() {
+      setTimerMode(pomoMode);
+    }
+
+    function updatePomodoroDisplay() {
+      const m = Math.floor(pomoTimeLeft / 60);
+      const s = pomoTimeLeft % 60;
+      const str = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+
+      const widgetDisp = document.getElementById('widget-timer-display');
+      if (widgetDisp) widgetDisp.textContent = str;
+
+      const fullDisp = document.getElementById('full-timer-display');
+      if (fullDisp) fullDisp.textContent = str;
+
+      const fullBtnText = document.getElementById('full-btn-text');
+      if (fullBtnText) {
+        fullBtnText.innerHTML = pomoIsRunning 
+          ? '<span class="material-symbols-outlined text-xl">pause</span> PAUSAR TEMPO'
+          : '<span class="material-symbols-outlined text-xl">play_arrow</span> INICIAR SESSÃO';
+      }
+
+      const widgetBtnText = document.getElementById('widget-btn-text');
+      if (widgetBtnText) {
+        widgetBtnText.innerHTML = pomoIsRunning 
+          ? '<span class="material-symbols-outlined text-base">pause</span> Pausar'
+          : '<span class="material-symbols-outlined text-base">play_arrow</span> Iniciar';
+      }
+    }
+
+    function setAmbientSound(type) {
+      ambientSoundType = type;
+      stopAmbientAudio();
+
+      const badge = document.getElementById('ambient-status-badge');
+      if (badge) {
+        if (type === 'none') badge.classList.add('hidden');
+        else badge.classList.remove('hidden');
+      }
+
+      const btnNone = document.getElementById('ambient-btn-none');
+      const btnRain = document.getElementById('ambient-btn-rain');
+      const btnFire = document.getElementById('ambient-btn-fireplace');
+      const btnBirds = document.getElementById('ambient-btn-birds');
+
+      [btnNone, btnRain, btnFire, btnBirds].forEach(b => { if (b) b.className = "py-2 px-2 rounded-xl border border-[#c2c8be] bg-white text-[#424841] hover:bg-[#ece8df] cursor-pointer flex items-center justify-center gap-1"; });
+
+      if (type === 'none' && btnNone) btnNone.className = "py-2 px-2 rounded-xl border border-[#7d5231] bg-[#7d5231] text-white cursor-pointer";
+      if (type === 'rain' && btnRain) btnRain.className = "py-2 px-2 rounded-xl border border-[#436444] bg-[#436444] text-white cursor-pointer flex items-center justify-center gap-1";
+      if (type === 'fireplace' && btnFire) btnFire.className = "py-2 px-2 rounded-xl border border-[#99462a] bg-[#99462a] text-white cursor-pointer flex items-center justify-center gap-1";
+      if (type === 'birds' && btnBirds) btnBirds.className = "py-2 px-2 rounded-xl border border-[#5b7d5b] bg-[#5b7d5b] text-white cursor-pointer flex items-center justify-center gap-1";
+
+      if (type !== 'none') playAmbientSynth(type);
+    }
+
+    function stopAmbientAudio() {
+      activeAudioNodes.forEach(node => {
+        try { node.stop(); } catch(e){}
+      });
+      activeAudioNodes = [];
+    }
+
+    function playAmbientSynth(type) {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
+      if (type === 'rain') {
+        const bufferSize = audioCtx.sampleRate * 2;
+        const noiseBuffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        const output = noiseBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) { output[i] = (Math.random() * 2 - 1) * 0.1; }
+        const whiteNoise = audioCtx.createBufferSource();
+        whiteNoise.buffer = noiseBuffer;
+        whiteNoise.loop = true;
+
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(700, audioCtx.currentTime);
+
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+
+        whiteNoise.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        whiteNoise.start();
+        activeAudioNodes.push(whiteNoise);
+      } else if (type === 'fireplace') {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(60, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        activeAudioNodes.push(osc);
+      } else if (type === 'birds') {
+        const osc1 = audioCtx.createOscillator();
+        const osc2 = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc1.type = 'sine'; osc2.type = 'triangle';
+        osc1.frequency.setValueAtTime(440, audioCtx.currentTime);
+        osc2.frequency.setValueAtTime(554.37, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        osc1.connect(gain); osc2.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc1.start(); osc2.start();
+        activeAudioNodes.push(osc1, osc2);
+      }
+    }
+
+    function playChimeSound() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 1.2);
+      } catch(e){}
+    }
+
+    function handleAddPomoTask(e) {
+      e.preventDefault();
+      const input = document.getElementById('pomo-task-input');
+      if (!input) return;
+      const text = input.value.trim();
+      if (!text) return;
+
+      const list = document.getElementById('pomo-tasks-list');
+      const div = document.createElement('div');
+      div.className = "p-3 rounded-2xl border-2 border-[#7d5231] bg-white flex items-center justify-between gap-2 shadow-sm group";
+      div.innerHTML = `
+        <div onclick="togglePomoTaskItem(this)" class="flex items-center gap-2.5 cursor-pointer flex-1">
+          <div class="w-5 h-5 rounded-md border-2 border-[#7d5231] bg-white flex items-center justify-center"></div>
+          <span class="font-body text-xs font-semibold text-[#1c1c17]">${text}</span>
+        </div>
+        <button onclick="this.closest('.group').remove()" class="text-[#737970] hover:text-[#ba1a1a] p-1"><span class="material-symbols-outlined text-base">delete</span></button>
+      `;
+      list.prepend(div);
+      input.value = '';
+    }
+
+    function togglePomoTaskItem(el) {
+      const check = el.querySelector('div');
+      const text = el.querySelector('span');
+      if (check.classList.contains('bg-[#436444]')) {
+        check.className = "w-5 h-5 rounded-md border-2 border-[#7d5231] bg-white flex items-center justify-center";
+        check.innerHTML = "";
+        text.classList.remove('line-through', 'text-[#737970]');
+      } else {
+        check.className = "w-5 h-5 rounded-md border-2 border-[#436444] bg-[#436444] text-white flex items-center justify-center";
+        check.innerHTML = '<span class="material-symbols-outlined text-xs">check</span>';
+        text.classList.add('line-through', 'text-[#737970]');
+        addXp(15);
+        showToast('✨ Meta de estudo concluída (+15 XP)!');
+      }
+    }
+
+    function analyzeEssay() {
+      const content = document.getElementById('essay-content-input').value.trim();
+      if (!content) {
+        showToast('Por favor, digite ou cole seu texto de redação.');
+        return;
+      }
+      const box = document.getElementById('essay-result-box');
+      box.classList.remove('hidden');
+      addXp(20);
+      showToast('✨ Redação corrigida! Você ganhou +20 XP!');
+    }
+
+    function updateTaskCount() {
+      const checkboxes = document.querySelectorAll('#view-dashboard input[type="checkbox"]');
+      let checked = 0;
+      checkboxes.forEach(cb => { if (cb.checked) checked++; });
+      const badge = document.getElementById('task-count');
+      if (badge) badge.textContent = checked + '/' + checkboxes.length + ' Concluídas';
+    }
+
+    function switchAiSubTab(tabName) {
+      ['explain', 'quiz', 'chat'].forEach(t => {
+        const btn = document.getElementById('aisubtab-' + t);
+        const view = document.getElementById('aiview-' + t);
+        if (t === tabName) {
+          btn.className = "flex-1 py-2.5 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 bg-[#99462a] text-white shadow-md";
+          if (view) view.classList.remove('hidden');
+        } else {
+          btn.className = "flex-1 py-2.5 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5 text-[#424841] hover:bg-[#ece8df]";
+          if (view) view.classList.add('hidden');
+        }
+      });
+      const quickSuggestions = document.getElementById('ai-quick-suggestions');
+      if (quickSuggestions) {
+        if (tabName === 'chat') quickSuggestions.classList.add('hidden');
+        else quickSuggestions.classList.remove('hidden');
+      }
+    }
+
+    function useQuickTopic(topicStr) {
+      document.getElementById('ai-explain-input').value = topicStr;
+      document.getElementById('ai-quiz-input').value = topicStr;
+      generateAiExplanation();
+    }
+
+    function generateAiExplanation() {
+      const input = document.getElementById('ai-explain-input');
+      const topic = input ? input.value.trim() : '';
+      if (!topic) return;
+
+      const resultBox = document.getElementById('ai-explain-result');
+      const resultText = document.getElementById('ai-explain-text');
+      resultBox.classList.remove('hidden');
+      resultText.textContent = "pensando na explicação...";
+
+      setTimeout(() => {
+        resultText.innerHTML = `<strong>Visão Geral de ${topic}:</strong><br/><br/>
+        1. <strong>Conceito Chave:</strong> ${topic} é fundamental na sua disciplina. Entendê-lo abre portas para resolver problemas complexos com facilidade.<br/>
+        2. <strong>Passo a Passo:</strong> Identifique os elementos centrais, observe a aplicação prática e conecte com exemplos do cotidiano.<br/>
+        3. <strong>Dica de Memorização do Coelho:</strong> Crie um mapa mental simples com 3 palavras-chave principais! 🌿`;
+        addXp(10);
+      }, 500);
+    }
+
+    function generateAiQuiz() {
+      const input = document.getElementById('ai-quiz-input');
+      const topic = input ? input.value.trim() : 'Estudos Gerais';
+      const container = document.getElementById('ai-quiz-container');
+      const title = document.getElementById('quiz-title');
+      const questionsList = document.getElementById('quiz-questions-list');
+
+      container.classList.remove('hidden');
+      title.textContent = 'Quiz: ' + topic;
+
+      const sampleQuestions = [
+        { q: 'Qual é o princípio fundamental de ' + topic + '?', opts: ['Aumentar o rendimento com menos esforço', 'Armazenar energia de forma contínua', 'Manter o equilíbrio do sistema'], correct: 0, exp: 'Essa opção representa a definição clássica cobrada em exames.' },
+        { q: 'Em qual contexto ' + topic + ' é mais aplicado?', opts: ['Revisões periódicas e listas de exercícios', 'Leitura rápida sem anotações', 'Apenas em provas finais'], correct: 0, exp: 'Revisões ativas garantem retenção na memória de longo prazo.' }
+      ];
+
+      questionsList.innerHTML = '';
+      sampleQuestions.forEach((item, qIdx) => {
+        const qDiv = document.createElement('div');
+        qDiv.className = "p-5 bg-[#f7f3ea] border-2 border-[#7d5231] rounded-2xl space-y-3";
+        let optsHtml = '';
+        item.opts.forEach((opt, oIdx) => {
+          optsHtml += `<button onclick="answerQuizQuestion(this, ${qIdx}, ${oIdx}, ${item.correct}, '${item.exp}')" class="w-full text-left p-3 rounded-xl border-2 border-[#c2c8be] bg-white hover:bg-[#ece8df] font-body text-xs md:text-sm transition-all cursor-pointer flex justify-between items-center mb-2"><span>${opt}</span></button>`;
+        });
+        qDiv.innerHTML = `<p class="font-body font-bold text-sm text-[#1c1c17]">${qIdx + 1}. ${item.q}</p><div class="space-y-2">${optsHtml}</div><div id="quiz-exp-${qIdx}" class="hidden p-3 bg-[#f1eee5] border-l-4 border-[#7d5231] rounded-r-xl text-xs font-body text-[#424841]"></div>`;
+        questionsList.appendChild(qDiv);
+      });
+    }
+
+    function answerQuizQuestion(btnEl, qIdx, selectedOpt, correctOpt, expText) {
+      const parent = btnEl.parentElement;
+      const buttons = parent.querySelectorAll('button');
+      buttons.forEach((b, idx) => {
+        b.disabled = true;
+        if (idx === correctOpt) b.className = "w-full text-left p-3 rounded-xl border-2 border-[#436444] bg-[#c6edc4] text-[#012108] font-bold text-xs md:text-sm flex justify-between items-center mb-2";
+        else if (idx === selectedOpt) b.className = "w-full text-left p-3 rounded-xl border-2 border-[#ba1a1a] bg-[#ffdad6] text-[#93000a] font-bold text-xs md:text-sm flex justify-between items-center mb-2";
+        else b.className = "w-full text-left p-3 rounded-xl border-2 border-[#c2c8be] bg-white/50 text-[#737970] opacity-50 text-xs md:text-sm mb-2";
+      });
+      const expBox = document.getElementById('quiz-exp-' + qIdx);
+      if (expBox) { expBox.classList.remove('hidden'); expBox.innerHTML = '<strong>Explicação:</strong> ' + expText; }
+    }
+
+    function handleSendChatMessage(e) {
+      e.preventDefault();
+      const input = document.getElementById('chat-input-field');
+      if (!input) return;
+      const userText = input.value.trim();
+      if (!userText) return;
+
+      const chatContainer = document.getElementById('chat-messages');
+      const userMsgDiv = document.createElement('div');
+      userMsgDiv.className = "flex gap-3 justify-end";
+      userMsgDiv.innerHTML = `<div class="max-w-[80%] p-3.5 bg-[#4d6a44] text-white rounded-2xl rounded-br-none font-body text-xs md:text-sm shadow-sm">${userText}</div>`;
+      chatContainer.appendChild(userMsgDiv);
+      input.value = '';
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+
+      setTimeout(() => {
+        const aiMsgDiv = document.createElement('div');
+        aiMsgDiv.className = "flex gap-3 justify-start";
+        aiMsgDiv.innerHTML = `<div class="w-8 h-8 rounded-full bg-[#7d5231] text-white flex items-center justify-center shrink-0 font-bold text-xs border border-white shadow-sm">🐰</div><div class="max-w-[80%] p-3.5 bg-[#f1eee5] text-[#1c1c17] border border-[#c2c8be] rounded-2xl rounded-bl-none font-body text-xs md:text-sm leading-relaxed">Ótima pergunta! Para entender <strong>"${userText}"</strong>, lembre-se de dividir o estudo em pequenas partes. Se quiser, posso gerar um quiz rápido sobre esse tema para você fixar melhor! 🌿</div>`;
+        chatContainer.appendChild(aiMsgDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        addXp(5);
+      }, 600);
+    }
+
+    function updateWeeklyChart(period) {
+      const dataMap = {
+        'this-week': ['60%', '80%', '45%', '70%', '90%', '30%', '20%'],
+        'last-week': ['40%', '65%', '85%', '50%', '75%', '40%', '30%'],
+        'this-month': ['75%', '90%', '60%', '80%', '95%', '50%', '40%']
+      };
+      const values = dataMap[period] || dataMap['this-week'];
+      ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'].forEach((day, idx) => {
+        const bar = document.getElementById('bar-' + day);
+        if (bar) bar.style.height = values[idx];
+      });
+    }
+
+    function loadForestModePreference() {
+      const isForest = localStorage.getItem('study_burrow_forest_mode') === 'true';
+      if (isForest) {
+        document.body.classList.add('forest-mode');
+      }
+    }
+
+    function toggleForestMood() {
+      const isForest = document.body.classList.toggle('forest-mode');
+      localStorage.setItem('study_burrow_forest_mode', isForest ? 'true' : 'false');
+      if (isForest) {
+        showToast('🌲 Modo Floresta (Dark Mode) ativado!');
+      } else {
+        showToast('☀️ Modo Claro restaurado!');
+      }
+    }
+
+    function showNotificationToast() { showToast('Você está em uma sequência de 3 dias de estudo!'); }
+
+    function showToast(msg) {
+      const existing = document.getElementById('burrow-toast');
+      if (existing) existing.remove();
+      const toast = document.createElement('div');
+      toast.id = 'burrow-toast';
+      toast.className = 'fixed bottom-6 right-6 bg-[#36522e] text-[#c7e9b9] font-label font-bold text-xs md:text-sm px-5 py-3 rounded-2xl shadow-xl z-50 flex items-center gap-2 border border-[#caecbc]/30 transition-all';
+      toast.innerHTML = '<span>🐰</span> <span>' + msg + '</span>';
+      document.body.appendChild(toast);
+      setTimeout(() => { if (toast) toast.remove(); }, 3000);
+    }
+  </script>
+</body>
+</html>

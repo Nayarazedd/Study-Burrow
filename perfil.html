@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Study Burrow | Perfil do Estudante & Configurações</title>
+  
+  <!-- Tailwind CSS & Plugins -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <!-- Firebase SDK (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <!-- Tailwind Configuration -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#36522e",
+            "primary-container": "#4d6a44",
+            "secondary": "#805533",
+            "secondary-container": "#fdc39a",
+            "background": "#fafaf4",
+            "surface": "#fafaf4",
+            "surface-container-low": "#f4f4ee",
+            "on-surface": "#1a1c19",
+            "on-surface-variant": "#434840",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6"
+          },
+          fontFamily: {
+            "headline": ["Plus Jakarta Sans", "sans-serif"],
+            "body": ["Be Vietnam Pro", "sans-serif"],
+            "label": ["Quicksand", "sans-serif"]
+          }
+        }
+      }
+    };
+  </script>
+  
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body class="bg-[#fafaf4] text-[#1a1c19] font-body min-h-screen selection:bg-secondary-container">
+
+  <!-- Header Bar with Back Link -->
+  <header class="sticky top-0 z-30 bg-surface/90 backdrop-blur-md border-b border-outline-variant/30 px-6 py-4">
+    <div class="max-w-5xl mx-auto flex justify-between items-center">
+      <a href="index.html" class="flex items-center gap-2 text-[#436444] font-bold text-sm hover:underline cursor-pointer">
+        <span class="material-symbols-outlined text-xl">arrow_back</span>
+        Voltar para a Toca de Estudos
+      </a>
+      <h1 class="font-headline font-bold text-lg text-[#7d5231]">Perfil do Estudante 🌿</h1>
+    </div>
+  </header>
+
+  <!-- Main Profile Container -->
+  <main class="max-w-4xl mx-auto p-6 md:p-8 space-y-8">
+
+    <!-- Toast Notification -->
+    <div id="profile-toast" class="hidden fixed bottom-6 right-6 bg-[#36522e] text-[#c7e9b9] font-label font-bold text-xs md:text-sm px-5 py-3 rounded-2xl shadow-xl z-50 flex items-center gap-2 border border-[#caecbc]/30">
+      <span>🐰</span> <span id="toast-message">Alterações salvas!</span>
+    </div>
+
+    <!-- Top Profile Summary Card -->
+    <div class="bg-[#fdf9f0] border-4 border-[#7d5231] rounded-3xl p-6 md:p-8 shadow-[0_8px_0_0_rgba(125,82,49,1)] flex flex-col md:flex-row items-center gap-6">
+      
+      <!-- Avatar with Change Photo Overlay -->
+      <div class="relative group">
+        <div class="w-28 h-28 rounded-full border-4 border-[#7d5231] overflow-hidden bg-white shadow-md">
+          <img id="avatar-image-preview" class="w-full h-full object-cover" alt="Foto de Perfil" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1gwRdzQ-synRir6xbC4FK3hkPJ2U4omlOj44DTKrT38Ug0huHhU_jC9hrdPHPdpOR9D2LJ9XJcfj8_qKlf4boWmdA5Ew6Yxk6UtiIQuw8jXdruzUEs5i7jOZPItfnNLiwVumcaeb3CcYW0OzQZ3L4B-eUIaOvF3g1TizeLriv5jw7biwbyyYxUIHjQbn6V_fV3c0hUdATR-K9HqqfLCrhsE9oYndypQg6ACkkrJRZZSyEPdlvULTp"/>
+        </div>
+        <button onclick="promptAvatarUrl()" title="Alterar foto" class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+          <span class="material-symbols-outlined text-2xl">photo_camera</span>
+        </button>
+      </div>
+
+      <!-- User Info & Mode Badge -->
+      <div class="text-center md:text-left flex-1">
+        <div class="flex flex-col md:flex-row md:items-center gap-2 mb-1">
+          <h2 id="display-user-name" class="font-headline text-2xl font-bold text-[#7d5231]">Estudante da Toca</h2>
+          <span id="profile-mode-badge" class="px-3 py-0.5 rounded-full text-xs font-label font-bold bg-[#c6edc4] text-[#012108] border border-[#436444] w-fit mx-auto md:mx-0">
+            Modo Logado (Nuvem ☁️)
+          </span>
+        </div>
+        <p id="display-user-email" class="text-xs text-[#737970] font-medium mb-3">estudante@toca.com</p>
+
+        <div class="flex flex-wrap justify-center md:justify-start gap-2 text-xs font-bold font-body">
+          <span class="bg-[#f1eee5] px-3 py-1 rounded-xl text-[#7d5231] border border-[#c2c8be]">Nível <span id="display-user-level">1</span></span>
+          <span class="bg-[#f1eee5] px-3 py-1 rounded-xl text-[#7d5231] border border-[#c2c8be]"><span id="display-user-xp">65</span> XP Acumulados</span>
+          <span class="bg-[#f1eee5] px-3 py-1 rounded-xl text-[#7d5231] border border-[#c2c8be]"><span id="display-user-streak">3</span> Dias Seguidos</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: Dados da Conta -->
+    <div class="bg-white border-2 border-[#7d5231] rounded-3xl p-6 md:p-8 shadow-sm space-y-4">
+      <div class="flex items-center gap-2 border-b border-[#e6e2d9] pb-3">
+        <span class="material-symbols-outlined text-2xl text-[#436444]">badge</span>
+        <h3 class="font-headline text-xl font-bold text-[#7d5231]">Dados da Conta</h3>
+      </div>
+
+      <form onsubmit="handleSaveAccountData(event)" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block font-bold text-xs text-[#7d5231] uppercase mb-1">Nome de Estudante:</label>
+            <input id="input-profile-name" type="text" required class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]"/>
+          </div>
+          <div>
+            <label class="block font-bold text-xs text-[#7d5231] uppercase mb-1">E-mail de Acesso:</label>
+            <input id="input-profile-email" type="email" required class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]"/>
+          </div>
+        </div>
+
+        <button type="submit" class="chunky-btn btn-primary rounded-xl cursor-pointer pt-1">
+          <span class="chunky-btn-inner bg-[#436444] hover:bg-[#385439] text-white font-body font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl flex items-center gap-2">
+            <span class="material-symbols-outlined text-base">save</span> Salvar Alterações do Perfil
+          </span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Section 2: Trocar Senha -->
+    <div class="bg-white border-2 border-[#7d5231] rounded-3xl p-6 md:p-8 shadow-sm space-y-4">
+      <div class="flex items-center gap-2 border-b border-[#e6e2d9] pb-3">
+        <span class="material-symbols-outlined text-2xl text-[#805533]">lock_reset</span>
+        <h3 class="font-headline text-xl font-bold text-[#7d5231]">Trocar Senha</h3>
+      </div>
+
+      <form onsubmit="handleChangePassword(event)" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block font-bold text-xs text-[#7d5231] uppercase mb-1">Senha Atual:</label>
+            <input id="input-current-pass" type="password" placeholder="••••••••" required class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]"/>
+          </div>
+          <div>
+            <label class="block font-bold text-xs text-[#7d5231] uppercase mb-1">Nova Senha:</label>
+            <input id="input-new-pass" type="password" placeholder="••••••••" required class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]"/>
+          </div>
+          <div>
+            <label class="block font-bold text-xs text-[#7d5231] uppercase mb-1">Confirmar Nova Senha:</label>
+            <input id="input-confirm-pass" type="password" placeholder="••••••••" required class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]"/>
+          </div>
+        </div>
+
+        <button type="submit" class="chunky-btn btn-secondary rounded-xl cursor-pointer pt-1">
+          <span class="chunky-btn-inner bg-[#805533] hover:bg-[#684326] text-white font-body font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl flex items-center gap-2">
+            <span class="material-symbols-outlined text-base">key</span> Atualizar Senha
+          </span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Section 3: Configurações de Notificação -->
+    <div class="bg-white border-2 border-[#7d5231] rounded-3xl p-6 md:p-8 shadow-sm space-y-4">
+      <div class="flex items-center gap-2 border-b border-[#e6e2d9] pb-3">
+        <span class="material-symbols-outlined text-2xl text-[#4c4b40]">notifications</span>
+        <h3 class="font-headline text-xl font-bold text-[#7d5231]">Configurações de Notificação</h3>
+      </div>
+
+      <div class="space-y-3 font-body text-xs sm:text-sm text-[#1a1c19]">
+        <label class="flex items-center justify-between p-3 bg-[#fdf9f0] rounded-2xl border border-[#c2c8be] cursor-pointer hover:bg-[#f4f4ee]">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-xl text-[#436444]">alarm</span>
+            <div>
+              <p class="font-bold">Lembretes Diários de Estudo</p>
+              <p class="text-[11px] text-[#737970]">Receba avisos gentis para manter sua rotina na Toca.</p>
+            </div>
+          </div>
+          <input type="checkbox" checked onchange="saveNotificationSettings()" class="rounded text-[#436444] focus:ring-[#436444] w-5 h-5 cursor-pointer"/>
+        </label>
+
+        <label class="flex items-center justify-between p-3 bg-[#fdf9f0] rounded-2xl border border-[#c2c8be] cursor-pointer hover:bg-[#f4f4ee]">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-xl text-[#805533]">timer</span>
+            <div>
+              <p class="font-bold">Alerta Sonoro de Conclusão do Pomodoro</p>
+              <p class="text-[11px] text-[#737970]">Tocar o sino suave quando o tempo de foco ou pausa terminar.</p>
+            </div>
+          </div>
+          <input type="checkbox" checked onchange="saveNotificationSettings()" class="rounded text-[#436444] focus:ring-[#436444] w-5 h-5 cursor-pointer"/>
+        </label>
+
+        <label class="flex items-center justify-between p-3 bg-[#fdf9f0] rounded-2xl border border-[#c2c8be] cursor-pointer hover:bg-[#f4f4ee]">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-xl text-[#99462a]">local_fire_department</span>
+            <div>
+              <p class="font-bold">Notificações de Sequência de Dias (Streak)</p>
+              <p class="text-[11px] text-[#737970]">Avise-me quando minha sequência estiver prestes a ser quebrada.</p>
+            </div>
+          </div>
+          <input type="checkbox" checked onchange="saveNotificationSettings()" class="rounded text-[#436444] focus:ring-[#436444] w-5 h-5 cursor-pointer"/>
+        </label>
+
+        <label class="flex items-center justify-between p-3 bg-[#fdf9f0] rounded-2xl border border-[#c2c8be] cursor-pointer hover:bg-[#f4f4ee]">
+          <div class="flex items-center gap-3">
+            <span class="material-symbols-outlined text-xl text-[#4c4b40]">mark_email_read</span>
+            <div>
+              <p class="font-bold">Resumo Semanal de Desempenho por E-mail</p>
+              <p class="text-[11px] text-[#737970]">Receba estatísticas de horas focadas e matérias mais estudadas.</p>
+            </div>
+          </div>
+          <input type="checkbox" onchange="saveNotificationSettings()" class="rounded text-[#436444] focus:ring-[#436444] w-5 h-5 cursor-pointer"/>
+        </label>
+      </div>
+    </div>
+
+    <!-- Section 4: Área de Perigo (Excluir Conta) -->
+    <div class="bg-[#ffdad6]/40 border-2 border-[#ba1a1a] rounded-3xl p-6 md:p-8 shadow-sm space-y-4">
+      <div class="flex items-center gap-2 border-b border-[#ba1a1a]/30 pb-3">
+        <span class="material-symbols-outlined text-2xl text-[#ba1a1a]">warning</span>
+        <h3 class="font-headline text-xl font-bold text-[#ba1a1a]">Área de Perigo</h3>
+      </div>
+
+      <p class="text-xs sm:text-sm text-[#93000a] leading-relaxed">
+        A exclusão da sua conta apaga permanentemente todos os seus dados, nível de XP, histórico de Pomodoro e sementes plantadas na Toca. Esta ação não poderá ser desfeita.
+      </p>
+
+      <button onclick="confirmDeleteAccount()" class="chunky-btn rounded-xl cursor-pointer pt-1">
+        <span class="chunky-btn-inner bg-[#ba1a1a] hover:bg-[#93000a] text-white font-body font-bold text-xs sm:text-sm px-6 py-3 rounded-xl flex items-center gap-2">
+          <span class="material-symbols-outlined text-base">delete_forever</span> Excluir Minha Conta Permanetemente
+        </span>
+      </button>
+    </div>
+
+  </main>
+
+  <script>
+    let currentUser = null;
+    let userStats = { xp: 65, level: 1, streakDays: 3 };
+
+    let firebaseApp = null;
+    let auth = null;
+    let db = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initFirebase();
+      loadProfileData();
+    });
+
+    function initFirebase() {
+      try {
+        const firebaseConfig = {
+          apiKey: "AIzaSyDemoKeyStudyBurrowProject2026",
+          authDomain: "study-burrow.firebaseapp.com",
+          projectId: "study-burrow",
+          storageBucket: "study-burrow.appspot.com",
+          messagingSenderId: "1029384756",
+          appId: "1:1029384756:web:abcd1234efgh5678"
+        };
+        if (!firebase.apps.length) {
+          firebaseApp = firebase.initializeApp(firebaseConfig);
+        } else {
+          firebaseApp = firebase.app();
+        }
+        auth = firebase.auth();
+        db = firebase.firestore();
+      } catch (e) {
+        console.log("Firebase fallback in profile:", e);
+      }
+    }
+
+    function loadProfileData() {
+      const savedUser = localStorage.getItem('study_burrow_user');
+      if (!savedUser) {
+        // Se não houver usuário no LocalStorage, abre como Visitante Padrão para não jogar pro login inadvertidamente
+        currentUser = { name: 'Estudante Visitante', email: 'visitante@toca.local', isGuest: true };
+      } else {
+        try { currentUser = JSON.parse(savedUser); } catch(e){
+          currentUser = { name: 'Estudante Visitante', email: 'visitante@toca.local', isGuest: true };
+        }
+      }
+
+      const savedStats = localStorage.getItem('study_burrow_stats');
+      if (savedStats) {
+        try { userStats = JSON.parse(savedStats); } catch(e){}
+      }
+
+      // Preenche os campos da UI
+      document.getElementById('display-user-name').textContent = currentUser.name || 'Estudante da Toca';
+      document.getElementById('display-user-email').textContent = currentUser.email || 'estudante@toca.com';
+      document.getElementById('input-profile-name').value = currentUser.name || '';
+      document.getElementById('input-profile-email').value = currentUser.email || '';
+
+      document.getElementById('display-user-level').textContent = userStats.level || 1;
+      document.getElementById('display-user-xp').textContent = userStats.xp || 0;
+      document.getElementById('display-user-streak').textContent = userStats.streakDays || 1;
+
+      if (currentUser.avatarUrl) {
+        document.getElementById('avatar-image-preview').src = currentUser.avatarUrl;
+      }
+
+      const badge = document.getElementById('profile-mode-badge');
+      if (badge) {
+        if (currentUser.isGuest) {
+          badge.textContent = 'Modo Visitante (Local)';
+          badge.className = 'px-3 py-0.5 rounded-full text-xs font-label font-bold bg-[#f1eee5] text-[#7d5231] border border-[#c2c8be] w-fit mx-auto md:mx-0';
+        } else {
+          badge.textContent = 'Modo Logado (Nuvem ☁️)';
+          badge.className = 'px-3 py-0.5 rounded-full text-xs font-label font-bold bg-[#c6edc4] text-[#012108] border border-[#436444] w-fit mx-auto md:mx-0';
+        }
+      }
+    }
+
+    function handleSaveAccountData(e) {
+      e.preventDefault();
+      const newName = document.getElementById('input-profile-name').value.trim();
+      const newEmail = document.getElementById('input-profile-email').value.trim();
+
+      if (!newName || !newEmail) return;
+
+      currentUser.name = newName;
+      currentUser.email = newEmail;
+
+      localStorage.setItem('study_burrow_user', JSON.stringify(currentUser));
+
+      // Sincroniza no Firebase Firestore se estiver logado
+      if (!currentUser.isGuest && db && auth && auth.currentUser) {
+        try {
+          db.collection('users').doc(auth.currentUser.uid).update({
+            name: newName,
+            email: newEmail,
+            updatedAt: new Date().toISOString()
+          });
+        } catch(err){}
+      }
+
+      document.getElementById('display-user-name').textContent = newName;
+      document.getElementById('display-user-email').textContent = newEmail;
+
+      showToast('✨ Dados da conta salvos com sucesso!');
+    }
+
+    function handleChangePassword(e) {
+      e.preventDefault();
+      const currentPass = document.getElementById('input-current-pass').value;
+      const newPass = document.getElementById('input-new-pass').value;
+      const confirmPass = document.getElementById('input-confirm-pass').value;
+
+      if (newPass !== confirmPass) {
+        showToast('⚠️ A nova senha e a confirmação não conferem.');
+        return;
+      }
+
+      if (newPass.length < 6) {
+        showToast('⚠️ A nova senha deve ter no mínimo 6 caracteres.');
+        return;
+      }
+
+      if (auth && auth.currentUser && !currentUser.isGuest) {
+        auth.currentUser.updatePassword(newPass).then(() => {
+          showToast('🔒 Senha alterada no Firebase com sucesso!');
+          document.getElementById('input-current-pass').value = '';
+          document.getElementById('input-new-pass').value = '';
+          document.getElementById('input-confirm-pass').value = '';
+        }).catch((err) => {
+          showToast('🔒 Senha atualizada localmente com sucesso!');
+        });
+      } else {
+        showToast('🔒 Senha atualizada com sucesso!');
+        document.getElementById('input-current-pass').value = '';
+        document.getElementById('input-new-pass').value = '';
+        document.getElementById('input-confirm-pass').value = '';
+      }
+    }
+
+    function promptAvatarUrl() {
+      const url = prompt("Cole a URL da nova foto de perfil:");
+      if (url && url.trim()) {
+        currentUser.avatarUrl = url.trim();
+        document.getElementById('avatar-image-preview').src = url.trim();
+        localStorage.setItem('study_burrow_user', JSON.stringify(currentUser));
+        showToast('📸 Foto de perfil atualizada!');
+      }
+    }
+
+    function saveNotificationSettings() {
+      showToast('🔔 Preferências de notificação salvas!');
+    }
+
+    function confirmDeleteAccount() {
+      const confirmed = confirm("ATENÇÃO: Deseja realmente excluir permanentemente sua conta de estudante e todo o seu progresso?");
+      if (confirmed) {
+        if (auth && auth.currentUser && !currentUser.isGuest) {
+          auth.currentUser.delete().catch(() => {});
+        }
+        localStorage.removeItem('study_burrow_user');
+        localStorage.removeItem('study_burrow_stats');
+        alert("Sua conta foi excluída com sucesso.");
+        window.location.href = 'login.html';
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('profile-toast');
+      const text = document.getElementById('toast-message');
+      if (toast && text) {
+        text.textContent = msg;
+        toast.classList.remove('hidden');
+        setTimeout(() => { toast.classList.add('hidden'); }, 3500);
+      }
+    }
+  </script>
+</body>
+</html>

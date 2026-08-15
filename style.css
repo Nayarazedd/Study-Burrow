@@ -1,0 +1,291 @@
+/* ==========================================================================
+   STUDY BURROW - UNIFIED DESIGN SYSTEM & STYLES (STITCH & REACT INTEGRATION)
+   ========================================================================== */
+
+/* Design Tokens & CSS Variables */
+:root {
+  --color-primary: #36522e;
+  --color-primary-container: #4d6a44;
+  --color-on-primary-container: #c7e9b9;
+  --color-primary-fixed: #caecbc;
+  --color-primary-fixed-dim: #afd0a2;
+  
+  --color-secondary: #805533;
+  --color-secondary-container: #fdc39a;
+  --color-on-secondary-container: #794e2e;
+  --color-secondary-fixed: #ffdcc5;
+  
+  --color-tertiary: #4c4b40;
+  --color-tertiary-container: #646357;
+  --color-tertiary-fixed-dim: #c9c7b8;
+  --color-on-tertiary-fixed-variant: #48473c;
+  
+  --color-background: #fafaf4;
+  --color-surface: #fafaf4;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f4f4ee;
+  --color-surface-container: #eeeee8;
+  --color-surface-container-high: #e9e8e3;
+  --color-surface-container-highest: #e3e3dd;
+  
+  --color-on-surface: #1a1c19;
+  --color-on-surface-variant: #434840;
+  --color-outline: #73796f;
+  --color-outline-variant: #c3c8bd;
+  
+  --color-error: #ba1a1a;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --font-headline: 'Plus Jakarta Sans', sans-serif;
+  --font-body: 'Be Vietnam Pro', sans-serif;
+  --font-label: 'Quicksand', sans-serif;
+}
+
+/* Base resets & typography */
+body {
+  background-color: var(--color-background);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234d6a44' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ==========================================================================
+   FOREST MODE (DARK MODE TEMÁTICO DA FLORESTA)
+   ========================================================================== */
+body.forest-mode {
+  background-color: #162215 !important;
+  color: #f4ebd9 !important;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23afd0a2' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") !important;
+}
+
+body.forest-mode header {
+  background-color: rgba(22, 34, 21, 0.95) !important;
+  border-color: rgba(128, 85, 51, 0.4) !important;
+}
+
+body.forest-mode nav {
+  background-color: #0f180e !important;
+  border-color: #805533 !important;
+}
+
+body.forest-mode .bg-surface,
+body.forest-mode .bg-surface-container-low,
+body.forest-mode .bg-surface-container,
+body.forest-mode .bg-surface-container-lowest,
+body.forest-mode .bg-\[\#fdf9f0\],
+body.forest-mode .bg-\[\#f1eee5\],
+body.forest-mode .bg-\[\#f0ebe1\],
+body.forest-mode .bg-\[\#Fdfbf2\],
+body.forest-mode .bg-\[\#f7f3ea\],
+body.forest-mode .bg-white {
+  background-color: #213020 !important;
+  color: #f4ebd9 !important;
+  border-color: #805533 !important;
+}
+
+body.forest-mode h1,
+body.forest-mode h2,
+body.forest-mode h3,
+body.forest-mode h4,
+body.forest-mode .text-on-surface,
+body.forest-mode .text-\[\#7d5231\],
+body.forest-mode .text-\[\#436444\],
+body.forest-mode .text-\[\#1c1c17\] {
+  color: #f8f3e6 !important;
+}
+
+body.forest-mode p,
+body.forest-mode span,
+body.forest-mode label,
+body.forest-mode .text-on-surface-variant,
+body.forest-mode .text-\[\#424841\],
+body.forest-mode .text-\[\#737970\] {
+  color: #dcd2bd !important;
+}
+
+body.forest-mode input,
+body.forest-mode select,
+body.forest-mode textarea {
+  background-color: #172416 !important;
+  color: #f8f3e6 !important;
+  border-color: #805533 !important;
+}
+
+/* Wood tone buttons in Forest Mode */
+body.forest-mode button:not(.nav-link):not(.bottom-nav-link),
+body.forest-mode .chunky-btn-inner,
+body.forest-mode .btn-primary .chunky-btn-inner,
+body.forest-mode .btn-secondary .chunky-btn-inner {
+  background-color: #805533 !important;
+  color: #f8f3e6 !important;
+  border-color: #623f24 !important;
+}
+
+body.forest-mode button:hover:not(.nav-link):not(.bottom-nav-link),
+body.forest-mode .chunky-btn-inner:hover {
+  background-color: #6c4629 !important;
+}
+
+body.forest-mode .border-[#7d5231],
+body.forest-mode .border-2,
+body.forest-mode .border-4 {
+  border-color: #805533 !important;
+}
+
+/* Material Icons Helper */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+}
+
+.material-symbols-outlined.filled {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* Custom Shadows */
+.shadow-ambient {
+  box-shadow: 0 4px 20px -2px rgba(139, 94, 60, 0.15);
+}
+
+.shadow-ambient-lg {
+  box-shadow: 0 8px 32px -4px rgba(139, 94, 60, 0.12);
+}
+
+.shadow-burrow {
+  box-shadow: 0 4px 20px -2px rgba(139, 94, 60, 0.15);
+}
+
+.shadow-inner-burrow {
+  box-shadow: inset 0 2px 4px 0 rgba(139, 94, 60, 0.06);
+}
+
+/* Custom Borders & Shapes */
+.border-journal {
+  border: 1.5px dashed #8B5E3C;
+}
+
+.border-dashed-custom {
+  border: 1px dashed rgba(139, 94, 60, 0.3);
+}
+
+.rounded-organic {
+  border-radius: 12px 16px 10px 14px;
+}
+
+.rounded-organic-lg {
+  border-radius: 20px 24px 18px 22px;
+}
+
+/* Gold Foil Accent */
+.gold-foil-bg {
+  background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #b8860b 100%);
+  color: #301400;
+  font-weight: 700;
+}
+
+/* Chunky 3D Button Utility */
+.chunky-btn {
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+  display: inline-block;
+  text-decoration: none;
+  border: none;
+  background: transparent;
+}
+
+.chunky-btn:active {
+  transform: translateY(2px);
+}
+
+/* Scrollbar Customization */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #fafaf4; 
+}
+::-webkit-scrollbar-thumb {
+  background: #afd0a2; 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #4d6a44; 
+}
+
+/* Tab View Transitions */
+.view-section {
+  display: none;
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.view-section.active-view {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Side Navigation Active Links */
+.nav-link {
+  transition: all 0.2s ease;
+}
+
+.nav-link.active-nav {
+  background-color: rgba(227, 227, 221, 0.4);
+  color: #c7e9b9 !important;
+  font-weight: 700;
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  transform: scale(0.98);
+}
+
+.nav-link.active-nav .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* Mobile Bottom Nav Active Link */
+.bottom-nav-link.active-nav {
+  color: #36522e !important;
+  background-color: rgba(77, 106, 68, 0.2);
+  border-radius: 9999px;
+}
+
+.bottom-nav-link.active-nav .material-symbols-outlined {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* Login Modal Overlay */
+#login-modal {
+  display: flex;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background-color: rgba(26, 28, 25, 0.6);
+  backdrop-filter: blur(4px);
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+#login-modal.hidden-modal {
+  display: none;
+}
