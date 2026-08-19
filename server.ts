@@ -5,7 +5,19 @@ import dotenv from "dotenv";
 
 import fs from "fs";
 
+dotenv.config({ path: path.join(process.cwd(), ".env.local") });
 dotenv.config();
+
+function extractCleanTopic(text: string): string {
+  if (!text) return "sua dúvida de estudo";
+  let cleaned = text.trim();
+  cleaned = cleaned.replace(/^(to|estou)\s+(ocm|com)\s+dificuldade\s+em\s+(entrnder|entender|compreender)\s+(porque|por que|porquê)?\s*/i, "");
+  cleaned = cleaned.replace(/^(nao\s+consigo|nao\s+entendo|nao\s+sei|me\s+explica|como\s+funciona|por\s+que|porque)\s+/i, "");
+  cleaned = cleaned.replace(/\bentrnder\b/gi, "entender");
+  cleaned = cleaned.replace(/\bocm\b/gi, "com");
+  cleaned = cleaned.replace(/\bto\b/gi, "estou");
+  return cleaned.trim() || "o assunto solicitado";
+}
 
 const app = express();
 const PORT = 3000;
@@ -94,57 +106,134 @@ app.post("/api/ai/study", async (req, res) => {
         if (!ai) throw new Error("Cliente IA indisponível");
 
         const response = await generateWithGeminiFallback(ai, {
-          contents: `Você é o "Coelho Sábio 🐰", um Professor Sênior de excelência pedagógica e mestre em didática inclusiva para vestibulares, ENEM e aprendizagem para leigos e dislexos.
-Crie uma **Aula e Material Didático Completo, Profundo, Claro e Inclusivo** sobre o assunto "${promptContent}".
+          contents: `Você é o "Coelho Sábio 🐰", um Professor Mestre Sênior de didática de excelência e tutor inclusivo especializado em vestibulares, ENEM e aprendizagem para neurodivergentes (TDAH, dislexia, autismo) e leigos.
 
-Siga rigorosamente estas diretrizes para mentes leigas e ledores dislexos/neurodivergentes:
-1. Explique o assunto de forma COMPLETA e PROFISSIONAL como um mestre da disciplina, sem omitir detalhes importantes, mas com extrema clareza e frases diretas.
-2. Use formatação visual impecável: frases curtas, parágrafos bem espaçados, marcadores numerados e **negritos estratégicos nas palavras-chave**.
-3. Inclua uma analogia do dia a dia fácil de visualizar para fixar conceitos complexos.
-4. Estruture a resposta rigorosamente nesta ordem:
+Crie uma **AULA MESTRA COMPLETA, APROFUNDADA E EXTREMAMENTE DIDÁTICA** sobre o assunto "${promptContent}".
 
-# 📚 Aula Completa: ${promptContent}
+Siga RIGOROSAMENTE estas diretrizes pedagógicas inclusivas:
+1. **Conteúdo Completo e Profundo**: Não dê resumos superficiais ou frases genéricas. Explique a matéria com profundidade real de professor, trazendo fatos, causas, consequências, conceitos e lógica por trás do tema.
+2. **Design Visual Acessível para Disléxicos/TDAH**:
+   - Use parágrafos curtos e bem espaçados.
+   - Use **negritos estratégicos em todas as palavras-chave essenciais**.
+   - Use listas bem organizadas com marcadores claros.
+3. **Didática por Analogias**: Sempre inclua uma **Analogia Prática do Dia a Dia** que conecte o conceito abstrato a algo altamente intuitivo da vida real.
+4. **Foco Prático no ENEM e Vestibulares**: Mostre como a banca cobra o assunto e qual é a pegadinha clássica.
 
-## 🎯 Conceito em Poucas Palavras (Para Leigos)
-[Resumo direto e descomplicado em 2 ou 3 frases simples com analogia fácil]
+Estruture a aula rigorosamente nesta ordem:
 
-## 📌 Explicação Completa do Professor (Passo a Passo)
-[Desenvolvimento didático aprofundado e completo em tópicos claros, com negritos estratégicos e linguagem acessível]
+# 📚 Aula Completa do Professor: ${promptContent}
+
+## 🎯 Conceito Central (Em poucas palavras)
+[Explicação direta, viva e cristalina do conceito em 2 ou 3 frases simples]
+
+## 📌 Contexto & Fundamentação Completa
+[Desenvolvimento histórico/científico profundo com fatos reais, origens e causas]
+
+## 📖 Explicação Didática Passo a Passo
+[Detalhamento completo em tópicos bem estruturados, com negritos estratégicos e linguagem clara e acolhedora]
 
 ## 💡 Analogia do Dia a Dia (Para Memorizar Fácil)
-[Uma metáfora ou comparação cotidiana intuitiva que torna a compreensão inesquecível]
+[Uma comparação ou metáfora visual intuitiva do cotidiano que torna a compreensão inesquecível]
 
-## 🔑 O que o ENEM e Vestibulares Mais Cobram
-- **Ponto Central:** [Conceito fundamental e relação de causa e efeito]
-- **Pegadinha Comum:** [Armadilha das alternativas e como não cair nela]
+## 🔑 Como o ENEM e os Vestibulares Cobram Esse Tema
+- **Ponto Central:** [O que a banca exige que o aluno saiba aplicar]
+- **Pegadinha Clássica:** [A armadilha mais comum nas alternativas e como não cair nela]
 
 ## 📝 Exemplo Prático Resolvido Passo a Passo
-[Um exemplo ou exercício resolvido e explicado em etapas diretas]`,
+[Um exercício ou situação prática resolvido e comentado em detalhes]`,
           config: {
             systemInstruction:
-              "Responda sempre em Português do Brasil como um Professor Sênior acolhedor, garantindo explicações completas, clareza didática impecável e formatação visual adaptada para leitores dislexos e leigos.",
+              "Responda sempre em Português do Brasil como um Professor Mestre Sênior extremamente didático, aprofundado, acolhedor e visualmente estruturado para leigos e leitores neurodivergentes.",
           },
         });
         return res.json({ text: response.text });
       } catch (err: any) {
         console.warn("Fallback em explain:", err?.message);
-        return res.json({
-          text: `# 📚 Explicação Didática: ${promptContent}
 
-## 📌 Contexto & Conceito Base
-O estudo de **${promptContent}** é um dos pilares fundamentais das Ciências e Humanidades cobradas no ENEM e nos principais vestibulares do Brasil. Compreender este tópico exige entender os processos históricos, biológicos ou matemáticos que o estruturam.
+        // Fallback didático rico por tema se a API estiver temporariamente fora
+        const lowerTopic = promptContent.toLowerCase();
+        let fallbackText = "";
 
-## 🔑 Pontos-Chave Mais Cobrados no ENEM
-- **Conceitos Centrais:** Identifique as definições fundamentais e relações de causa e efeito do assunto.
-- **Interdisciplinaridade:** O ENEM costuma cobrar este tema conectado com atualidades e problemas do cotidiano.
-- **Análise de Gráficos e Textos:** Atente-se à interpretação atenta dos enunciados e fontes primárias.
+        if (lowerTopic.includes("vargas") || lowerTopic.includes("era vargas")) {
+          fallbackText = `# 📚 Aula Completa do Professor: História — Era Vargas (1930–1945)
 
-## 💡 Dica de Ouro do Coelho Sábio
-*Foque na resolução ativa de questões anteriores do ENEM sobre ${promptContent} e crie um mapa mental simplificado dos conceitos principais!*
+## 🎯 Conceito Central (Em poucas palavras)
+A **Era Vargas** foi o período de 15 anos ininterruptos em que **Getúlio Vargas** governou o Brasil. Ela marcou a transição de um país agrário comandado pelas oligarquias do café para um **Brasil industrializado, urbano e com leis trabalhistas**.
 
-## 📝 Exemplo Prático Aplicado
-Ao analisar uma questão sobre **${promptContent}**, elimine primeiro as alternativas com termos absolutistas ("sempre", "nunca") e identifique a palavra-chave no comando da questão!`
-        });
+## 📌 Contexto & Fundamentação Completa
+Antes de 1930, o Brasil vivia a **República Velha**, dominada pela política do "Café com Leite" (São Paulo e Minas Gerais alternando no poder). Com a **Crise de 1929** (que quebrou a venda de café) e a **Revolução de 1930**, Getúlio Vargas assumiu o poder prometendo modernizar a nação.
+
+A Era Vargas é dividida em **3 Fases Fundamentais**:
+1. **Governo Provisório (1930–1934):** Vargas centraliza o poder e enfrenta a **Revolução Constitucionalista de 1932** em SP, culminando na Constituição de 1934 (que criou o voto feminino e secreto).
+2. **Governo Constitucional (1934–1937):** Marcado pela intensa polarização política entre a **AIB (Fascistas/Integralistas)** e a **ANL (Aliança Nacional Libertadora/Comunistas)**.
+3. **Estado Novo (1937–1945):** Ditadura Vargas! Vargas fecha o Congresso alegando uma ameaça falsa (o *Plano Cohen*), estabelece a censura pelo **DIP (Departamento de Imprensa e Propaganda)** e governa por decretos-lei.
+
+## 📖 Explicação Didática Passo a Passo
+- **Trabalhismo e CLT (1943):** Vargas criou a **Consolidação das Leis do Trabalho (CLT)**, garantindo salário mínimo, férias remuneradas e jornada de 8h. Isso lhe rendeu o título de *"Pai dos Pobres"*.
+- **Industrialização de Base:** O Estado brasileiro passou a investir diretamente em indústrias pesadas, criando a **CSN (Companhia Siderúrgica Nacional)** e a **Vale do Rio Doce**.
+- **Propaganda e Nacionalismo:** Através do rádio (*A Hora do Brasil*) e do sambista exalando brasilidade, o governo construiu o civismo e a imagem protetora do líder.
+
+## 💡 Analogia do Dia a Dia (Para Memorizar Fácil)
+Pense na Era Vargas como uma **reforma geral em um prédio antigo**: Vargas trocou a diretoria dominada por dois velhos donos (Café com Leite), refez toda a fiação elétrica e encanamento (Criação de indústrias e leis de trabalho) e colocou regras estritas para os moradores (Estado Novo), tornando-se o síndico autoritário porém popular que mudou a estrutura do prédio para sempre.
+
+## 🔑 Como o ENEM e os Vestibulares Cobram Esse Tema
+- **Ponto Central:** O ENEM adora cobrar o **Trabalhismo**, a **Propaganda do DIP** e a **Industrialização Substitutiva de Importações**.
+- **Pegadinha Clássica:** Achar que Vargas deu os direitos trabalhistas por pura bondade. O ENEM cobra o conceito de **Paternalismo/Populismo**: as leis foram criadas para controlar a classe trabalhadora e evitar revoluções operárias!
+
+## 📝 Exemplo Prático Resolvido Passo a Passo
+**Questão Exemplo:** *"Por que a propaganda promovida pelo DIP no Estado Novo era estratégica?"*
+**Resolução:** O DIP controlava a imprensa, censurava opositores e transmitia programas educativos e ufanistas no rádio para construir a imagem de Vargas como o pacificador do país e patrono dos trabalhadores.`;
+        } else if (lowerTopic.includes("fotossíntese") || lowerTopic.includes("fotossintese")) {
+          fallbackText = `# 📚 Aula Completa do Professor: Biologia — Fotossíntese
+
+## 🎯 Conceito Central (Em poucas palavras)
+A **Fotossíntese** é o processo bioquímico pelo qual seres autotróficos (plantas, algas e cianobactérias) convertem **energia luminosa do Sol em energia química (glicose)**, utilizando água e gás carbônico.
+
+## 📌 Contexto & Fundamentação Completa
+Ocorre no interior dos **Cloroplastos**, organelas celulares que possuem o pigmento verde chamado **Clorofila**.
+
+A reação geral da fotossíntese é:
+**6 CO₂ + 6 H₂O + Luz ➔ C₆H₁₂O₆ (Glicose) + 6 O₂**
+
+A fotossíntese é dividida em **duas etapas principais**:
+1. **Fase Clara (Fequação Fotoquímica):** Ocorre nos **Tilacoides**. Necessita diretamente de luz solar. Ocorre a **fotólise da água** (quebra da molécula de H₂O pela luz), liberando o **Oxigênio (O₂)** para a atmosfera.
+2. **Fase Escura / Ciclo de Calvin (Etapa Enzimática):** Ocorre no **Estroma**. Não exige luz direta, mas usa a energia (ATP e NADPH) produzida na fase clara para fixar o **Gás Carbônico (CO₂)** e sintetizar a **Glicose**.
+
+## 💡 Analogia do Dia a Dia (Para Memorizar Fácil)
+Imagine uma **painel solar conectado a uma cozinha industrial**: A luz do Sol é a eletricidade da tomada, a água e o CO₂ são os ingredientes brutos, a clorofila é o chef de cozinha e a glicose é o bolo pronto que alimenta a planta!
+
+## 🔑 Como o ENEM e os Vestibulares Cobram Esse Tema
+- **Ponto Central:** O Oxigênio liberado na fotossíntese vem da **água (H₂O)** na fase fotoquímica, e NÃO do CO₂!
+- **Pegadinha Clássica:** Achar que a fase escura acontece apenas à noite. Ela pode ocorrer de dia, pois depende apenas dos produtos formados na etapa fotossensível.`;
+        } else {
+          fallbackText = `# 📚 Aula Completa do Professor: ${promptContent}
+
+## 🎯 Conceito Central (Em poucas palavras)
+O tópico **${promptContent}** representa um conjunto essencial de conceitos e aplicações práticas fundamentais para o domínio acadêmico e para a resolução de questões no ENEM.
+
+## 📌 Contexto & Fundamentação Completa
+Para compreender **${promptContent}** em profundidade, é preciso analisar três pilares básicos:
+1. **As Origens e Fundamentos:** Como esse conceito se estabelece e quais leis ou fatos o sustentam.
+2. **Os Mecanismos de Funcionamento:** A relação lógica de causa, efeito e transformação presente no assunto.
+3. **As Aplicações no Mundo Real:** Como essa matéria se manifesta na nossa sociedade, na natureza ou na tecnologia.
+
+## 📖 Explicação Didática Passo a Passo
+- **Passo 1 (Base Conceitual):** Identifique o significado exato dos termos e fórmulas/teorias associadas.
+- **Passo 2 (Estruturação Lógica):** Entenda o caminho do raciocínio sem memorizar apenas decorando.
+- **Passo 3 (Conexão Interdisciplinar):** Conecte este tema com outras áreas do conhecimento cobradas no vestibular.
+
+## 💡 Analogia do Dia a Dia (Para Memorizar Fácil)
+Pense em **${promptContent}** como **as engrenagens de um relógio de precisão**: cada detalhe tem um papel específico e, quando entendemos como uma peça move a outra, todo o funcionamento fica simples e intuitivo de prever.
+
+## 🔑 Como o ENEM e os Vestibulares Cobram Esse Tema
+- **Ponto Central:** Interpretação atenta do enunciado, identificando as variáveis ou contextos principais.
+- **Pegadinha Clássica:** Cuidado com alternativas extremas que usam palavras como *"sempre"*, *"nunca"* ou *"exclusivamente"*.
+
+## 📝 Exemplo Prático Resolvido Passo a Passo
+Ao resolver um problema sobre **${promptContent}**, destaque primeiro o comando principal da pergunta, elimine distratores incoerentes e aplique o conceito central diretamente!`;
+        }
+
+        return res.json({ text: fallbackText });
       }
     }
 
@@ -284,6 +373,7 @@ ${JSON.stringify(sanitizedList)}`,
     // Ação principal: CHAT / TIRA-DÚVIDAS com o Coelho Sábio
     const userQuery = question || prompt || topic || "";
     const userPromptText = userQuery || `O aluno registrou ${errNum} erro(s) na disciplina de ${discName}. Aponte os principais pontos de atenção e ofereça suporte didático adaptativo.`;
+    const cleanedSubject = extractCleanTopic(userPromptText);
 
     try {
       const ai = getAIClient();
@@ -294,8 +384,9 @@ ${JSON.stringify(sanitizedList)}`,
         : "";
 
       const response = await generateWithGeminiFallback(ai, {
-        contents: `Você é o "Coelho Sábio 🐰", o Professor Sênior, tutor adaptativo e mestre em didática inclusiva da Toca de Estudos (Study Burrow).
-Seu objetivo é resolver QUALQUER dúvida do estudante com uma resposta COMPLETA, tom profissional de professor mestre e didática perfeitamente adaptada para leigos e leitores dislexos.
+        contents: `Você é o "Coelho Sábio 🐰", um Professor Mestre Sênior de didática de excelência, tutor adaptativo e especialista em aprendizagem inclusiva (TDAH, dislexia, autismo e leigos).
+
+Seu objetivo é resolver QUALQUER dúvida do estudante com uma resposta COMPLETA, APROFUNDADA, DIDÁTICA E ACOLHEDORA. Responda como um verdadeiro professor ensinando um aluno com toda a dedicação do mundo.
 
 Histórico recente da conversa:
 ${historyFormatted}
@@ -303,49 +394,73 @@ ${historyFormatted}
 Pergunta / Solicitação atual do estudante:
 "${userPromptText}"
 
-Diretrizes obrigatórias para sua resposta:
-1. Responda como um Professor Sênior completo: forneça uma explicação consistente e abrangente, sem deixar dúvidas pela metade ou simplificar em excesso.
-2. Acessibilidade total para leigos e leitores dislexos:
-   - Use frases curtas, objetivas e parágrafos bem espaçados.
-   - Destaque conceitos centrais com **negritos estratégicos**.
-   - Use analogias práticas do cotidiano para tornar conceitos complexos fáceis de memorizar.
-3. Se a pergunta for acadêmica (Biologia, História, Matemática, Português, Redação, Física, Química, Filosofia, Geografia, etc.), estruture a explicação em:
-   - 🎯 **O Conceito em Poucas Palavras**
-   - 📖 **Explicação Completa do Professor**
-   - 💡 **Analogia Prática do Dia a Dia**
-   - 📝 **Exemplo ou Aplicação Prática**
-4. Se a pergunta for sobre erros ou desempenho, forneça um diagnóstico encorajador e um plano pedagógico claro em 3 passos para superá-los.
-5. Mantenha sempre um tom profissional, extremamente didático, empático e positivo!`,
+Diretrizes pedagógicas e de linguagem obrigatórias:
+1. **CORREÇÃO DE PORTUGUÊS E ELEGÂNCIA**: Se o estudante enviou a mensagem com erros de digitação (ex: "to ocm dificuldade em entrnder porque plantas respiram"), interprete com inteligência pedagógica o real significado ("Por que as plantas respiram?") e responda em Português culto, elegante e impecável. **JAMAIS repita erros de ortografia ou trechos truncados do aluno na sua resposta!**
+2. **Professor Mestre Omnisciente**: Explique o assunto acadêmico (Biologia, História, Matemática, Física, Química, Português, Redação, Filosofia, Geografia, métodos de estudo ou ansiedade) com profundidade real e linguagem acessível.
+3. **Didática Inclusiva e Neurodivergência**:
+   - Use parágrafos bem divididos e frases diretas.
+   - Destaque termos-chave e conceitos vitais com **negritos estratégicos**.
+   - Use tópicos com marcadores visuais claros.
+   - Traga uma **Analogia Prática do Dia a Dia** para tornar a explicação inesquecível.
+4. **Estrutura Recomendada da Resposta**:
+   - 🎯 **Resposta Direta & Acolhedora**: A explicação imediata do conceito para o aluno entender de início.
+   - 📖 **Explicação Didática Completa (Passo a Passo)**: O desenvolvimento pedagógico detalhado com fatos, lógica e exemplos.
+   - 💡 **Exemplo / Analogia Prática**: Como isso funciona na vida real ou em uma questão do ENEM.
+   - 💬 **Checagem de Entendimento**: Termine sempre com uma pergunta atenciosa (ex: *"Ficou claro este ponto? Quer que eu te dê outro exemplo prático ou resolva um exercício com você?"*).
+
+Mantenha sempre um tom de professor paciente, inspirador, extremamente didático e encorajador!`,
         config: {
           systemInstruction:
-            "Responda sempre em Português do Brasil como um Professor Sênior extremamente didático, profissional, acolhedor e visualmente claro para leigos e leitores dislexos.",
+            "Responda sempre em Português do Brasil correto e impecável como um Professor Mestre Sênior acolhedor, altamente didático, profundo e visualmente claro para leitores neurodivergentes e leigos.",
         },
       });
       return res.json({ text: response.text });
     } catch (chatErr: any) {
       console.warn("Fallback no chat da API:", chatErr?.message || chatErr);
 
-      let intelligentReply = `Olá! Analisei sua dúvida sobre **"${userPromptText}"**:
-
-📌 **Análise Didática:**
-Para avançar nesse ponto, o essencial é focar no entendimento conceitual e na prática de questões.
-
-💡 **Recomendação do Coelho Sábio:**
-1. Revise o tema na aba **Explicação** para consolidar os conceitos.
-2. Faça um **Quiz Rápido de 10 a 20 questões** para testar suas habilidades na prática!
-
-Qual matéria ou ponto específico você gostaria de revisar juntos agora? 🌿`;
-
       const lowerQ = userPromptText.toLowerCase();
-      if (lowerQ.includes("onde eu falhei") || lowerQ.includes("erros") || lowerQ.includes("falhas") || lowerQ.includes("pontos fracos")) {
-        intelligentReply = `📊 **Análise de Desempenho e Erros:**
+      let intelligentReply = "";
 
-Identifiquei que os pontos que exigem maior atenção nos seus estudos envolvem:
-- 🌿 **Interpretação de Enunciados:** Atentar-se aos comandos principais da questão (palavras como "exceto", "incorreto", "portanto").
-- 📚 **Conceitos de Base em Biologia e Humanas:** Revisar a teoria essencial antes de tentar resolver questões mais complexas.
-- 💡 **Dica de Treino:** Selecione a aba **Quiz Rápido**, gere 10 questões no seu assunto de menor domínio e leia atentamente as **Resoluções Comentadas**!
+      if (lowerQ.includes("respiram") || lowerQ.includes("respiração") || lowerQ.includes("respiracao") || lowerQ.includes("planta")) {
+        intelligentReply = `# 🌿 Por que as plantas respiram? (Explicação do Professor)
 
-Quer que eu te ajude a planejar uma revisão dessa matéria agora? 🐰`;
+## 🎯 Resposta Direta & Acolhedora
+Muitas pessoas acreditam que as plantas apenas fazem **fotossíntese**, mas a verdade é que **as plantas também RESPIRAM 24 horas por dia**!
+
+## 📖 Qual a diferença entre Fotossíntese e Respiração Celular?
+1. **Fotossíntese (Produção de Alimento):** Durante o dia, sob a luz do Sol, a planta absorve água e gás carbônico (CO₂) para fabricar **Glicose** (seu açúcar/alimento) e libera **Oxigênio (O₂)**.
+2. **Respiração Celular (Consumo de Energia):** A planta precisa **quebrar essa glicose** para liberar energia química (ATP) necessária para manter suas células vivas, crescer e absorver minerais pelas raízes. Nesse processo, a planta consome **Oxigênio (O₂)** e libera **Gás Carbônico (CO₂)** — exatamente igual aos animais!
+
+## 💡 Analogia Prática do Dia a Dia
+Pense na **Fotossíntese como ir ao supermercado e estocar comida na geladeira**, e na **Respiração Celular como preparar e comer a refeição** para ter forças para trabalhar. De nada adiantaria estocar alimentos se a planta não pudesse consumi-los para extrair energia!
+
+💬 **Ficou claro esse ponto? Quer que eu te explique o que acontece com o consumo de oxigênio das plantas durante a noite? 🐰**`;
+      } else if (lowerQ.includes("onde eu falhei") || lowerQ.includes("erros") || lowerQ.includes("falhas") || lowerQ.includes("pontos fracos")) {
+        intelligentReply = `📊 **Análise Pedagógica de Desempenho e Erros:**
+
+Olá! Vamos olhar para os seus erros como **degraus essenciais para a sua aprovação**! 🌿
+
+Identifiquei os pontos prioritários para aprimorar sua rotina de estudos:
+1. 🌿 **Interpretação Atenta do Comando:** A maioria dos erros no ENEM ocorre por não identificar a palavra-chave no comando da questão (como "exceto", "incorreto", "causa principal").
+2. 📚 **Consolidação dos Conceitos de Base:** Antes de partir para questões difíceis, garanta que a base da matéria esteja cristalina.
+3. 💡 **Estratégia Inclusiva de Treino:** Resolva quizzes em blocos menores (ex: 5 a 10 questões) fazendo pausas ativas para manter o foco e a atenção plena.
+
+💬 **Qual matéria você sente que mais te desafia atualmente? Quer que eu crie um plano de revisão simples e sem estresse para ela? 🐰**`;
+      } else {
+        intelligentReply = `# 📚 Explicação do Professor Coelho Sábio: ${cleanedSubject}
+
+## 🎯 Conceito em Poucas Palavras
+Para entender **${cleanedSubject}**, o segredo é dominar a base lógica por trás do conceito e entender como ele se aplica na prática.
+
+## 📖 Desenvolvimento Didático Passo a Passo
+1. **A Base Fundamental:** Todo tópico acadêmico possui um pilar estruturante. Precisamos observar as relações de causa, efeito e contexto.
+2. **Organização das Ideias:** Divida o problema em etapas menores para não sobrecarregar sua memória de trabalho.
+3. **Foco em Provas:** O ENEM e os vestibulares cobram a aplicação prática e a interpretação atenta dos enunciados.
+
+## 💡 Analogia Prática do Dia a Dia
+Pense nesse conceito como um **mapa de navegação**: quando você conhece os pontos de referência principais, não importa como a pergunta venha formulada, você sempre saberá encontrar a resposta correta!
+
+💬 **Ficou claro este raciocínio inicial? Quer que eu aprofunde algum detalhe específico de ${cleanedSubject} ou traga um exemplo resolvido? 🌿**`;
       }
 
       return res.json({ text: intelligentReply });

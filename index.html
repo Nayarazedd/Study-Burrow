@@ -368,11 +368,34 @@
             class="p-1.5 text-on-surface-variant hover:bg-primary-container/20 rounded-full transition-colors cursor-pointer">
             <span class="material-symbols-outlined text-xl">account_circle</span>
           </a>
-          <button title="Notificações" onclick="showNotificationToast()"
-            class="p-1.5 text-on-surface-variant hover:bg-primary-container/20 rounded-full transition-colors cursor-pointer relative">
-            <span class="material-symbols-outlined text-xl">notifications</span>
-            <span class="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full"></span>
-          </button>
+          <div class="relative">
+            <button title="Notificações" onclick="toggleNotificationPanel(event)" id="btn-notification-bell"
+              class="p-1.5 text-on-surface-variant hover:bg-primary-container/20 rounded-full transition-colors cursor-pointer relative">
+              <span class="material-symbols-outlined text-xl">notifications</span>
+              <span id="notification-unread-badge" class="absolute top-1 right-1 w-2.5 h-2.5 bg-[#ba1a1a] rounded-full border border-white"></span>
+            </button>
+
+            <!-- Painel Flutuante de Notificações da Toca -->
+            <div id="notification-dropdown-panel" class="hidden absolute right-0 top-11 w-80 sm:w-96 bg-[#fdf9f0] border-4 border-[#7d5231] rounded-3xl shadow-2xl z-50 overflow-hidden font-body text-xs text-[#1c1c17]">
+              <div class="bg-[#f1eee5] px-4 py-3 border-b-2 border-[#7d5231] flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-lg text-[#7d5231]">notifications_active</span>
+                  <h4 class="font-headline font-bold text-sm text-[#7d5231]">Notificações da Toca</h4>
+                </div>
+                <button onclick="markAllNotificationsAsRead()" type="button" class="text-[10px] font-bold text-[#436444] hover:underline cursor-pointer">
+                  ✓ Marcar lidas
+                </button>
+              </div>
+
+              <div id="notification-list-container" class="max-h-80 overflow-y-auto divide-y divide-[#c2c8be]/40">
+                <!-- Injetado via JS -->
+              </div>
+
+              <div class="p-2 bg-[#f1eee5] border-t border-[#c2c8be] text-center">
+                <span class="text-[10px] font-semibold text-[#737970]">Sua rotina de estudos sincronizada 🌿</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <button type="button" onclick="abrirExploradorDeArquivosParaFoto()"
@@ -1847,9 +1870,23 @@
                 min, +10 XP por explorar explicações com IA, +15 XP por tarefa concluída e +20 XP por redação corrigida.
               </p>
             </details>
+      <!-- RODAPÉ PROFISSIONAL & DIREITOS AUTORAIS -->
+      <footer class="w-full mt-12 py-6 border-t-2 border-[#c2c8be]/40 no-print">
+        <div class="max-w-5xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3 font-body text-xs text-[#737970]">
+          <div class="flex items-center gap-2 font-bold text-[#436444]">
+            <span class="material-symbols-outlined text-base">shield_with_house</span>
+            <span>Study Burrow • Toca de Estudos</span>
+          </div>
+          <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+            <span>© 2026 <strong>Study Burrow</strong>. Todos os direitos reservados.</span>
+            <span class="hidden sm:inline-block text-[#c2c8be]">•</span>
+            <span class="inline-flex items-center gap-1.5 font-bold text-[#7d5231] bg-[#fdf9f0] px-3.5 py-1 rounded-full border-2 border-[#7d5231]/30 shadow-xs">
+              <span class="material-symbols-outlined text-sm text-[#d97706]">verified</span>
+              Desenvolvido por <strong>Nay</strong>
+            </span>
           </div>
         </div>
-      </section>
+      </footer>
 
     </div>
   </main>
@@ -1953,16 +1990,38 @@
       }
     }
 
-    function checkAuthentication() {
+    function isGuestUser() {
+      if (!currentUser) {
+        const saved = localStorage.getItem('study_burrow_user');
+        if (saved) {
+          try { currentUser = JSON.parse(saved); } catch (e) {}
+        }
+      }
+      if (!currentUser) return true;
+      return currentUser.isGuest === true || currentUser.isGuest === 'true';
+    }
+
+    function showAuthRequiredModal(actionDescription) {
+      const modal = document.getElementById('modal-auth-required');
+      const text = document.getElementById('auth-modal-action-text');
+      if (text && actionDescription) {
+        text.innerHTML = `Para <strong>${actionDescription}</strong>, você precisa estar conectado na sua conta da Toca.`;
+      }
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function closeAuthRequiredModal() {
+      const modal = document.getElementById('modal-auth-required');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function loadUserData() {
       const savedUser = localStorage.getItem('study_burrow_user');
-      if (!savedUser) {
-        window.location.href = 'login.html';
-        return;
+      if (savedUser) {
+        try { currentUser = JSON.parse(savedUser); } catch (e) { }
       }
 
-      try {
-        currentUser = JSON.parse(savedUser);
-      } catch (e) {
+      if (!currentUser) {
         window.location.href = 'login.html';
         return;
       }
@@ -1973,15 +2032,33 @@
 
       if (badge && icon && text) {
         badge.classList.remove('hidden');
-        if (currentUser.isGuest) {
+        if (isGuestUser()) {
           icon.textContent = 'phonelink_off';
-          text.textContent = 'Modo Visitante (Local)';
+          text.textContent = 'Modo Visitante';
           badge.className = 'hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-label font-bold bg-[#f1eee5] text-[#7d5231] border border-[#c2c8be]';
         } else {
           icon.textContent = 'cloud_done';
           text.textContent = 'Modo Logado (Nuvem ☁️)';
           badge.className = 'hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-label font-bold bg-[#c6edc4] text-[#012108] border border-[#436444]';
         }
+      }
+
+      if (isGuestUser()) {
+        // Ocultar Jardim de Conquistas para Visitante
+        const gardenNav = document.getElementById('nav-garden');
+        if (gardenNav) gardenNav.style.display = 'none';
+        const bgardenNav = document.getElementById('bnav-garden');
+        if (bgardenNav) bgardenNav.style.display = 'none';
+
+        // Interceptar cliques em links do Perfil
+        setTimeout(() => {
+          document.querySelectorAll('a[href="perfil.html"], button[title="Meu Perfil"], button[title="Clique para trocar sua foto de perfil"]').forEach(el => {
+            el.onclick = (e) => {
+              e.preventDefault();
+              showAuthRequiredModal('acessar seu Perfil e personalizar seus dados');
+            };
+          });
+        }, 300);
       }
 
       const savedStats = localStorage.getItem('study_burrow_stats');
@@ -5440,6 +5517,11 @@ Pergunta do aluno: "${userText}"`;
 
     // IMPRESSÃO DE SIMULADOS (P&B VS CORES DIDÁTICAS) COM IMAGENS INTEGRADAS
     async function imprimirSimulado(tipoProva, esquemaCores) {
+      if (isGuestUser()) {
+        showAuthRequiredModal('imprimir e baixar simulados em PDF');
+        return;
+      }
+
       const nomeTipo = (tipoProva === 'corrigido') ? 'Corrigida' : 'em Branco';
       const nomeCores = (esquemaCores === 'cores') ? 'Cores Didáticas' : 'Preto e Branco';
       showToast(`🖨️ Pré-carregando imagens e gerando Prova ${nomeTipo} (${nomeCores})...`);
@@ -5818,6 +5900,11 @@ RESPONDA IMEDIATAMENTE E DE FORMA DIDÁTICA A ESSA PERGUNTA, utilizando os dados
     }
 
     function switchTab(viewId) {
+      if ((viewId === 'garden' || viewId === 'view-garden') && isGuestUser()) {
+        showAuthRequiredModal('acessar o Jardim & Conquistas');
+        return;
+      }
+
       const sections = document.querySelectorAll('.view-section');
       sections.forEach(sec => sec.classList.remove('active-view'));
 
@@ -6101,6 +6188,11 @@ RESPONDA IMEDIATAMENTE E DE FORMA DIDÁTICA A ESSA PERGUNTA, utilizando os dados
     }
 
     function switchEssaySubTab(tabName) {
+      if (isGuestUser() && (tabName === 'compare' || tabName === 'history')) {
+        showAuthRequiredModal('acessar o histórico salvo e o comparativo de evolução');
+        return;
+      }
+
       ['write', 'compare', 'history'].forEach(t => {
         const btn = document.getElementById('essaysubtab-' + t);
         const view = document.getElementById('essayview-' + t);
@@ -6686,6 +6778,20 @@ Portanto, medidas urgentes são necessárias para alterar esse panorama. Para is
       generateAiExplanation();
     }
 
+    function formatCoelhoMarkdown(text) {
+      if (!text) return '';
+      return text
+        .replace(/^### (.*$)/gim, '<h3 class="text-base font-bold text-[#7d5231] mt-3 mb-1">$1</h3>')
+        .replace(/^## (.*$)/gim, '<h2 class="text-lg font-bold text-[#436444] mt-4 mb-2 border-b border-[#c2c8be] pb-1">$1</h2>')
+        .replace(/^# (.*$)/gim, '<h1 class="text-xl font-headline font-bold text-[#7d5231] mb-3">$1</h1>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-[#1c1c17]">$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em class="italic">$1</em>')
+        .replace(/^\s*[\-\*]\s+(.*$)/gim, '<li class="ml-4 list-disc text-xs md:text-sm my-1">$1</li>')
+        .replace(/^\s*(\d+)\.\s+(.*$)/gim, '<li class="ml-4 list-decimal text-xs md:text-sm my-1">$2</li>')
+        .replace(/\n\n/g, '<div class="h-2"></div>')
+        .replace(/\n/g, '<br/>');
+    }
+
     async function generateAiExplanation() {
       const input = document.getElementById('ai-explain-input');
       const topic = input ? input.value.trim() : '';
@@ -6712,9 +6818,7 @@ Portanto, medidas urgentes são necessárias para alterar esse panorama. Para is
           return;
         }
 
-        let formatted = data.text
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\n/g, '<br/>');
+        let formatted = formatCoelhoMarkdown(data.text);
 
         resultText.innerHTML = formatted;
         addXp(10);
@@ -6726,6 +6830,11 @@ Portanto, medidas urgentes são necessárias para alterar esse panorama. Para is
     }
 
     async function generateAiQuiz() {
+      if (isGuestUser()) {
+        showAuthRequiredModal('gerar e responder a Quizzes interativos');
+        return;
+      }
+
       const input = document.getElementById('ai-quiz-input');
       const countSelect = document.getElementById('ai-quiz-count');
       const topic = input ? input.value.trim() : '';
@@ -6880,7 +6989,7 @@ Portanto, medidas urgentes são necessárias para alterar esse panorama. Para is
         const aiMsgDiv = document.createElement('div');
         aiMsgDiv.className = "flex gap-3 justify-start";
 
-        const replyText = data.text ? data.text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br/>') : (data.error || 'Não consegui processar a resposta.');
+        const replyText = data.text ? formatCoelhoMarkdown(data.text) : (data.error || 'Não consegui processar a resposta.');
         aiMsgDiv.innerHTML = `<div class="w-8 h-8 rounded-full bg-[#7d5231] text-white flex items-center justify-center shrink-0 font-bold text-xs border border-white shadow-sm">🐰</div><div class="max-w-[80%] p-3.5 bg-[#f1eee5] text-[#1c1c17] border border-[#c2c8be] rounded-2xl rounded-bl-none font-body text-xs md:text-sm leading-relaxed">${replyText}</div>`;
         chatContainer.appendChild(aiMsgDiv);
         chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -6929,18 +7038,130 @@ Portanto, medidas urgentes são necessárias para alterar esse panorama. Para is
       }
     }
 
-    function showNotificationToast() { showToast('Você está em uma sequência de 3 dias de estudo!'); }
+    // =========================================================================
+    // SISTEMA PROFISSIONAL DE NOTIFICAÇÕES E TOASTS DA TOCA
+    // =========================================================================
+    let appNotifications = [
+      { id: 1, type: 'streak', icon: 'local_fire_department', title: 'Sequência Ativa!', text: 'Você está em uma sequência de 3 dias seguidos de foco na Toca! 🔥', time: 'há 10 min', unread: true },
+      { id: 2, type: 'simulado', icon: 'quiz', title: 'Simulado Disponível', text: 'Sua prova do ENEM está pronta para revisão e treino adaptativo. 📚', time: 'há 1 hora', unread: true },
+      { id: 3, type: 'xp', icon: 'military_tech', title: 'Conquista de Nível', text: 'Você acumulou novos pontos de XP e está avançando no seu nível! 🏆', time: 'há 3 horas', unread: false }
+    ];
 
-    function showToast(msg) {
+    function toggleNotificationPanel(e) {
+      if (e) e.stopPropagation();
+      const panel = document.getElementById('notification-dropdown-panel');
+      if (!panel) return;
+      const isHidden = panel.classList.contains('hidden');
+      if (isHidden) {
+        renderNotificationList();
+        panel.classList.remove('hidden');
+      } else {
+        panel.classList.add('hidden');
+      }
+    }
+
+    function renderNotificationList() {
+      const container = document.getElementById('notification-list-container');
+      const badge = document.getElementById('notification-unread-badge');
+      if (!container) return;
+
+      const unreadCount = appNotifications.filter(n => n.unread).length;
+      if (badge) {
+        if (unreadCount > 0) badge.classList.remove('hidden');
+        else badge.classList.add('hidden');
+      }
+
+      if (appNotifications.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 text-center text-[#737970] space-y-1">
+            <span class="material-symbols-outlined text-2xl text-[#c2c8be]">notifications_off</span>
+            <p class="font-bold text-xs">Nenhuma notificação recente</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = appNotifications.map(n => `
+        <div onclick="markNotificationAsRead(${n.id})" class="p-3.5 flex gap-3 items-start transition-all cursor-pointer ${n.unread ? 'bg-[#f7f3ea] font-semibold' : 'bg-white text-[#424841]'} hover:bg-[#ece8df]">
+          <div class="w-8 h-8 rounded-full ${n.unread ? 'bg-[#436444] text-white' : 'bg-[#e6e2d9] text-[#7d5231]'} flex items-center justify-center shrink-0 border border-[#c2c8be]">
+            <span class="material-symbols-outlined text-sm">${n.icon}</span>
+          </div>
+          <div class="flex-1 space-y-0.5">
+            <div class="flex justify-between items-center">
+              <span class="font-bold text-xs text-[#7d5231]">${n.title}</span>
+              <span class="text-[10px] text-[#737970] font-normal">${n.time}</span>
+            </div>
+            <p class="text-xs text-[#1c1c17] leading-relaxed">${n.text}</p>
+          </div>
+          ${n.unread ? '<span class="w-2 h-2 rounded-full bg-[#7d5231] mt-1.5 shrink-0"></span>' : ''}
+        </div>
+      `).join('');
+    }
+
+    function markNotificationAsRead(id) {
+      const notif = appNotifications.find(n => n.id === id);
+      if (notif) notif.unread = false;
+      renderNotificationList();
+    }
+
+    function markAllNotificationsAsRead() {
+      appNotifications.forEach(n => n.unread = false);
+      renderNotificationList();
+    }
+
+    function pushAppNotification(type, title, text, icon = 'info') {
+      appNotifications.unshift({
+        id: Date.now(),
+        type,
+        icon,
+        title,
+        text,
+        time: 'Agora',
+        unread: true
+      });
+      renderNotificationList();
+    }
+
+    function showNotificationToast() {
+      toggleNotificationPanel();
+    }
+
+    function showToast(msg, type = 'info') {
       const existing = document.getElementById('burrow-toast');
       if (existing) existing.remove();
+
       const toast = document.createElement('div');
       toast.id = 'burrow-toast';
-      toast.className = 'fixed bottom-6 right-6 bg-[#36522e] text-[#c7e9b9] font-label font-bold text-xs md:text-sm px-5 py-3 rounded-2xl shadow-xl z-50 flex items-center gap-2 border border-[#caecbc]/30 transition-all';
-      toast.innerHTML = '<span>🐰</span> <span>' + msg + '</span>';
+
+      let bgClass = 'bg-[#36522e] text-[#c7e9b9] border-[#caecbc]/30';
+      let icon = '🐰';
+
+      if (type === 'error' || msg.includes('⚠️') || msg.includes('Erro')) {
+        bgClass = 'bg-[#7a1c1c] text-[#ffdad6] border-[#ffdad6]/30';
+        icon = '⚠️';
+      } else if (type === 'success' || msg.includes('✨') || msg.includes('🎉') || msg.includes('✅')) {
+        bgClass = 'bg-[#1b431e] text-[#c6edc4] border-[#c6edc4]/30';
+        icon = '🌿';
+      } else if (type === 'warning' || msg.includes('🔒') || msg.includes('💡')) {
+        bgClass = 'bg-[#613b1c] text-[#ffe0cc] border-[#ffe0cc]/30';
+        icon = '💡';
+      }
+
+      toast.className = `fixed bottom-6 right-6 ${bgClass} font-label font-bold text-xs md:text-sm px-5 py-3.5 rounded-2xl shadow-2xl z-50 flex items-center gap-3 border transition-all`;
+      toast.innerHTML = `<span class="text-base">${icon}</span> <span>${msg}</span>`;
+
       document.body.appendChild(toast);
-      setTimeout(() => { if (toast) toast.remove(); }, 3000);
+      setTimeout(() => { if (toast) toast.remove(); }, 3500);
     }
+
+    // Fecha o painel de notificações ao clicar fora
+    document.addEventListener('click', (e) => {
+      const panel = document.getElementById('notification-dropdown-panel');
+      const btn = document.getElementById('btn-notification-bell');
+      if (panel && !panel.contains(e.target) && btn && !btn.contains(e.target)) {
+        panel.classList.add('hidden');
+      }
+    });
   </script>
 
   <!-- MODAL DE CONFIRMAÇÃO DA IA DE REORGANIZAÇÃO DE ROTINA -->
@@ -7210,6 +7431,32 @@ Portanto, medidas urgentes são necessárias para alterar esse panorama. Para is
       <div class="flex justify-end pt-3 border-t border-[#c2c8be]">
         <button onclick="closeWallpaperCustomizer()" type="button" class="px-6 py-2.5 bg-[#436444] text-white rounded-xl font-headline font-bold text-xs hover:bg-[#385439] transition-all cursor-pointer shadow-xs">
           ✅ Concluído
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Temático: Autenticação Necessária (Modo Visitante) -->
+  <div id="modal-auth-required" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-[#fdf9f0] border-4 border-[#7d5231] rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl text-center space-y-5 relative">
+      <div class="w-16 h-16 mx-auto bg-[#ffdcc5] text-[#805533] rounded-full flex items-center justify-center border-2 border-[#7d5231] shadow-inner">
+        <span class="material-symbols-outlined text-3xl">lock</span>
+      </div>
+      <div>
+        <h3 class="font-headline text-2xl font-bold text-[#7d5231]">Recurso Exclusivo 🔒</h3>
+        <p id="auth-modal-action-text" class="font-body text-xs md:text-sm text-[#424841] mt-2 leading-relaxed">
+          Para realizar esta ação e salvar seu progresso, você precisa estar conectado na sua conta da Toca.
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-3 pt-2">
+        <a href="login.html" class="chunky-btn btn-primary flex-1 rounded-xl">
+          <span class="chunky-btn-inner bg-[#436444] text-white font-body font-bold py-3 px-4 rounded-xl flex justify-center items-center gap-1.5 text-xs sm:text-sm">
+            <span class="material-symbols-outlined text-base">login</span>
+            Entrar / Criar Conta
+          </span>
+        </a>
+        <button onclick="closeAuthRequiredModal()" type="button" class="px-4 py-3 rounded-xl border-2 border-[#c2c8be] bg-white text-[#737970] font-bold text-xs sm:text-sm hover:bg-[#ece8df] transition-all cursor-pointer">
+          Voltar
         </button>
       </div>
     </div>
