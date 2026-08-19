@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="pt-BR" class="light">
+
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Study Burrow | Perfil do Estudante & Configurações</title>
-  
+
   <!-- Tailwind CSS & Plugins -->
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  
+
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
 
   <!-- Firebase SDK (Compat) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -45,15 +49,126 @@
       }
     };
   </script>
-  
-  <link rel="stylesheet" href="style.css"/>
+
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* SISTEMA COMPLETO DE TEMAS HARMONIZADOS COM WALLPAPER EM FOCO TOTAL */
+    body {
+      background-image: linear-gradient(var(--bg-overlay-grad, rgba(253, 249, 240, 0.38)), var(--bg-overlay-grad, rgba(253, 249, 240, 0.38))), var(--wallpaper-url, url('/wallpapers/botanical.jpg'));
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+      transition: background-image 0.5s ease-in-out, background-color 0.3s ease, color 0.3s ease;
+      color: var(--text-main, #1c1c17);
+    }
+
+    /* 🌿 TEMA 1: Santuário Botânico (Cottagecore Verde) */
+    body[data-wallpaper="botanical"][data-theme-mode="light"], body:not([data-wallpaper]) {
+      --wallpaper-url: url('/wallpapers/botanical.jpg');
+      --bg-overlay-grad: rgba(253, 249, 240, 0.38);
+      --sidebar-bg: rgba(244, 240, 228, 0.72);
+      --header-bg: rgba(250, 246, 236, 0.75);
+      --card-bg: rgba(253, 249, 240, 0.82);
+      --card-border: #7d5231;
+      --text-main: #1c1c17;
+      --text-title: #345235;
+      --accent-color: #436444;
+    }
+    body[data-wallpaper="botanical"][data-theme-mode="dark"] {
+      --wallpaper-url: url('/wallpapers/botanical.jpg');
+      --bg-overlay-grad: rgba(10, 20, 12, 0.65);
+      --sidebar-bg: rgba(14, 26, 17, 0.78);
+      --header-bg: rgba(14, 26, 17, 0.80);
+      --card-bg: rgba(18, 32, 21, 0.82);
+      --card-border: #436444;
+      --text-main: #e8f5e9;
+      --text-title: #a8d5ab;
+      --accent-color: #81b584;
+    }
+
+    /* 🏺 TEMA 2: Alquimia & Mapas Antigos (Âmbar & Bronze) */
+    body[data-wallpaper="alchemy"][data-theme-mode="light"] {
+      --wallpaper-url: url('/wallpapers/alchemy.jpg');
+      --bg-overlay-grad: rgba(252, 246, 232, 0.38);
+      --sidebar-bg: rgba(246, 237, 217, 0.72);
+      --header-bg: rgba(252, 246, 232, 0.75);
+      --card-bg: rgba(252, 246, 232, 0.82);
+      --card-border: #94672e;
+      --text-main: #2b1d0e;
+      --text-title: #784718;
+      --accent-color: #784718;
+    }
+    body[data-wallpaper="alchemy"][data-theme-mode="dark"] {
+      --wallpaper-url: url('/wallpapers/alchemy.jpg');
+      --bg-overlay-grad: rgba(20, 13, 7, 0.65);
+      --sidebar-bg: rgba(28, 18, 10, 0.78);
+      --header-bg: rgba(28, 18, 10, 0.80);
+      --card-bg: rgba(34, 22, 12, 0.82);
+      --card-border: #94672e;
+      --text-main: #fff2e0;
+      --text-title: #e5a864;
+      --accent-color: #e5a864;
+    }
+
+    /* ✨ TEMA 3: Astronomia Mágica (Azul Estelar) */
+    body[data-wallpaper="astronomy"][data-theme-mode="light"] {
+      --wallpaper-url: url('/wallpapers/astronomy.jpg');
+      --bg-overlay-grad: rgba(240, 244, 255, 0.38);
+      --sidebar-bg: rgba(225, 236, 255, 0.72);
+      --header-bg: rgba(240, 244, 255, 0.75);
+      --card-bg: rgba(240, 244, 255, 0.82);
+      --card-border: #2b4c7e;
+      --text-main: #0d1b2a;
+      --text-title: #1e3a66;
+      --accent-color: #1e3a66;
+    }
+    body[data-wallpaper="astronomy"][data-theme-mode="dark"] {
+      --wallpaper-url: url('/wallpapers/astronomy.jpg');
+      --bg-overlay-grad: rgba(8, 14, 28, 0.65);
+      --sidebar-bg: rgba(12, 20, 40, 0.78);
+      --header-bg: rgba(12, 20, 40, 0.80);
+      --card-bg: rgba(16, 26, 50, 0.82);
+      --card-border: #4d7cbf;
+      --text-main: #e0e8f9;
+      --text-title: #8bb2f0;
+      --accent-color: #7fa7e8;
+    }
+
+    header.sticky {
+      background-color: var(--header-bg) !important;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-color: var(--card-border) !important;
+    }
+
+    .bg-\[\#fdf9f0\], 
+    .bg-surface-container-lowest,
+    .bg-surface-container-low,
+    .bg-white,
+    .bg-surface-container {
+      background-color: var(--card-bg) !important;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-color: var(--card-border) !important;
+      color: var(--text-main) !important;
+    }
+
+    h1, h2, h3, h4, 
+    .text-\[\#7d5231\], 
+    .text-\[\#012108\],
+    .text-primary {
+      color: var(--text-title) !important;
+    }
+  </style>
 </head>
+
 <body class="bg-[#fafaf4] text-[#1a1c19] font-body min-h-screen selection:bg-secondary-container">
 
   <!-- Header Bar with Back Link -->
   <header class="sticky top-0 z-30 bg-surface/90 backdrop-blur-md border-b border-outline-variant/30 px-6 py-4">
     <div class="max-w-5xl mx-auto flex justify-between items-center">
-      <a href="index.html" class="flex items-center gap-2 text-[#436444] font-bold text-sm hover:underline cursor-pointer">
+      <a href="index.html"
+        class="flex items-center gap-2 text-[#436444] font-bold text-sm hover:underline cursor-pointer">
         <span class="material-symbols-outlined text-xl">arrow_back</span>
         Voltar para a Toca de Estudos
       </a>
@@ -65,37 +180,49 @@
   <main class="max-w-4xl mx-auto p-6 md:p-8 space-y-8">
 
     <!-- Toast Notification -->
-    <div id="profile-toast" class="hidden fixed bottom-6 right-6 bg-[#36522e] text-[#c7e9b9] font-label font-bold text-xs md:text-sm px-5 py-3 rounded-2xl shadow-xl z-50 flex items-center gap-2 border border-[#caecbc]/30">
+    <div id="profile-toast"
+      class="hidden fixed bottom-6 right-6 bg-[#36522e] text-[#c7e9b9] font-label font-bold text-xs md:text-sm px-5 py-3 rounded-2xl shadow-xl z-50 flex items-center gap-2 border border-[#caecbc]/30">
       <span>🐰</span> <span id="toast-message">Alterações salvas!</span>
     </div>
 
     <!-- Top Profile Summary Card -->
-    <div class="bg-[#fdf9f0] border-4 border-[#7d5231] rounded-3xl p-6 md:p-8 shadow-[0_8px_0_0_rgba(125,82,49,1)] flex flex-col md:flex-row items-center gap-6">
-      
+    <div
+      class="bg-[#fdf9f0] border-4 border-[#7d5231] rounded-3xl p-6 md:p-8 shadow-[0_8px_0_0_rgba(125,82,49,1)] flex flex-col md:flex-row items-center gap-6">
+
       <!-- Avatar with Change Photo Overlay -->
-      <div class="relative group">
-        <div class="w-28 h-28 rounded-full border-4 border-[#7d5231] overflow-hidden bg-white shadow-md">
-          <img id="avatar-image-preview" class="w-full h-full object-cover" alt="Foto de Perfil" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1gwRdzQ-synRir6xbC4FK3hkPJ2U4omlOj44DTKrT38Ug0huHhU_jC9hrdPHPdpOR9D2LJ9XJcfj8_qKlf4boWmdA5Ew6Yxk6UtiIQuw8jXdruzUEs5i7jOZPItfnNLiwVumcaeb3CcYW0OzQZ3L4B-eUIaOvF3g1TizeLriv5jw7biwbyyYxUIHjQbn6V_fV3c0hUdATR-K9HqqfLCrhsE9oYndypQg6ACkkrJRZZSyEPdlvULTp"/>
+      <div class="flex flex-col items-center">
+        <div class="relative group">
+          <div class="w-28 h-28 rounded-full border-4 border-[#7d5231] overflow-hidden bg-white shadow-md cursor-pointer" onclick="abrirExploradorDeArquivosParaFoto()">
+            <img id="avatar-image-preview" class="w-full h-full object-cover" alt="Foto de Perfil"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1gwRdzQ-synRir6xbC4FK3hkPJ2U4omlOj44DTKrT38Ug0huHhU_jC9hrdPHPdpOR9D2LJ9XJcfj8_qKlf4boWmdA5Ew6Yxk6UtiIQuw8jXdruzUEs5i7jOZPItfnNLiwVumcaeb3CcYW0OzQZ3L4B-eUIaOvF3g1TizeLriv5jw7biwbyyYxUIHjQbn6V_fV3c0hUdATR-K9HqqfLCrhsE9oYndypQg6ACkkrJRZZSyEPdlvULTp" />
+          </div>
+          <button onclick="abrirExploradorDeArquivosParaFoto()" title="Alterar foto (Abrir Explorador de Arquivos)"
+            class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
+            <span class="material-symbols-outlined text-2xl">photo_camera</span>
+          </button>
         </div>
-        <button onclick="promptAvatarUrl()" title="Alterar foto" class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-          <span class="material-symbols-outlined text-2xl">photo_camera</span>
-        </button>
+        <!-- Input nativo de arquivos invisível -->
+        <input type="file" id="user-avatar-file-input" accept="image/*" class="hidden" onchange="handleUserAvatarUpload(event)" />
       </div>
 
       <!-- User Info & Mode Badge -->
       <div class="text-center md:text-left flex-1">
         <div class="flex flex-col md:flex-row md:items-center gap-2 mb-1">
           <h2 id="display-user-name" class="font-headline text-2xl font-bold text-[#7d5231]">Estudante da Toca</h2>
-          <span id="profile-mode-badge" class="px-3 py-0.5 rounded-full text-xs font-label font-bold bg-[#c6edc4] text-[#012108] border border-[#436444] w-fit mx-auto md:mx-0">
+          <span id="profile-mode-badge"
+            class="px-3 py-0.5 rounded-full text-xs font-label font-bold bg-[#c6edc4] text-[#012108] border border-[#436444] w-fit mx-auto md:mx-0">
             Modo Logado (Nuvem ☁️)
           </span>
         </div>
         <p id="display-user-email" class="text-xs text-[#737970] font-medium mb-3">estudante@toca.com</p>
 
         <div class="flex flex-wrap justify-center md:justify-start gap-2 text-xs font-bold font-body">
-          <span class="bg-[#f1eee5] px-3 py-1 rounded-xl text-[#7d5231] border border-[#c2c8be]">Nível <span id="display-user-level">1</span></span>
-          <span class="bg-[#f1eee5] px-3 py-1 rounded-xl text-[#7d5231] border border-[#c2c8be]"><span id="display-user-xp">65</span> XP Acumulados</span>
-          <span class="bg-[#f1eee5] px-3 py-1 rounded-xl text-[#7d5231] border border-[#c2c8be]"><span id="display-user-streak">3</span> Dias Seguidos</span>
+          <span class="bg-[#f1eee5] px-3 py-1 rounded-xl text-[#7d5231] border border-[#c2c8be]">Nível <span
+              id="display-user-level">1</span></span>
+          <span class="bg-[#f1eee5] px-3 py-1 rounded-xl text-[#7d5231] border border-[#c2c8be]"><span
+              id="display-user-xp">65</span> XP Acumulados</span>
+          <span class="bg-[#f1eee5] px-3 py-1 rounded-xl text-[#7d5231] border border-[#c2c8be]"><span
+              id="display-user-streak">3</span> Dias Seguidos</span>
         </div>
       </div>
     </div>
@@ -111,16 +238,19 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block font-bold text-xs text-[#7d5231] uppercase mb-1">Nome de Estudante:</label>
-            <input id="input-profile-name" type="text" required class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]"/>
+            <input id="input-profile-name" type="text" required
+              class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]" />
           </div>
           <div>
             <label class="block font-bold text-xs text-[#7d5231] uppercase mb-1">E-mail de Acesso:</label>
-            <input id="input-profile-email" type="email" required class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]"/>
+            <input id="input-profile-email" type="email" required
+              class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]" />
           </div>
         </div>
 
         <button type="submit" class="chunky-btn btn-primary rounded-xl cursor-pointer pt-1">
-          <span class="chunky-btn-inner bg-[#436444] hover:bg-[#385439] text-white font-body font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl flex items-center gap-2">
+          <span
+            class="chunky-btn-inner bg-[#436444] hover:bg-[#385439] text-white font-body font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl flex items-center gap-2">
             <span class="material-symbols-outlined text-base">save</span> Salvar Alterações do Perfil
           </span>
         </button>
@@ -138,20 +268,24 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label class="block font-bold text-xs text-[#7d5231] uppercase mb-1">Senha Atual:</label>
-            <input id="input-current-pass" type="password" placeholder="••••••••" required class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]"/>
+            <input id="input-current-pass" type="password" placeholder="••••••••" required
+              class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]" />
           </div>
           <div>
             <label class="block font-bold text-xs text-[#7d5231] uppercase mb-1">Nova Senha:</label>
-            <input id="input-new-pass" type="password" placeholder="••••••••" required class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]"/>
+            <input id="input-new-pass" type="password" placeholder="••••••••" required
+              class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]" />
           </div>
           <div>
             <label class="block font-bold text-xs text-[#7d5231] uppercase mb-1">Confirmar Nova Senha:</label>
-            <input id="input-confirm-pass" type="password" placeholder="••••••••" required class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]"/>
+            <input id="input-confirm-pass" type="password" placeholder="••••••••" required
+              class="w-full bg-[#fdf9f0] border-2 border-[#c2c8be] rounded-xl p-3 font-body text-sm focus:outline-none focus:border-[#436444]" />
           </div>
         </div>
 
         <button type="submit" class="chunky-btn btn-secondary rounded-xl cursor-pointer pt-1">
-          <span class="chunky-btn-inner bg-[#805533] hover:bg-[#684326] text-white font-body font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl flex items-center gap-2">
+          <span
+            class="chunky-btn-inner bg-[#805533] hover:bg-[#684326] text-white font-body font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl flex items-center gap-2">
             <span class="material-symbols-outlined text-base">key</span> Atualizar Senha
           </span>
         </button>
@@ -166,7 +300,8 @@
       </div>
 
       <div class="space-y-3 font-body text-xs sm:text-sm text-[#1a1c19]">
-        <label class="flex items-center justify-between p-3 bg-[#fdf9f0] rounded-2xl border border-[#c2c8be] cursor-pointer hover:bg-[#f4f4ee]">
+        <label
+          class="flex items-center justify-between p-3 bg-[#fdf9f0] rounded-2xl border border-[#c2c8be] cursor-pointer hover:bg-[#f4f4ee]">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined text-xl text-[#436444]">alarm</span>
             <div>
@@ -174,10 +309,12 @@
               <p class="text-[11px] text-[#737970]">Receba avisos gentis para manter sua rotina na Toca.</p>
             </div>
           </div>
-          <input type="checkbox" checked onchange="saveNotificationSettings()" class="rounded text-[#436444] focus:ring-[#436444] w-5 h-5 cursor-pointer"/>
+          <input type="checkbox" checked onchange="saveNotificationSettings()"
+            class="rounded text-[#436444] focus:ring-[#436444] w-5 h-5 cursor-pointer" />
         </label>
 
-        <label class="flex items-center justify-between p-3 bg-[#fdf9f0] rounded-2xl border border-[#c2c8be] cursor-pointer hover:bg-[#f4f4ee]">
+        <label
+          class="flex items-center justify-between p-3 bg-[#fdf9f0] rounded-2xl border border-[#c2c8be] cursor-pointer hover:bg-[#f4f4ee]">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined text-xl text-[#805533]">timer</span>
             <div>
@@ -185,10 +322,12 @@
               <p class="text-[11px] text-[#737970]">Tocar o sino suave quando o tempo de foco ou pausa terminar.</p>
             </div>
           </div>
-          <input type="checkbox" checked onchange="saveNotificationSettings()" class="rounded text-[#436444] focus:ring-[#436444] w-5 h-5 cursor-pointer"/>
+          <input type="checkbox" checked onchange="saveNotificationSettings()"
+            class="rounded text-[#436444] focus:ring-[#436444] w-5 h-5 cursor-pointer" />
         </label>
 
-        <label class="flex items-center justify-between p-3 bg-[#fdf9f0] rounded-2xl border border-[#c2c8be] cursor-pointer hover:bg-[#f4f4ee]">
+        <label
+          class="flex items-center justify-between p-3 bg-[#fdf9f0] rounded-2xl border border-[#c2c8be] cursor-pointer hover:bg-[#f4f4ee]">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined text-xl text-[#99462a]">local_fire_department</span>
             <div>
@@ -196,10 +335,12 @@
               <p class="text-[11px] text-[#737970]">Avise-me quando minha sequência estiver prestes a ser quebrada.</p>
             </div>
           </div>
-          <input type="checkbox" checked onchange="saveNotificationSettings()" class="rounded text-[#436444] focus:ring-[#436444] w-5 h-5 cursor-pointer"/>
+          <input type="checkbox" checked onchange="saveNotificationSettings()"
+            class="rounded text-[#436444] focus:ring-[#436444] w-5 h-5 cursor-pointer" />
         </label>
 
-        <label class="flex items-center justify-between p-3 bg-[#fdf9f0] rounded-2xl border border-[#c2c8be] cursor-pointer hover:bg-[#f4f4ee]">
+        <label
+          class="flex items-center justify-between p-3 bg-[#fdf9f0] rounded-2xl border border-[#c2c8be] cursor-pointer hover:bg-[#f4f4ee]">
           <div class="flex items-center gap-3">
             <span class="material-symbols-outlined text-xl text-[#4c4b40]">mark_email_read</span>
             <div>
@@ -207,7 +348,8 @@
               <p class="text-[11px] text-[#737970]">Receba estatísticas de horas focadas e matérias mais estudadas.</p>
             </div>
           </div>
-          <input type="checkbox" onchange="saveNotificationSettings()" class="rounded text-[#436444] focus:ring-[#436444] w-5 h-5 cursor-pointer"/>
+          <input type="checkbox" onchange="saveNotificationSettings()"
+            class="rounded text-[#436444] focus:ring-[#436444] w-5 h-5 cursor-pointer" />
         </label>
       </div>
     </div>
@@ -220,14 +362,24 @@
       </div>
 
       <p class="text-xs sm:text-sm text-[#93000a] leading-relaxed">
-        A exclusão da sua conta apaga permanentemente todos os seus dados, nível de XP, histórico de Pomodoro e sementes plantadas na Toca. Esta ação não poderá ser desfeita.
+        A exclusão da sua conta apaga permanentemente todos os seus dados, nível de XP, histórico de Pomodoro e sementes
+        plantadas na Toca. Esta ação não poderá ser desfeita.
       </p>
 
-      <button onclick="confirmDeleteAccount()" class="chunky-btn rounded-xl cursor-pointer pt-1">
-        <span class="chunky-btn-inner bg-[#ba1a1a] hover:bg-[#93000a] text-white font-body font-bold text-xs sm:text-sm px-6 py-3 rounded-xl flex items-center gap-2">
+      <button type="button" onclick="showDeleteConfirmBox()" class="chunky-btn rounded-xl cursor-pointer pt-1">
+        <span
+          class="chunky-btn-inner bg-[#ba1a1a] hover:bg-[#93000a] text-white font-body font-bold text-xs sm:text-sm px-6 py-3 rounded-xl flex items-center gap-2">
           <span class="material-symbols-outlined text-base">delete_forever</span> Excluir Minha Conta Permanetemente
         </span>
       </button>
+
+      <div id="delete-confirm-box" class="hidden p-4 bg-[#ffdad6] border-2 border-[#ba1a1a] rounded-2xl space-y-3">
+        <p class="font-bold text-xs text-[#93000a]">⚠️ Tem certeza absoluta? Todos os seus dados acumulados serão excluídos permanentemente e esta ação não pode ser desfeita.</p>
+        <div class="flex gap-3">
+          <button type="button" onclick="executeAccountDeletion()" class="bg-[#ba1a1a] text-white text-xs font-bold px-4 py-2 rounded-xl hover:bg-[#93000a] cursor-pointer">Sim, Excluir Agora</button>
+          <button type="button" onclick="hideDeleteConfirmBox()" class="bg-[#f1eee5] text-[#7d5231] border border-[#c2c8be] text-xs font-bold px-4 py-2 rounded-xl hover:bg-[#ece8df] cursor-pointer">Cancelar</button>
+        </div>
+      </div>
     </div>
 
   </main>
@@ -273,14 +425,14 @@
         // Se não houver usuário no LocalStorage, abre como Visitante Padrão para não jogar pro login inadvertidamente
         currentUser = { name: 'Estudante Visitante', email: 'visitante@toca.local', isGuest: true };
       } else {
-        try { currentUser = JSON.parse(savedUser); } catch(e){
+        try { currentUser = JSON.parse(savedUser); } catch (e) {
           currentUser = { name: 'Estudante Visitante', email: 'visitante@toca.local', isGuest: true };
         }
       }
 
       const savedStats = localStorage.getItem('study_burrow_stats');
       if (savedStats) {
-        try { userStats = JSON.parse(savedStats); } catch(e){}
+        try { userStats = JSON.parse(savedStats); } catch (e) { }
       }
 
       // Preenche os campos da UI
@@ -307,6 +459,15 @@
           badge.className = 'px-3 py-0.5 rounded-full text-xs font-label font-bold bg-[#c6edc4] text-[#012108] border border-[#436444] w-fit mx-auto md:mx-0';
         }
       }
+
+      initWallpaperThemeSystem();
+    }
+
+    function initWallpaperThemeSystem() {
+      const activeWp = localStorage.getItem('study_burrow_active_wallpaper') || 'botanical';
+      const themeMode = localStorage.getItem('study_burrow_theme_mode') || 'light';
+      document.body.dataset.wallpaper = activeWp;
+      document.body.dataset.themeMode = themeMode;
     }
 
     function handleSaveAccountData(e) {
@@ -329,7 +490,7 @@
             email: newEmail,
             updatedAt: new Date().toISOString()
           });
-        } catch(err){}
+        } catch (err) { }
       }
 
       document.getElementById('display-user-name').textContent = newName;
@@ -371,31 +532,61 @@
       }
     }
 
-    function promptAvatarUrl() {
-      const url = prompt("Cole a URL da nova foto de perfil:");
-      if (url && url.trim()) {
-        currentUser.avatarUrl = url.trim();
-        document.getElementById('avatar-image-preview').src = url.trim();
-        localStorage.setItem('study_burrow_user', JSON.stringify(currentUser));
-        showToast('📸 Foto de perfil atualizada!');
+    function abrirExploradorDeArquivosParaFoto() {
+      const input = document.getElementById('user-avatar-file-input');
+      if (input) input.click();
+    }
+
+    function handleUserAvatarUpload(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        showToast('⚠️ Por favor, selecione um arquivo de imagem válido (JPG, PNG, WebP).');
+        return;
       }
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const base64Data = evt.target.result;
+        if (!currentUser) currentUser = {};
+        currentUser.avatarUrl = base64Data;
+        localStorage.setItem('study_burrow_user', JSON.stringify(currentUser));
+
+        const imgPrev = document.getElementById('avatar-image-preview');
+        if (imgPrev) imgPrev.src = base64Data;
+
+        showToast('📸 Foto de perfil atualizada com sucesso!');
+      };
+      reader.readAsDataURL(file);
     }
 
     function saveNotificationSettings() {
       showToast('🔔 Preferências de notificação salvas!');
     }
 
-    function confirmDeleteAccount() {
-      const confirmed = confirm("ATENÇÃO: Deseja realmente excluir permanentemente sua conta de estudante e todo o seu progresso?");
-      if (confirmed) {
-        if (auth && auth.currentUser && !currentUser.isGuest) {
-          auth.currentUser.delete().catch(() => {});
-        }
-        localStorage.removeItem('study_burrow_user');
-        localStorage.removeItem('study_burrow_stats');
-        alert("Sua conta foi excluída com sucesso.");
-        window.location.href = 'login.html';
+    function showDeleteConfirmBox() {
+      const box = document.getElementById('delete-confirm-box');
+      if (box) box.classList.remove('hidden');
+    }
+
+    function hideDeleteConfirmBox() {
+      const box = document.getElementById('delete-confirm-box');
+      if (box) box.classList.add('hidden');
+    }
+
+    function executeAccountDeletion() {
+      if (auth && auth.currentUser && !currentUser.isGuest) {
+        auth.currentUser.delete().catch(() => { });
       }
+      localStorage.removeItem('study_burrow_user');
+      localStorage.removeItem('study_burrow_stats');
+      localStorage.removeItem('study_burrow_routines');
+      localStorage.removeItem('study_burrow_pomo_tasks');
+      showToast('🗑️ Sua conta foi excluída com sucesso.');
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 1500);
     }
 
     function showToast(msg) {
@@ -409,4 +600,5 @@
     }
   </script>
 </body>
+
 </html>

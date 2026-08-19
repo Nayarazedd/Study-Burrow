@@ -53,6 +53,8 @@ Portanto, medidas são necessárias para mitigar esses impactos. O Ministério d
       if (!res.ok) throw new Error(data.error || 'Erro ao analisar redação');
 
       setResult(data);
+      const redacoesFeitasAtual = parseInt(localStorage.getItem('redacoesFeitas') || '0', 10);
+      localStorage.setItem('redacoesFeitas', (redacoesFeitasAtual + 1).toString());
       onAddXp(30);
     } catch (err: any) {
       setError(err.message || 'Ocorreu um erro ao conectar com o laboratório de redação.');

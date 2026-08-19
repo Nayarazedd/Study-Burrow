@@ -9,17 +9,17 @@
   --color-on-primary-container: #c7e9b9;
   --color-primary-fixed: #caecbc;
   --color-primary-fixed-dim: #afd0a2;
-  
+
   --color-secondary: #805533;
   --color-secondary-container: #fdc39a;
   --color-on-secondary-container: #794e2e;
   --color-secondary-fixed: #ffdcc5;
-  
+
   --color-tertiary: #4c4b40;
   --color-tertiary-container: #646357;
   --color-tertiary-fixed-dim: #c9c7b8;
   --color-on-tertiary-fixed-variant: #48473c;
-  
+
   --color-background: #fafaf4;
   --color-surface: #fafaf4;
   --color-surface-container-lowest: #ffffff;
@@ -27,12 +27,12 @@
   --color-surface-container: #eeeee8;
   --color-surface-container-high: #e9e8e3;
   --color-surface-container-highest: #e3e3dd;
-  
+
   --color-on-surface: #1a1c19;
   --color-on-surface-variant: #434840;
   --color-outline: #73796f;
   --color-outline-variant: #c3c8bd;
-  
+
   --color-error: #ba1a1a;
   --color-error-container: #ffdad6;
   --color-on-error-container: #93000a;
@@ -131,10 +131,44 @@ body.forest-mode .chunky-btn-inner:hover {
   background-color: #6c4629 !important;
 }
 
-body.forest-mode .border-[#7d5231],
-body.forest-mode .border-2,
-body.forest-mode .border-4 {
+/* MELHORIAS DE CONTRASTE E LEGIBILIDADE NO MODO ESCURO (FOREST MODE) */
+body.forest-mode .bg-\[\#c6edc4\],
+body.forest-mode .bg-\[\#c6edc4\]\/40,
+body.forest-mode .bg-\[\#c6edc4\]\/60 {
+  background-color: #1e3a1f !important;
+  color: #bbf2b7 !important;
+  border-color: #4e8050 !important;
+}
+
+body.forest-mode .text-\[\#012108\],
+body.forest-mode .text-\[\#012f0c\] {
+  color: #bbf2b7 !important;
+}
+
+body.forest-mode .bg-\[\#ffdad6\],
+body.forest-mode .bg-\[\#ffdad6\]\/40,
+body.forest-mode .bg-\[\#ffdad6\]\/60 {
+  background-color: #3e1616 !important;
+  color: #ffb4ab !important;
+  border-color: #ba1a1a !important;
+}
+
+body.forest-mode .text-\[\#93000a\],
+body.forest-mode .text-\[\#ba1a1a\] {
+  color: #ffb4ab !important;
+}
+
+body.forest-mode #sim-review-chat-messages button,
+body.forest-mode .bg-white.border-2 {
+  background-color: #1c2a1b !important;
+  color: #f8f3e6 !important;
   border-color: #805533 !important;
+}
+
+body.forest-mode #sim-review-chat-messages button:hover,
+body.forest-mode .bg-white.border-2:hover {
+  background-color: #2b4229 !important;
+  border-color: #a3e29f !important;
 }
 
 /* Material Icons Helper */
@@ -205,6 +239,7 @@ body.forest-mode .border-4 {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -213,15 +248,18 @@ body.forest-mode .border-4 {
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #fafaf4; 
+  background: #fafaf4;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #afd0a2; 
+  background: #afd0a2;
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #4d6a44; 
+  background: #4d6a44;
 }
 
 /* Tab View Transitions */
@@ -239,6 +277,7 @@ body.forest-mode .border-4 {
     opacity: 0;
     transform: translateY(6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -288,4 +327,289 @@ body.forest-mode .border-4 {
 
 #login-modal.hidden-modal {
   display: none;
+}
+
+/* Estilos de Impressão (Modelo Oficial P&B vs Modelo Cores Didáticas do App) */
+#pdf-print-official-container {
+  display: none !important;
+}
+
+@media print {
+  header, nav, footer, button, .no-print, #login-modal, #toast-container, .chunky-btn, .view-section {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  #pdf-print-official-container {
+    display: block !important;
+    width: 100% !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 10.5px !important;
+    line-height: 1.35 !important;
+    padding: 10px 15px !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* REGRA GERAL DE EXIBIÇÃO DE IMAGENS EM IMPRESSÃO DO PDF */
+  #pdf-print-official-container img,
+  #pdf-print-official-container .enem-question-img {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-width: 100% !important;
+    max-height: 220px !important;
+    height: auto !important;
+    margin: 8px auto !important;
+    object-fit: contain !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* ----------------------------------------------------
+     MODO 1: PRETO E BRANCO (OFICIAL DE PROVAS)
+     ---------------------------------------------------- */
+  .pdf-mode-bw .pdf-header-top {
+    text-align: right;
+    font-size: 10px;
+    font-weight: bold;
+    color: #000000;
+    border-bottom: 2px solid #000000;
+    padding-bottom: 4px;
+    margin-bottom: 8px;
+  }
+
+  .pdf-mode-bw .pdf-banner-black {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    text-align: center;
+    font-weight: 900;
+    font-size: 15px;
+    letter-spacing: 2px;
+    padding: 6px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .pdf-mode-bw .pdf-subject-box {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    padding: 6px 12px;
+    margin-bottom: 14px;
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pdf-mode-bw .pdf-subject-box h4 {
+    font-size: 13px;
+    font-weight: bold;
+    margin: 0;
+    color: #ffffff !important;
+  }
+
+  .pdf-mode-bw .pdf-subject-box span {
+    font-size: 10px;
+    color: #ffffff !important;
+  }
+
+  .pdf-mode-bw #simulado-questions-container-pdf {
+    column-count: 2 !important;
+    column-gap: 24px !important;
+    column-rule: 1px solid #888888 !important;
+  }
+
+  .pdf-mode-bw .pdf-question-item {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin-bottom: 14px !important;
+  }
+
+  .pdf-mode-bw .pdf-question-title {
+    font-weight: bold;
+    font-size: 10.5px;
+    margin-bottom: 4px;
+    text-align: justify;
+  }
+
+  .pdf-mode-bw .pdf-option-item {
+    font-size: 10px;
+    margin-bottom: 2px;
+    padding-left: 2px;
+  }
+
+  .pdf-mode-bw .pdf-footer-bottom {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 9px;
+    font-weight: bold;
+    border-top: 1.5px solid #000000;
+    padding-top: 6px;
+    color: #000000;
+  }
+
+  /* ----------------------------------------------------
+     MODO 2: CORES DIDÁTICAS (TOCA DE ESTUDOS - STUDY BURROW)
+     ---------------------------------------------------- */
+  .pdf-mode-color .pdf-header-top {
+    text-align: right;
+    font-size: 10.5px;
+    font-weight: bold;
+    color: #436444 !important;
+    border-bottom: 2.5px solid #436444 !important;
+    padding-bottom: 4px;
+    margin-bottom: 10px;
+  }
+
+  .pdf-mode-color .pdf-banner-black {
+    background-color: #436444 !important;
+    color: #ffffff !important;
+    text-align: center;
+    font-weight: 900;
+    font-size: 16px;
+    letter-spacing: 2px;
+    padding: 8px;
+    text-transform: uppercase;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .pdf-mode-color .pdf-subject-box {
+    background-color: #7d5231 !important;
+    color: #ffffff !important;
+    padding: 8px 14px;
+    margin-bottom: 14px;
+    border-radius: 8px;
+    display: flex !important;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .pdf-mode-color .pdf-subject-box h4 {
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0;
+    color: #ffffff !important;
+  }
+
+  .pdf-mode-color .pdf-subject-box span {
+    font-size: 11px;
+    font-weight: bold;
+    color: #ffffff !important;
+  }
+
+  .pdf-mode-color #simulado-questions-container-pdf {
+    column-count: 2 !important;
+    column-gap: 24px !important;
+    column-rule: 2px solid #c2c8be !important;
+  }
+
+  .pdf-mode-color .pdf-question-item {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    margin-bottom: 14px !important;
+    background-color: #fdf9f0 !important;
+    border: 1.5px solid #7d5231 !important;
+    border-radius: 10px !important;
+    padding: 8px 10px !important;
+  }
+
+  .pdf-mode-color .pdf-question-title {
+    font-weight: bold;
+    font-size: 11px;
+    color: #7d5231 !important;
+    margin-bottom: 6px;
+  }
+
+  .pdf-mode-color .pdf-option-correct {
+    background-color: #c6edc4 !important;
+    color: #012108 !important;
+    border: 1.5px solid #436444 !important;
+    border-radius: 6px !important;
+    padding: 3px 6px !important;
+    font-weight: bold !important;
+    margin-bottom: 3px !important;
+  }
+
+  .pdf-mode-color .pdf-option-wrong {
+    background-color: #ffdad6 !important;
+    color: #93000a !important;
+    border: 1.5px solid #ba1a1a !important;
+    border-radius: 6px !important;
+    padding: 3px 6px !important;
+    font-weight: bold !important;
+    margin-bottom: 3px !important;
+  }
+
+  .pdf-mode-color .pdf-option-normal {
+    background-color: #ffffff !important;
+    color: #1c1c17 !important;
+    border: 1px solid #c2c8be !important;
+    border-radius: 6px !important;
+    padding: 3px 6px !important;
+    margin-bottom: 3px !important;
+  }
+
+  .pdf-mode-color .pdf-explanation-box {
+    margin-top: 6px !important;
+    padding: 6px 8px !important;
+    background-color: #ffffff !important;
+    border-left: 3.5px solid #7d5231 !important;
+    border-radius: 4px !important;
+    font-size: 9.5px !important;
+    color: #1c1c17 !important;
+    line-height: 1.3 !important;
+  }
+
+  .pdf-mode-bw .enem-question-img {
+    max-width: 100% !important;
+    max-height: 220px !important;
+    border-radius: 4px !important;
+    margin: 6px 0 !important;
+    object-fit: contain !important;
+    display: block !important;
+    filter: grayscale(100%) contrast(120%) !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .pdf-mode-color .pdf-footer-bottom {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 9.5px;
+    font-weight: bold;
+    border-top: 2px solid #436444;
+    padding-top: 6px;
+    color: #436444;
+  }
+
+  .pdf-mode-color .enem-question-img {
+    max-width: 100% !important;
+    max-height: 220px !important;
+    border-radius: 8px !important;
+    margin: 6px 0 !important;
+    object-fit: contain !important;
+    display: block !important;
+    border: 1px solid #7d5231 !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
+
+/* ESTILO RESPONSIVO DAS IMAGENS DAS QUESTÕES DO ENEM */
+.enem-question-img {
+  max-width: 100% !important;
+  border-radius: 8px !important;
+  margin: 10px 0 !important;
+  object-fit: contain !important;
+  display: block !important;
+  height: auto !important;
 }

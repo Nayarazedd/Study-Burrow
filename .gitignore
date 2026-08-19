@@ -1,8 +1,47 @@
+# Dependências de Pacotes
 node_modules/
+.pnpm-store/
+
+# Compilação e Saídas de Build (Vite/Node)
 build/
 dist/
+dist-ssr/
 coverage/
-.DS_Store
+*.tsbuildinfo
+
+# Logs e Relatórios
 *.log
-.env.example
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Variáveis de Ambiente e Segredos (Não sobem pro GitHub)
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.example
+
+# IDEs, Editores e Arquivos do Sistema Operacional
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.vscode/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Pastas da IA e Ferramentas Antigravity/Gemini
+.gemini/
+.agents/
+
+# Pastas Temporárias, Submódulos e Duplicadas
+enem-api/
+stitch_duplicate_of_jardim_do_estudo_gentil_00/
+tmp/
+.cache/
